@@ -1,0 +1,11 @@
+.DS_Store
+.idea
+tmp/
+*.pid
+*.raw
+*.vcd
+*.pgf
+*.csv
+*.log
+*.out
+*.sim
