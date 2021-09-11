@@ -27,6 +27,7 @@ If you're an NTNU student, then you can ssh to login.stud.ntnu.no and run
 
 For information on login.stud.ntnu.no see https://innsida.ntnu.no/wiki/-/wiki/English/ssh
 
+hallo jeg har skrevet her
 
 # I don't have Ubuntu Linux 20
 
