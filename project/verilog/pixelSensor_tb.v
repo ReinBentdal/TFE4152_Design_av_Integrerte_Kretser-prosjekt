@@ -25,7 +25,9 @@
 //
 //====================================================================
 
+`include "pixelSensor.v"
 
+// bigscale / smallscale
 `timescale 1 ns / 1 ps
 
 //====================================================================
@@ -44,8 +46,13 @@ module pixelSensor_tb;
    //------------------------------------------------------------
    logic clk =0;
    logic reset =0;
+
+   // hvor mange av "bigscale" som tilsvarer en periode
    parameter integer clk_period = 500;
    parameter integer sim_end = clk_period*2400;
+
+   // når man har # forran, betyr dette at den kalles hver gang den tidsperioden har gått
+   // clk = not clk, altså alternerer den
    always #clk_period clk=~clk;
 
    //------------------------------------------------------------
@@ -68,7 +75,7 @@ module pixelSensor_tb;
    tri[7:0]         pixData; //  We need this to be a wire, because we're tristating it
 
    //Instanciate the pixel
-   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, anaReset, erase,expose, read,pixData);
+   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, anaReset, erase, expose, read, pixData);
 
    //------------------------------------------------------------
    // State Machine
