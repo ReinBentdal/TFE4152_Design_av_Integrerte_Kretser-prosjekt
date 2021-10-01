@@ -33,6 +33,8 @@
 //  - Memory latch
 //  - Readout of latched value
 //----------------------------------------------------------------
+
+
 module PIXEL_SENSOR
   (
    input logic      VBN1,
@@ -41,12 +43,15 @@ module PIXEL_SENSOR
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
-   inout [7:0] DATA
-
+   input [7:0] COUNTER,
+   output [7:0] DATA
    );
 
    real             v_erase = 1.2;
+
+   // hvor mye spenning per steg
    real             lsb = v_erase/255;
+   
    parameter real   dv_pixel = 0.5;
 
    real             tmp;
@@ -91,15 +96,15 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    always_comb  begin
       if(!cmp) begin
-         p_data = DATA;
+         p_data = COUNTER;
       end
-
    end
 
    //----------------------------------------------------------------
    // Readout
    //----------------------------------------------------------------
    // Assign data to bus when pixRead = 0
+   // Antar at når READ kalles så er p_data satt
    assign DATA = READ ? p_data : 8'bZ;
 
 endmodule // re_control
