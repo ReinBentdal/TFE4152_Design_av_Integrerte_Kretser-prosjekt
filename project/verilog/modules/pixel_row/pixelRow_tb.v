@@ -1,11 +1,9 @@
-`include "config.v"
+`include "../../config.v"
 `include "pixelRow.v"
 
 `timescale 1 ns / 1 ps
 
 module pixelRow_tb;
-
-    logic enable = 1;
 
     logic clk = 0;
     logic reset = 0;
@@ -29,7 +27,7 @@ module pixelRow_tb;
 
     logic [PIXEL_ARRAY_WIDTH-1:0][7:0] rowData;
 
-    PIXEL_ROW pixel_row(
+    PIXEL_ROW #(.PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH)) pixel_row(
         .VBN1(analog_bias),
         .RAMP(analog_ramp),
         .RESET(analog_reset),
@@ -37,7 +35,6 @@ module pixelRow_tb;
         .EXPOSE(expose),
         .READ(read),
         .DATA_OUT(rowData),
-        .ENABLE(enable),
         .COUNTER(pixel_counter)
     );
 

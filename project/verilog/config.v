@@ -6,5 +6,5 @@
 
 `ifndef _PIXEL_ARRAY_HEIGHT
     `define _PIXEL_ARRAY_HEIGHT
-    localparam PIXEL_ARRAY_HEIGHT = 2;
+    localparam PIXEL_ARRAY_HEIGHT = 3;
 `endif
