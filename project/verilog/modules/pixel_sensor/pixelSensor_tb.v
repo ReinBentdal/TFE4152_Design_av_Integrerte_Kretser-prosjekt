@@ -74,8 +74,10 @@ module pixelSensor_tb;
    logic              read;
    tri[7:0]         pixData; //  We need this to be a wire, because we're tristating it
 
+   tri[7:0] counterr;
+
    //Instanciate the pixel
-   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, anaReset, erase, expose, read, pixData);
+   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, anaReset, erase, expose, read, counterr, pixData);
 
    //------------------------------------------------------------
    // State Machine

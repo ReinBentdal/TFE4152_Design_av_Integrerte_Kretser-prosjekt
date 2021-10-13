@@ -1,3 +1,6 @@
+`include "graycounter.v"
+`include "counter.v"
+
 module test;
 
   /* Make a reset that pulses once. */
