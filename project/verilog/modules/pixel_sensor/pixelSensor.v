@@ -52,6 +52,7 @@ module PIXEL_SENSOR
    // hvor mye spenning per steg
    real             lsb = v_erase/255;
    
+   // lysintensitet
    parameter real   dv_pixel = 0.5;
 
    real             tmp;
@@ -84,10 +85,10 @@ module PIXEL_SENSOR
    // Comparator
    //----------------------------------------------------------------
    // Use ramp to provide a clock for ADC conversion, assume that ramp
-   // and DATA are synchronous
+   // and COUNTER are synchronous
    always @(posedge RAMP) begin
       adc = adc + lsb;
-      if(adc > tmp)
+      if(adc > tmp) // TODO: mulig å fjerne compare
         cmp <= 1;
    end
 
