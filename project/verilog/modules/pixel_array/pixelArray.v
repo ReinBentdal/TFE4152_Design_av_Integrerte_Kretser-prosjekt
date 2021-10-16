@@ -3,7 +3,6 @@
 module PIXEL_ARRAY(
    input logic      VBN1,
    input logic      RAMP,
-   input logic      RESET,
    input logic      ERASE,
    input logic      EXPOSE,
    input [PIXEL_ARRAY_HEIGHT-1:0] READ,
@@ -23,7 +22,6 @@ module PIXEL_ARRAY(
             ) pr(
                 .VBN1(VBN1),
                 .RAMP(RAMP),
-                .RESET(RESET),
                 .ERASE(ERASE),
                 .EXPOSE(EXPOSE),
                 .READ(READ[i]),

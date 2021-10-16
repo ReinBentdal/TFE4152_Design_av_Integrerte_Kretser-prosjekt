@@ -65,19 +65,16 @@ module pixelSensor_tb;
    logic              anaRamp;
    logic              anaReset;
 
-   //Tie off the unused lines
-   assign anaReset = 1;
-
    //Digital
    logic              erase;
    logic              expose;
    logic              read;
    tri[7:0]         pixData; //  We need this to be a wire, because we're tristating it
 
-   tri[7:0] counterr;
+   logic [7:0] pixel_counter;
 
    //Instanciate the pixel
-   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, anaReset, erase, expose, read, counterr, pixData);
+   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, erase, expose, read, pixel_counter, pixData);
 
    //------------------------------------------------------------
    // State Machine
@@ -139,6 +136,7 @@ module pixelSensor_tb;
          next_state = ERASE;
          counter  = 0;
          convert  = 0;
+         pixel_counter = 0;
       end
       else begin
          case (state)
@@ -200,10 +198,10 @@ module pixelSensor_tb;
          data =0;
       end
       if(convert) begin
-         data +=  1;
+         pixel_counter +=  1;
       end
       else begin
-         data = 0;
+         pixel_counter = 0;
       end
    end // always @ (posedge clk or reset)
 
