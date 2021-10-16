@@ -25,6 +25,8 @@ module pixelArray_tb;
     logic analog_ramp;
     logic analog_reset;
 
+    assign analog_reset = 1;
+
     logic erase;
     logic expose;
     logic [PIXEL_ARRAY_HEIGHT-1:0] read;
@@ -39,6 +41,7 @@ module pixelArray_tb;
     ) pixel_array(
         .VBN1(analog_bias),
         .RAMP(analog_ramp),
+        .RESET(analog_reset),
         .ERASE(erase),
         .EXPOSE(expose),
         .READ(read),
