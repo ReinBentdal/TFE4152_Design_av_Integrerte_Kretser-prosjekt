@@ -3,6 +3,7 @@
 module PIXEL_ROW(
    input logic      VBN1,
    input logic      RAMP,
+   input logic      RESET,
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
@@ -11,16 +12,15 @@ module PIXEL_ROW(
 );
 
     parameter PIXEL_ARRAY_WIDTH = 2;
-    parameter dv_row = 1;
+    parameter integer dv_row = 1;
 
     genvar i;
     generate
         for (i = 0; i < PIXEL_ARRAY_WIDTH; i++) begin
-            PIXEL_SENSOR #(
-                .dv_pixel(i*0.02*dv_row)
-            ) ps(
+            PIXEL_SENSOR #(.dv_pixel(i*0.02*dv_row)) ps(
                 .VBN1(VBN1),
                 .RAMP(RAMP),
+                .RESET(RESET),
                 .ERASE(ERASE),
                 .EXPOSE(EXPOSE),
                 .READ(READ),
