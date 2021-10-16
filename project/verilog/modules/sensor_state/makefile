@@ -9,7 +9,7 @@ synth:
 	
 # include nesecary library
 	sed -i "" '1{h;s/.*//;G;}' sensorState_netlist.v
-	sed -i "" '1{h;s/.*/`include "..\/..\/..\/lib\/demo.v"/;G;}' sensorState_netlist.v
+	sed -i "" '1{h;s/.*/`include "gates.v"/;G;}' sensorState_netlist.v
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' sensorState_netlist.v
 
 # create circuit diagram
