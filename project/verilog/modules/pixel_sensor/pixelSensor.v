@@ -39,7 +39,6 @@ module PIXEL_SENSOR
   (
    input logic      VBN1,
    input logic      RAMP,
-   input logic      RESET,
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
@@ -47,10 +46,10 @@ module PIXEL_SENSOR
    output [7:0] DATA
    );
 
-   real             v_erase = 1.2;
+   parameter real             v_erase = 1.2;
 
    // hvor mye spenning per steg
-   real             lsb = v_erase/255;
+   parameter real             lsb = v_erase/255;
    
    // lysintensitet
    parameter real   dv_pixel = 0.5;
@@ -65,7 +64,7 @@ module PIXEL_SENSOR
    // ERASE
    //----------------------------------------------------------------
    // Reset the pixel value on pixRst
-   always @(ERASE) begin
+   always_ff @(posedge ERASE) begin
       tmp = v_erase;
       p_data = 0;
       cmp  = 0;
@@ -76,7 +75,7 @@ module PIXEL_SENSOR
    // SENSOR
    //----------------------------------------------------------------
    // Use bias to provide a clock for integration when exposing
-   always @(posedge VBN1) begin
+   always_ff @(posedge VBN1) begin
       if(EXPOSE)
         tmp = tmp - dv_pixel*lsb;
    end
@@ -86,7 +85,7 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    // Use ramp to provide a clock for ADC conversion, assume that ramp
    // and COUNTER are synchronous
-   always @(posedge RAMP) begin
+   always_ff @(posedge RAMP) begin
       adc = adc + lsb;
       if(adc > tmp) // TODO: mulig å fjerne compare
         cmp <= 1;
@@ -95,10 +94,8 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    // Memory latch
    //----------------------------------------------------------------
-   always_comb  begin
-      if(!cmp) begin
-         p_data = COUNTER;
-      end
+   always_ff @(posedge cmp)  begin
+      p_data = COUNTER;
    end
 
    //----------------------------------------------------------------
