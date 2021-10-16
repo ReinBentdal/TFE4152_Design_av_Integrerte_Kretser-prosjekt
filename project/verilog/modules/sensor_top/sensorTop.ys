@@ -1,0 +1,39 @@
+# read design
+read_verilog -sv sensorTop.v
+
+# convert high-level behavioral parts ("processes") to d-type flip-flops and muxes
+proc; 
+fsm;
+
+# simple optimizations
+opt; 
+
+# convert high-level memory constructs to d-type flip-flops and multiplexers
+memory; 
+
+# simple optimizations
+opt
+
+# convert design to (logical) gate-level netlists
+techmap; 
+
+# simple optimizations
+opt
+
+# generic synthesis
+synth -top SENSOR_TOP
+
+# map internal register types to the ones from the cell library
+dfflibmap -liberty gates.lib
+
+# use ABC to map remaining logic to cells from the cell library
+abc -liberty gates.lib
+
+# simple optimizations
+opt
+
+# writes netlist version. -v makes the output more verbous
+write_verilog -v sensorTop_netlist.v
+
+# json used to create svg of circuit
+write_json sensorTop.json
