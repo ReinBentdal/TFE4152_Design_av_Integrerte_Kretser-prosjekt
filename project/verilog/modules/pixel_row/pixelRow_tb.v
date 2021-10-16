@@ -17,8 +17,6 @@ module pixelRow_tb;
     logic analog_ramp;
     logic analog_reset;
 
-    assign analog_reset = 1;
-
     logic erase;
     logic expose;
     logic read;
@@ -30,7 +28,6 @@ module pixelRow_tb;
     PIXEL_ROW #(.PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH)) pixel_row(
         .VBN1(analog_bias),
         .RAMP(analog_ramp),
-        .RESET(analog_reset),
         .ERASE(erase),
         .EXPOSE(expose),
         .READ(read),
