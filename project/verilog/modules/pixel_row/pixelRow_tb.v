@@ -1,4 +1,3 @@
-`include "../../config.v"
 `include "pixelRow.v"
 
 `timescale 1 ns / 1 ps
@@ -12,6 +11,8 @@ module pixelRow_tb;
     parameter integer sim_end = clk_period*2400;
 
     always #clk_period clk=~clk;
+
+    parameter PIXEL_ARRAY_WIDTH = 4;
 
     logic analog_bias;
     logic analog_ramp;

@@ -34,6 +34,7 @@
 //  - Readout of latched value
 //----------------------------------------------------------------
 
+`timescale 1 ns / 1 ps
 
 module PIXEL_SENSOR
   (
@@ -52,7 +53,7 @@ module PIXEL_SENSOR
    parameter real             lsb = v_erase/255;
    
    // lysintensitet
-   parameter real   dv_pixel = 0.5;
+   parameter real   photodiode_lightintensity = 0.5;
 
    real             tmp;
    logic            cmp;
@@ -77,7 +78,7 @@ module PIXEL_SENSOR
    // Use bias to provide a clock for integration when exposing
    always_ff @(posedge VBN1) begin
       if(EXPOSE)
-        tmp = tmp - dv_pixel*lsb;
+         tmp = tmp - photodiode_lightintensity*lsb;
    end
 
    //----------------------------------------------------------------
