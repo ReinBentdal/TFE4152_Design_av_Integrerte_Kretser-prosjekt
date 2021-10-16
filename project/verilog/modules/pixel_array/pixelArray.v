@@ -13,11 +13,13 @@ module PIXEL_ARRAY(
     parameter PIXEL_ARRAY_HEIGHT = 2;
     parameter PIXEL_ARRAY_WIDTH = 2;
 
+    // TODO: photodiode input scene
+
     genvar i;
     generate
         for (i = 0; i < PIXEL_ARRAY_HEIGHT; i++) begin
             PIXEL_ROW #(
-                .dv_row(i), 
+                // TODO: photodiode input
                 .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH)
             ) pr(
                 .VBN1(VBN1),

@@ -22,7 +22,7 @@ module SENSOR_STATE(
     parameter row_read_time = 5;
     parameter read_time = row_read_time*PIXEL_ARRAY_HEIGHT;
 
-    parameter counter_bits = 8;
+    parameter counter_bits = 10;
 
     parameter states = 4; // does not count idle state
     parameter idle_state = 0;
@@ -36,8 +36,12 @@ module SENSOR_STATE(
     wire master_reset;
     assign master_reset = reset | internal_reset;
 
-    // **INTERNAL COUNTER setup**
-    logic [7:0] counter;
+
+
+    //------------------------------------------------------------
+    // Internal counter
+    //------------------------------------------------------------
+    logic [counter_bits-1:0] counter;
     
     logic counter_reset;
     wire master_counter_reset;
@@ -50,7 +54,11 @@ module SENSOR_STATE(
         .out(counter)
     );
 
-    // **Digital RAMP setup**
+
+
+    //------------------------------------------------------------
+    // Digital RAMP
+    //------------------------------------------------------------
     logic [7:0] dRamp;
 
     logic dRamp_reset;
@@ -67,7 +75,11 @@ module SENSOR_STATE(
         .out(p_dRamp)
     );
 
-    // **Row selector setup**
+
+
+    //------------------------------------------------------------
+    // Row selector shifter
+    //------------------------------------------------------------
     logic rowSelect_inc;
     wire rowSelect_enable;
     assign rowSelect_enable = idle ? 0 : state[3];
@@ -86,7 +98,10 @@ module SENSOR_STATE(
         .out(p_row_select)
     );
 
-    // **State selector setup**
+
+    //------------------------------------------------------------
+    // Current STATE shifter
+    //------------------------------------------------------------
     logic stateSelector_shift;
     logic [states-1:0] state;
 
@@ -100,7 +115,10 @@ module SENSOR_STATE(
         .out(state)
     );
 
-    // state machine
+
+    //------------------------------------------------------------
+    // State machine
+    //------------------------------------------------------------
     wire idle;
     assign idle = counter_reset;
 
@@ -140,13 +158,12 @@ module SENSOR_STATE(
         end
     end
 
+    //------------------------------------------------------------
+    // output assign
+    //------------------------------------------------------------
     assign p_erase = idle ? 0 : state[0];
     assign p_expose = idle ? 0 : state[1];
     assign p_aRamp = state == convert_state ? clk : 1'bX;
     assign p_expose_clk = state == expose_state ? clk : 1'bX;
-
-    // always_ff @(posedge master_reset) begin
-    //     counter_reset <= 0;
-    // end
 
 endmodule

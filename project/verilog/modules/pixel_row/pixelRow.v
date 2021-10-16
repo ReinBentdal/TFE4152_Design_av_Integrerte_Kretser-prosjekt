@@ -11,13 +11,18 @@ module PIXEL_ROW(
 );
 
     parameter PIXEL_ARRAY_WIDTH = 2;
-    parameter dv_row = 1;
+
+    // row index
+    parameter j = 0;
+
+    // photodiode light for each pixel
+    parameter [PIXEL_ARRAY_WIDTH-1:0] photodiode_lightintensity_row = ~0;
 
     genvar i;
     generate
         for (i = 0; i < PIXEL_ARRAY_WIDTH; i++) begin
             PIXEL_SENSOR #(
-                .dv_pixel(i*0.02*dv_row)
+                .photodiode_lightintensity(photodiode_lightintensity_row[i])
             ) ps(
                 .VBN1(VBN1),
                 .RAMP(RAMP),

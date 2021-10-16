@@ -9,11 +9,17 @@ module sensorTop_tb ();
     logic clk;
 
     parameter integer clk_period = 500;
-    parameter integer sim_end = clk_period*2400;
+    parameter integer sim_end = clk_period*4800;
 
     always #clk_period clk=~clk;
 
-    SENSOR_TOP SensorTop(
+    parameter PIXEL_ARRAY_WIDTH = 128;
+    parameter PIXEL_ARRAY_HEIGHT = 128;
+
+    SENSOR_TOP #(
+        .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH),
+        .PIXEL_ARRAY_HEIGHT(PIXEL_ARRAY_HEIGHT)
+    ) SensorTop(
         .clk(clk),
         .reset(reset)
     );

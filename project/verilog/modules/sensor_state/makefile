@@ -13,8 +13,8 @@ synth:
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' sensorState_netlist.v
 
 # create circuit diagram
-#	rm sensorState_diagram.svg
-#	netlistsvg sensorState.json -o sensorState_diagram.svg
+	rm sensorState_diagram.svg
+	netlistsvg sensorState.json -o sensorState_diagram.svg
 
 # log circuit components count
 	$(eval dffsr=$(shell cat sensorState_netlist.v |grep DFFSR|wc -l))

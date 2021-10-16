@@ -1,4 +1,3 @@
-`include "../../config.v"
 `include "pixelArray.v"
 
 `timescale 1 ns / 1 ps
@@ -6,8 +5,8 @@
 module pixelArray_tb;
 
 
-    logic clk = 0;
-    logic reset = 0;
+   logic clk = 0;
+   logic reset = 0;
 
    //State duration in clock cycles
    parameter integer c_erase = 5;
@@ -16,37 +15,40 @@ module pixelArray_tb;
    parameter integer c_read_row = 5;
    parameter integer c_read = c_read_row*PIXEL_ARRAY_HEIGHT;
 
-    parameter integer clk_period = 500;
-    parameter integer sim_end = clk_period*2400;
+   parameter integer clk_period = 500;
+   parameter integer sim_end = clk_period*2400;
 
-    always #clk_period clk=~clk;
+   always #clk_period clk=~clk;
 
-    logic analog_bias;
-    logic analog_ramp;
-    logic analog_reset;
+   parameter PIXEL_ARRAY_HEIGHT = 2;
+   parameter PIXEL_ARRAY_WIDTH = 2;
 
-    logic erase;
-    logic expose;
-    logic [PIXEL_ARRAY_HEIGHT-1:0] read;
+   logic analog_bias;
+   logic analog_ramp;
+   logic analog_reset;
 
-    logic [7:0] pixel_counter;
+   logic erase;
+   logic expose;
+   logic [PIXEL_ARRAY_HEIGHT-1:0] read;
 
-    wire [PIXEL_ARRAY_WIDTH-1:0][7:0] rowData;
+   logic [7:0] pixel_counter;
 
-    PIXEL_ARRAY #(
-       .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH), 
-       .PIXEL_ARRAY_HEIGHT(PIXEL_ARRAY_HEIGHT)
-    ) pixel_array(
-        .VBN1(analog_bias),
-        .RAMP(analog_ramp),
-        .ERASE(erase),
-        .EXPOSE(expose),
-        .READ(read),
-        .DATA_OUT(rowData),
-        .COUNTER(pixel_counter)
-    );
+   wire [PIXEL_ARRAY_WIDTH-1:0][7:0] rowData;
 
-    //------------------------------------------------------------
+   PIXEL_ARRAY #(
+      .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH), 
+      .PIXEL_ARRAY_HEIGHT(PIXEL_ARRAY_HEIGHT)
+   ) pixel_array(
+      .VBN1(analog_bias),
+      .RAMP(analog_ramp),
+      .ERASE(erase),
+      .EXPOSE(expose),
+      .READ(read),
+      .DATA_OUT(rowData),
+      .COUNTER(pixel_counter)
+   );
+
+   //------------------------------------------------------------
    // State Machine
    //------------------------------------------------------------
    parameter ERASE=0, EXPOSE=1, CONVERT=2, READ=3, IDLE=4;
