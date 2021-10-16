@@ -7,8 +7,12 @@
 (* hdlname = "\\CircularShifter" *)
 (* src = "../../components/shifter.v:4.1-27.10" *)
 module \$paramod\CircularShifter\length=s32'00000000000000000000000000000010 (clk, inputEnable, outputEnable, reset, out);
-  wire _0_;
-  wire _1_;
+  wire _00_;
+  wire _01_;
+  wire _02_;
+  wire _03_;
+  wire _04_;
+  wire _05_;
   (* src = "../../components/shifter.v:5.11-5.14" *)
   input clk;
   (* src = "../../components/shifter.v:6.11-6.22" *)
@@ -22,20 +26,46 @@ module \$paramod\CircularShifter\length=s32'00000000000000000000000000000010 (cl
   input outputEnable;
   (* src = "../../components/shifter.v:8.11-8.16" *)
   input reset;
-  assign _0_ = inputEnable ? 1'h0 : local_out[0];
-  assign _1_ = inputEnable ? local_out[0] : local_out[1];
+  NOT _06_ (
+    .A(local_out[0]),
+    .Y(_03_)
+  );
+  NOT _07_ (
+    .A(inputEnable),
+    .Y(_04_)
+  );
+  NOR _08_ (
+    .A(_03_),
+    .B(inputEnable),
+    .Y(_00_)
+  );
+  NAND _09_ (
+    .A(local_out[0]),
+    .B(inputEnable),
+    .Y(_05_)
+  );
+  NAND _10_ (
+    .A(_04_),
+    .B(local_out[1]),
+    .Y(_02_)
+  );
+  NAND _11_ (
+    .A(_05_),
+    .B(_02_),
+    .Y(_01_)
+  );
   (* src = "../../components/shifter.v:18.5-25.8" *)
-  DFFSR _4_ (
+  DFFSR _12_ (
     .C(clk),
-    .D(_0_),
+    .D(_00_),
     .Q(local_out[0]),
     .R(1'h0),
     .S(reset)
   );
   (* src = "../../components/shifter.v:18.5-25.8" *)
-  DFFSR _5_ (
+  DFFSR _13_ (
     .C(clk),
-    .D(_1_),
+    .D(_01_),
     .Q(local_out[1]),
     .R(reset),
     .S(1'h0)
@@ -51,6 +81,14 @@ module \$paramod\CircularShifter\length=s32'00000000000000000000000000000100 (cl
   wire _01_;
   wire _02_;
   wire _03_;
+  wire _04_;
+  wire _05_;
+  wire _06_;
+  wire _07_;
+  wire _08_;
+  wire _09_;
+  wire _10_;
+  wire _11_;
   (* src = "../../components/shifter.v:5.11-5.14" *)
   input clk;
   (* src = "../../components/shifter.v:6.11-6.22" *)
@@ -64,12 +102,66 @@ module \$paramod\CircularShifter\length=s32'00000000000000000000000000000100 (cl
   input outputEnable;
   (* src = "../../components/shifter.v:8.11-8.16" *)
   input reset;
-  assign _00_ = inputEnable ? 1'h0 : local_out[0];
-  assign _01_ = inputEnable ? local_out[0] : local_out[1];
-  assign _02_ = inputEnable ? local_out[1] : local_out[2];
-  assign _03_ = inputEnable ? local_out[2] : local_out[3];
+  NOT _12_ (
+    .A(inputEnable),
+    .Y(_04_)
+  );
+  NOT _13_ (
+    .A(local_out[0]),
+    .Y(_05_)
+  );
+  NAND _14_ (
+    .A(local_out[1]),
+    .B(inputEnable),
+    .Y(_06_)
+  );
+  NAND _15_ (
+    .A(local_out[2]),
+    .B(_04_),
+    .Y(_07_)
+  );
+  NAND _16_ (
+    .A(_06_),
+    .B(_07_),
+    .Y(_02_)
+  );
+  NAND _17_ (
+    .A(inputEnable),
+    .B(local_out[0]),
+    .Y(_08_)
+  );
+  NAND _18_ (
+    .A(local_out[1]),
+    .B(_04_),
+    .Y(_09_)
+  );
+  NAND _19_ (
+    .A(_08_),
+    .B(_09_),
+    .Y(_01_)
+  );
+  NOR _20_ (
+    .A(inputEnable),
+    .B(_05_),
+    .Y(_00_)
+  );
+  NAND _21_ (
+    .A(local_out[2]),
+    .B(inputEnable),
+    .Y(_10_)
+  );
+  NAND _22_ (
+    .A(_04_),
+    .B(local_out[3]),
+    .Y(_11_)
+  );
+  NAND _23_ (
+    .A(_10_),
+    .B(_11_),
+    .Y(_03_)
+  );
   (* src = "../../components/shifter.v:18.5-25.8" *)
-  DFFSR _08_ (
+  DFFSR _24_ (
     .C(clk),
     .D(_00_),
     .Q(local_out[0]),
@@ -77,7 +169,7 @@ module \$paramod\CircularShifter\length=s32'00000000000000000000000000000100 (cl
     .S(reset)
   );
   (* src = "../../components/shifter.v:18.5-25.8" *)
-  DFFSR _09_ (
+  DFFSR _25_ (
     .C(clk),
     .D(_01_),
     .Q(local_out[1]),
@@ -85,7 +177,7 @@ module \$paramod\CircularShifter\length=s32'00000000000000000000000000000100 (cl
     .S(1'h0)
   );
   (* src = "../../components/shifter.v:18.5-25.8" *)
-  DFFSR _10_ (
+  DFFSR _26_ (
     .C(clk),
     .D(_02_),
     .Q(local_out[2]),
@@ -93,7 +185,7 @@ module \$paramod\CircularShifter\length=s32'00000000000000000000000000000100 (cl
     .S(1'h0)
   );
   (* src = "../../components/shifter.v:18.5-25.8" *)
-  DFFSR _11_ (
+  DFFSR _27_ (
     .C(clk),
     .D(_03_),
     .Q(local_out[3]),
@@ -115,12 +207,8 @@ module \$paramod\Counter\bits=s32'00000000000000000000000000001000 (clk, reset, 
   wire _05_;
   wire _06_;
   wire _07_;
-  (* force_downto = 32'd1 *)
-  (* src = "../../components/counter.v:18.19-18.26|/usr/local/bin/../share/yosys/techmap.v:270.23-270.24" *)
-  wire [7:0] _08_;
-  (* force_downto = 32'd1 *)
-  (* src = "../../components/counter.v:18.19-18.26|/usr/local/bin/../share/yosys/techmap.v:270.26-270.27" *)
-  wire [7:0] _09_;
+  wire _08_;
+  wire _09_;
   wire _10_;
   wire _11_;
   wire _12_;
@@ -129,6 +217,26 @@ module \$paramod\Counter\bits=s32'00000000000000000000000000001000 (clk, reset, 
   wire _15_;
   wire _16_;
   wire _17_;
+  wire _18_;
+  wire _19_;
+  wire _20_;
+  wire _21_;
+  wire _22_;
+  wire _23_;
+  wire _24_;
+  wire _25_;
+  wire _26_;
+  wire _27_;
+  wire _28_;
+  wire _29_;
+  wire _30_;
+  wire _31_;
+  wire _32_;
+  wire _33_;
+  wire _34_;
+  wire _35_;
+  wire _36_;
+  wire _37_;
   (* src = "../../components/counter.v:5.11-5.14" *)
   input clk;
   (* src = "../../components/counter.v:7.11-7.17" *)
@@ -137,925 +245,405 @@ module \$paramod\Counter\bits=s32'00000000000000000000000000001000 (clk, reset, 
   output [7:0] out;
   (* src = "../../components/counter.v:6.11-6.16" *)
   input reset;
-  assign _08_[0] = ~out[0];
-  assign _09_[1] = out[1] ^ out[0];
-  assign _00_ = ~(out[1] & out[0]);
-  assign _09_[2] = ~(_00_ ^ out[2]);
-  assign _01_ = out[2] & ~(_00_);
-  assign _09_[3] = _01_ ^ out[3];
-  assign _02_ = ~(out[3] & out[2]);
-  assign _03_ = _02_ | _00_;
-  assign _09_[4] = ~(_03_ ^ out[4]);
-  assign _04_ = out[4] & ~(_03_);
-  assign _09_[5] = _04_ ^ out[5];
-  assign _05_ = ~(out[5] & out[4]);
-  assign _06_ = _05_ | _03_;
-  assign _09_[6] = ~(_06_ ^ out[6]);
-  assign _07_ = out[6] & ~(_06_);
-  assign _09_[7] = _07_ ^ out[7];
-  assign _10_ = enable ? _08_[0] : out[0];
-  assign _11_ = enable ? _09_[1] : out[1];
-  assign _12_ = enable ? _09_[2] : out[2];
-  assign _13_ = enable ? _09_[3] : out[3];
-  assign _14_ = enable ? _09_[4] : out[4];
-  assign _15_ = enable ? _09_[5] : out[5];
-  assign _16_ = enable ? _09_[6] : out[6];
-  assign _17_ = enable ? _09_[7] : out[7];
+  NOT _38_ (
+    .A(enable),
+    .Y(_08_)
+  );
+  NOT _39_ (
+    .A(out[5]),
+    .Y(_09_)
+  );
+  NOT _40_ (
+    .A(out[4]),
+    .Y(_10_)
+  );
+  NOT _41_ (
+    .A(out[3]),
+    .Y(_11_)
+  );
+  NOT _42_ (
+    .A(out[2]),
+    .Y(_12_)
+  );
+  NOT _43_ (
+    .A(out[1]),
+    .Y(_13_)
+  );
+  NOT _44_ (
+    .A(out[0]),
+    .Y(_14_)
+  );
+  NOR _45_ (
+    .A(_08_),
+    .B(_14_),
+    .Y(_15_)
+  );
+  NAND _46_ (
+    .A(enable),
+    .B(out[0]),
+    .Y(_16_)
+  );
+  NOR _47_ (
+    .A(_13_),
+    .B(_16_),
+    .Y(_17_)
+  );
+  NOT _48_ (
+    .A(_17_),
+    .Y(_18_)
+  );
+  NOR _49_ (
+    .A(_12_),
+    .B(_18_),
+    .Y(_19_)
+  );
+  NAND _50_ (
+    .A(out[2]),
+    .B(_17_),
+    .Y(_20_)
+  );
+  NOR _51_ (
+    .A(_11_),
+    .B(_20_),
+    .Y(_21_)
+  );
+  NOT _52_ (
+    .A(_21_),
+    .Y(_22_)
+  );
+  NOR _53_ (
+    .A(_10_),
+    .B(_22_),
+    .Y(_23_)
+  );
+  NAND _54_ (
+    .A(out[4]),
+    .B(_21_),
+    .Y(_24_)
+  );
+  NOR _55_ (
+    .A(_09_),
+    .B(_24_),
+    .Y(_25_)
+  );
+  NAND _56_ (
+    .A(out[6]),
+    .B(_25_),
+    .Y(_26_)
+  );
+  NOT _57_ (
+    .A(_26_),
+    .Y(_27_)
+  );
+  NOR _58_ (
+    .A(out[6]),
+    .B(_25_),
+    .Y(_28_)
+  );
+  NOR _59_ (
+    .A(_27_),
+    .B(_28_),
+    .Y(_06_)
+  );
+  NOR _60_ (
+    .A(out[5]),
+    .B(_23_),
+    .Y(_29_)
+  );
+  NOR _61_ (
+    .A(_25_),
+    .B(_29_),
+    .Y(_05_)
+  );
+  NOR _62_ (
+    .A(out[4]),
+    .B(_21_),
+    .Y(_30_)
+  );
+  NOR _63_ (
+    .A(_23_),
+    .B(_30_),
+    .Y(_04_)
+  );
+  NOR _64_ (
+    .A(out[3]),
+    .B(_19_),
+    .Y(_31_)
+  );
+  NOR _65_ (
+    .A(_21_),
+    .B(_31_),
+    .Y(_03_)
+  );
+  NOR _66_ (
+    .A(out[2]),
+    .B(_17_),
+    .Y(_32_)
+  );
+  NOR _67_ (
+    .A(_19_),
+    .B(_32_),
+    .Y(_02_)
+  );
+  NOR _68_ (
+    .A(out[1]),
+    .B(_15_),
+    .Y(_33_)
+  );
+  NOR _69_ (
+    .A(_17_),
+    .B(_33_),
+    .Y(_01_)
+  );
+  NOR _70_ (
+    .A(enable),
+    .B(out[0]),
+    .Y(_34_)
+  );
+  NOR _71_ (
+    .A(_15_),
+    .B(_34_),
+    .Y(_00_)
+  );
+  NAND _72_ (
+    .A(out[7]),
+    .B(_26_),
+    .Y(_35_)
+  );
+  NOR _73_ (
+    .A(out[7]),
+    .B(_26_),
+    .Y(_36_)
+  );
+  NOT _74_ (
+    .A(_36_),
+    .Y(_37_)
+  );
+  NAND _75_ (
+    .A(_35_),
+    .B(_37_),
+    .Y(_07_)
+  );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _42_ (
+  DFFSR _76_ (
     .C(clk),
-    .D(_10_),
+    .D(_00_),
     .Q(out[0]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _43_ (
+  DFFSR _77_ (
     .C(clk),
-    .D(_11_),
+    .D(_01_),
     .Q(out[1]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _44_ (
+  DFFSR _78_ (
     .C(clk),
-    .D(_12_),
+    .D(_02_),
     .Q(out[2]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _45_ (
+  DFFSR _79_ (
     .C(clk),
-    .D(_13_),
+    .D(_03_),
     .Q(out[3]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _46_ (
+  DFFSR _80_ (
     .C(clk),
-    .D(_14_),
+    .D(_04_),
     .Q(out[4]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _47_ (
+  DFFSR _81_ (
     .C(clk),
-    .D(_15_),
+    .D(_05_),
     .Q(out[5]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _48_ (
+  DFFSR _82_ (
     .C(clk),
-    .D(_16_),
+    .D(_06_),
     .Q(out[6]),
     .R(reset),
     .S(1'h0)
   );
   (* src = "../../components/counter.v:13.5-20.8" *)
-  DFFSR _49_ (
+  DFFSR _83_ (
     .C(clk),
-    .D(_17_),
+    .D(_07_),
     .Q(out[7]),
     .R(reset),
     .S(1'h0)
   );
-  assign _08_[7:1] = out[7:1];
-  assign _09_[0] = _08_[0];
 endmodule
 
 (* dynports =  1  *)
 (* top =  1  *)
 (* src = "sensorState.v:5.1-152.10" *)
 module SENSOR_STATE(clk, reset, p_erase, p_expose, p_expose_clk, p_row_select, p_aRamp, p_dRamp);
-  wire _0000_;
-  wire _0001_;
-  wire _0002_;
-  (* src = "sensorState.v:135.21-135.65" *)
-  wire _0003_;
-  wire _0004_;
-  wire _0005_;
-  wire _0006_;
-  wire _0007_;
-  wire _0008_;
-  wire _0009_;
-  wire _0010_;
-  wire _0011_;
-  wire _0012_;
-  wire _0013_;
-  wire _0014_;
-  wire _0015_;
-  wire _0016_;
-  wire _0017_;
-  wire _0018_;
-  wire _0019_;
-  wire _0020_;
-  wire _0021_;
-  wire _0022_;
-  wire _0023_;
-  wire _0024_;
-  wire _0025_;
-  wire _0026_;
-  wire _0027_;
-  wire _0028_;
-  wire _0029_;
-  wire _0030_;
-  wire _0031_;
-  wire _0032_;
-  wire _0033_;
-  wire _0034_;
-  wire _0035_;
-  wire _0036_;
-  wire _0037_;
-  wire _0038_;
-  wire _0039_;
-  wire _0040_;
-  wire _0041_;
-  wire _0042_;
-  wire _0043_;
-  wire _0044_;
-  wire _0045_;
-  wire _0046_;
-  wire _0047_;
-  wire _0048_;
-  wire _0049_;
-  wire _0050_;
-  wire _0051_;
-  wire _0052_;
-  wire _0053_;
-  wire _0054_;
-  wire _0055_;
-  wire _0056_;
-  wire _0057_;
-  wire _0058_;
-  wire _0059_;
-  wire _0060_;
-  wire _0061_;
-  wire _0062_;
-  wire _0063_;
-  wire _0064_;
-  wire _0065_;
-  wire _0066_;
-  wire _0067_;
-  wire _0068_;
-  wire _0069_;
-  wire _0070_;
-  wire _0071_;
-  wire _0072_;
-  wire _0073_;
-  wire _0074_;
-  wire _0075_;
-  wire _0076_;
-  wire _0077_;
-  wire _0078_;
-  wire _0079_;
-  wire _0080_;
-  wire _0081_;
-  wire _0082_;
-  wire _0083_;
-  wire _0084_;
-  wire _0085_;
-  wire _0086_;
-  wire _0087_;
-  wire _0088_;
-  wire _0089_;
-  wire _0090_;
-  wire _0091_;
-  wire _0092_;
-  wire _0093_;
-  wire _0094_;
-  wire _0095_;
-  wire _0096_;
-  wire _0097_;
-  wire _0098_;
-  wire _0099_;
-  wire _0100_;
-  wire _0101_;
-  wire _0102_;
-  wire _0103_;
-  wire _0104_;
-  wire _0105_;
-  wire _0106_;
-  wire _0107_;
-  wire _0108_;
-  wire _0109_;
-  wire _0110_;
-  wire _0111_;
-  wire _0112_;
-  wire _0113_;
-  wire _0114_;
-  wire _0115_;
-  wire _0116_;
-  wire _0117_;
-  wire _0118_;
-  wire _0119_;
-  wire _0120_;
-  wire _0121_;
-  wire _0122_;
-  wire _0123_;
-  wire _0124_;
-  wire _0125_;
-  wire _0126_;
-  wire _0127_;
-  wire _0128_;
-  wire _0129_;
-  wire _0130_;
-  wire _0131_;
-  wire _0132_;
-  wire _0133_;
-  wire _0134_;
-  wire _0135_;
-  wire _0136_;
-  wire _0137_;
-  wire _0138_;
-  wire _0139_;
-  wire _0140_;
-  wire _0141_;
-  wire _0142_;
-  wire _0143_;
-  wire _0144_;
-  wire _0145_;
-  wire _0146_;
-  wire _0147_;
-  wire _0148_;
-  wire _0149_;
-  wire _0150_;
-  wire _0151_;
-  wire _0152_;
-  wire _0153_;
-  wire _0154_;
-  wire _0155_;
-  wire _0156_;
-  wire _0157_;
-  wire _0158_;
-  wire _0159_;
-  wire _0160_;
-  wire _0161_;
-  wire _0162_;
-  wire _0163_;
-  wire _0164_;
-  wire _0165_;
-  wire _0166_;
-  wire _0167_;
-  wire _0168_;
-  wire _0169_;
-  wire _0170_;
-  wire _0171_;
-  wire _0172_;
-  wire _0173_;
-  wire _0174_;
-  wire _0175_;
-  wire _0176_;
-  wire _0177_;
-  wire _0178_;
-  wire _0179_;
-  wire _0180_;
-  wire _0181_;
-  wire _0182_;
-  wire _0183_;
-  wire _0184_;
-  wire _0185_;
-  wire _0186_;
-  wire _0187_;
-  wire _0188_;
-  wire _0189_;
-  wire _0190_;
-  wire _0191_;
-  wire _0192_;
-  wire _0193_;
-  wire _0194_;
-  wire _0195_;
-  wire _0196_;
-  wire _0197_;
-  wire _0198_;
-  wire _0199_;
-  wire _0200_;
-  wire _0201_;
-  wire _0202_;
-  wire _0203_;
-  wire _0204_;
-  wire _0205_;
-  wire _0206_;
-  wire _0207_;
-  wire _0208_;
-  wire _0209_;
-  wire _0210_;
-  wire _0211_;
-  wire _0212_;
-  wire _0213_;
-  wire _0214_;
-  wire _0215_;
-  wire _0216_;
-  wire _0217_;
-  wire _0218_;
-  wire _0219_;
-  wire _0220_;
-  wire _0221_;
-  wire _0222_;
-  wire _0223_;
-  wire _0224_;
-  wire _0225_;
-  wire _0226_;
-  wire _0227_;
-  wire _0228_;
-  wire _0229_;
-  wire _0230_;
-  wire _0231_;
-  wire _0232_;
-  wire _0233_;
-  wire _0234_;
-  wire _0235_;
-  wire _0236_;
-  wire _0237_;
-  wire _0238_;
-  wire _0239_;
-  wire _0240_;
-  wire _0241_;
-  wire _0242_;
-  wire _0243_;
-  wire _0244_;
-  wire _0245_;
-  wire _0246_;
-  wire _0247_;
-  wire _0248_;
-  wire _0249_;
-  wire _0250_;
-  wire _0251_;
-  wire _0252_;
-  wire _0253_;
-  wire _0254_;
-  wire _0255_;
-  wire _0256_;
-  wire _0257_;
-  wire _0258_;
-  wire _0259_;
-  wire _0260_;
-  wire _0261_;
-  wire _0262_;
-  wire _0263_;
-  wire _0264_;
-  wire _0265_;
-  wire _0266_;
-  wire _0267_;
-  wire _0268_;
-  wire _0269_;
-  wire _0270_;
-  wire _0271_;
-  wire _0272_;
-  wire _0273_;
-  wire _0274_;
-  wire _0275_;
-  wire _0276_;
-  wire _0277_;
-  wire _0278_;
-  wire _0279_;
-  wire _0280_;
-  wire _0281_;
-  wire _0282_;
-  wire _0283_;
-  wire _0284_;
-  wire _0285_;
-  wire _0286_;
-  wire _0287_;
-  wire _0288_;
-  wire _0289_;
-  wire _0290_;
-  wire _0291_;
-  wire _0292_;
-  wire _0293_;
-  wire _0294_;
-  wire _0295_;
-  wire _0296_;
-  wire _0297_;
-  wire _0298_;
-  wire _0299_;
-  wire _0300_;
-  wire _0301_;
-  wire _0302_;
-  wire _0303_;
-  wire _0304_;
-  wire _0305_;
-  wire _0306_;
-  wire _0307_;
-  wire _0308_;
-  wire _0309_;
-  wire _0310_;
-  wire _0311_;
-  wire _0312_;
-  wire _0313_;
-  wire _0314_;
-  wire _0315_;
-  wire _0316_;
-  wire _0317_;
-  wire _0318_;
-  wire _0319_;
-  wire _0320_;
-  wire _0321_;
-  wire _0322_;
-  wire _0323_;
-  wire _0324_;
-  wire _0325_;
-  wire _0326_;
-  wire _0327_;
-  wire _0328_;
-  wire _0329_;
-  wire _0330_;
-  wire _0331_;
-  wire _0332_;
-  wire _0333_;
-  wire _0334_;
-  wire _0335_;
-  wire _0336_;
-  wire _0337_;
-  wire _0338_;
-  wire _0339_;
-  wire _0340_;
-  wire _0341_;
-  wire _0342_;
-  wire _0343_;
-  wire _0344_;
-  wire _0345_;
-  wire _0346_;
-  wire _0347_;
-  wire _0348_;
-  wire _0349_;
-  wire _0350_;
-  wire _0351_;
-  wire _0352_;
-  wire _0353_;
-  wire _0354_;
-  wire _0355_;
-  wire _0356_;
-  wire _0357_;
-  wire _0358_;
-  wire _0359_;
-  wire _0360_;
-  wire _0361_;
-  wire _0362_;
-  wire _0363_;
-  wire _0364_;
-  wire _0365_;
-  wire _0366_;
-  wire _0367_;
-  wire _0368_;
-  wire _0369_;
-  wire _0370_;
-  wire _0371_;
-  wire _0372_;
-  wire _0373_;
-  wire _0374_;
-  wire _0375_;
-  wire _0376_;
-  wire _0377_;
-  wire _0378_;
-  wire _0379_;
-  wire _0380_;
-  wire _0381_;
-  wire _0382_;
-  wire _0383_;
-  wire _0384_;
-  wire _0385_;
-  wire _0386_;
-  wire _0387_;
-  wire _0388_;
-  wire _0389_;
-  wire _0390_;
-  wire _0391_;
-  wire _0392_;
-  wire _0393_;
-  wire _0394_;
-  wire _0395_;
-  wire _0396_;
-  wire _0397_;
-  wire _0398_;
-  wire _0399_;
-  wire _0400_;
-  wire _0401_;
-  wire _0402_;
-  wire _0403_;
-  wire _0404_;
-  wire _0405_;
-  wire _0406_;
-  wire _0407_;
-  wire _0408_;
-  wire _0409_;
-  wire _0410_;
-  wire _0411_;
-  wire _0412_;
-  wire _0413_;
-  wire _0414_;
-  wire _0415_;
-  wire _0416_;
-  wire _0417_;
-  wire _0418_;
-  wire _0419_;
-  wire _0420_;
-  wire _0421_;
-  wire _0422_;
-  wire _0423_;
-  wire _0424_;
-  wire _0425_;
-  wire _0426_;
-  wire _0427_;
-  wire _0428_;
-  wire _0429_;
-  wire _0430_;
-  wire _0431_;
-  wire _0432_;
-  wire _0433_;
-  wire _0434_;
-  wire _0435_;
-  wire _0436_;
-  wire _0437_;
-  wire _0438_;
-  wire _0439_;
-  wire _0440_;
-  wire _0441_;
-  wire _0442_;
-  wire _0443_;
-  wire _0444_;
-  wire _0445_;
-  wire _0446_;
-  wire _0447_;
-  wire _0448_;
-  wire _0449_;
-  wire _0450_;
-  wire _0451_;
-  wire _0452_;
-  wire _0453_;
-  wire _0454_;
-  wire _0455_;
-  wire _0456_;
-  wire _0457_;
-  wire _0458_;
-  wire _0459_;
-  wire _0460_;
-  wire _0461_;
-  wire _0462_;
-  wire _0463_;
-  wire _0464_;
-  wire _0465_;
-  wire _0466_;
-  wire _0467_;
-  wire _0468_;
-  wire _0469_;
-  wire _0470_;
-  wire _0471_;
-  wire _0472_;
-  wire _0473_;
-  wire _0474_;
-  wire _0475_;
-  wire _0476_;
-  wire _0477_;
-  wire _0478_;
-  wire _0479_;
-  wire _0480_;
-  wire _0481_;
-  wire _0482_;
-  wire _0483_;
-  wire _0484_;
-  wire _0485_;
-  wire _0486_;
-  wire _0487_;
-  wire _0488_;
-  wire _0489_;
-  wire _0490_;
-  wire _0491_;
-  wire _0492_;
-  wire _0493_;
-  wire _0494_;
-  wire _0495_;
-  wire _0496_;
-  wire _0497_;
-  wire _0498_;
-  wire _0499_;
-  wire _0500_;
-  wire _0501_;
-  wire _0502_;
-  wire _0503_;
-  wire _0504_;
-  wire _0505_;
-  wire _0506_;
-  wire _0507_;
-  wire _0508_;
-  wire _0509_;
-  wire _0510_;
-  wire _0511_;
-  wire _0512_;
-  wire _0513_;
-  wire _0514_;
-  wire _0515_;
-  wire _0516_;
-  wire _0517_;
-  wire _0518_;
-  wire _0519_;
-  wire _0520_;
-  wire _0521_;
-  wire _0522_;
-  wire _0523_;
-  wire _0524_;
-  wire _0525_;
-  wire _0526_;
-  wire _0527_;
-  wire _0528_;
-  wire _0529_;
-  wire _0530_;
-  wire _0531_;
-  wire _0532_;
-  wire _0533_;
-  wire _0534_;
-  wire _0535_;
-  wire _0536_;
-  wire _0537_;
-  wire _0538_;
-  wire _0539_;
-  wire _0540_;
-  wire _0541_;
-  wire _0542_;
-  wire _0543_;
-  wire _0544_;
-  wire _0545_;
-  wire _0546_;
-  wire _0547_;
-  wire _0548_;
-  wire _0549_;
-  wire _0550_;
-  wire _0551_;
-  wire _0552_;
-  wire _0553_;
-  wire _0554_;
-  wire _0555_;
-  wire _0556_;
-  wire _0557_;
-  wire _0558_;
-  wire _0559_;
-  wire _0560_;
-  wire _0561_;
-  wire _0562_;
-  wire _0563_;
-  wire _0564_;
-  wire _0565_;
-  wire _0566_;
-  wire _0567_;
-  wire _0568_;
-  wire _0569_;
-  wire _0570_;
-  wire _0571_;
-  wire _0572_;
-  wire _0573_;
-  wire _0574_;
-  wire _0575_;
-  wire _0576_;
-  wire _0577_;
-  wire _0578_;
-  wire _0579_;
-  wire _0580_;
-  wire _0581_;
-  wire _0582_;
-  wire _0583_;
-  wire _0584_;
-  wire _0585_;
-  wire _0586_;
-  wire _0587_;
-  wire _0588_;
-  wire _0589_;
-  wire _0590_;
-  wire _0591_;
-  wire _0592_;
-  wire _0593_;
-  wire _0594_;
-  wire _0595_;
-  wire _0596_;
-  wire _0597_;
-  wire _0598_;
-  wire _0599_;
-  wire _0600_;
-  wire _0601_;
-  wire _0602_;
-  wire _0603_;
-  wire _0604_;
-  wire _0605_;
-  wire _0606_;
-  wire _0607_;
-  wire _0608_;
-  wire _0609_;
-  wire _0610_;
-  wire _0611_;
-  wire _0612_;
-  wire _0613_;
-  wire _0614_;
-  wire _0615_;
-  wire _0616_;
-  wire _0617_;
-  wire _0618_;
-  wire _0619_;
-  wire _0620_;
-  wire _0621_;
-  wire _0622_;
-  wire _0623_;
-  wire _0624_;
-  wire _0625_;
-  wire _0626_;
-  wire _0627_;
-  wire _0628_;
-  wire _0629_;
-  wire _0630_;
-  wire _0631_;
-  wire _0632_;
-  wire _0633_;
-  wire _0634_;
-  wire _0635_;
-  wire _0636_;
-  wire _0637_;
-  wire _0638_;
-  wire _0639_;
-  wire _0640_;
-  wire _0641_;
-  wire _0642_;
-  wire _0643_;
-  wire _0644_;
-  wire _0645_;
-  wire _0646_;
-  wire _0647_;
-  wire _0648_;
-  wire _0649_;
-  wire _0650_;
-  wire _0651_;
-  wire _0652_;
-  wire _0653_;
-  wire _0654_;
-  wire _0655_;
-  wire _0656_;
-  wire _0657_;
-  wire _0658_;
-  wire _0659_;
-  wire _0660_;
-  wire _0661_;
-  wire _0662_;
-  wire _0663_;
-  wire _0664_;
-  wire _0665_;
-  wire _0666_;
-  wire _0667_;
-  wire _0668_;
-  wire _0669_;
-  wire _0670_;
-  wire _0671_;
-  wire _0672_;
-  wire _0673_;
-  wire _0674_;
-  wire _0675_;
-  wire _0676_;
-  wire _0677_;
-  wire _0678_;
-  wire _0679_;
-  wire _0680_;
-  wire _0681_;
-  wire _0682_;
-  wire _0683_;
-  wire _0684_;
-  wire _0685_;
-  wire _0686_;
-  wire _0687_;
-  wire _0688_;
-  wire _0689_;
-  wire _0690_;
-  wire _0691_;
-  wire _0692_;
-  wire _0693_;
-  wire _0694_;
-  wire _0695_;
-  wire _0696_;
-  wire _0697_;
-  wire _0698_;
-  wire _0699_;
-  wire _0700_;
-  wire _0701_;
-  wire _0702_;
-  wire _0703_;
-  wire _0704_;
-  wire _0705_;
-  wire _0706_;
-  wire _0707_;
-  wire _0708_;
-  wire _0709_;
-  wire _0710_;
-  wire _0711_;
-  wire _0712_;
-  wire _0713_;
-  wire _0714_;
-  wire _0715_;
-  wire _0716_;
-  wire _0717_;
-  wire _0718_;
-  wire _0719_;
-  wire _0720_;
-  wire _0721_;
-  wire _0722_;
-  wire _0723_;
-  wire _0724_;
-  wire _0725_;
-  wire _0726_;
-  wire _0727_;
-  wire _0728_;
-  wire _0729_;
-  wire _0730_;
-  wire _0731_;
-  wire _0732_;
-  wire _0733_;
-  wire _0734_;
-  wire _0735_;
-  wire _0736_;
-  wire _0737_;
-  wire _0738_;
-  wire _0739_;
-  wire _0740_;
-  wire _0741_;
-  wire _0742_;
-  wire _0743_;
-  wire _0744_;
-  wire _0745_;
-  wire _0746_;
-  wire _0747_;
-  wire _0748_;
-  wire _0749_;
-  wire _0750_;
-  wire _0751_;
-  wire _0752_;
-  wire _0753_;
-  wire _0754_;
-  wire _0755_;
-  wire _0756_;
-  wire _0757_;
-  wire _0758_;
-  wire _0759_;
-  wire _0760_;
-  wire _0761_;
-  wire _0762_;
-  wire _0763_;
-  wire _0764_;
-  wire _0765_;
-  wire _0766_;
-  wire _0767_;
-  wire _0768_;
-  wire _0769_;
-  wire _0770_;
-  wire _0771_;
-  wire _0772_;
-  wire _0773_;
-  wire _0774_;
-  wire _0775_;
-  wire _0776_;
-  wire _0777_;
-  wire _0778_;
-  wire _0779_;
-  wire _0780_;
-  wire _0781_;
-  wire _0782_;
-  wire _0783_;
-  wire _0784_;
-  wire _0785_;
-  wire _0786_;
-  wire _0787_;
-  wire _0788_;
-  wire _0789_;
-  wire _0790_;
-  wire _0791_;
-  wire _0792_;
-  wire _0793_;
-  wire _0794_;
-  wire _0795_;
-  wire _0796_;
-  wire _0797_;
-  wire _0798_;
-  wire _0799_;
-  wire _0800_;
-  wire _0801_;
-  wire _0802_;
-  wire _0803_;
-  wire _0804_;
-  wire _0805_;
-  wire _0806_;
-  wire _0807_;
-  wire _0808_;
-  wire _0809_;
-  wire _0810_;
-  wire _0811_;
-  wire _0812_;
-  wire _0813_;
-  wire _0814_;
-  wire _0815_;
-  wire _0816_;
-  wire _0817_;
-  wire _0818_;
-  wire _0819_;
-  wire _0820_;
-  wire _0821_;
+  wire _000_;
+  wire _001_;
+  wire _002_;
+  wire _003_;
+  wire _004_;
+  wire _005_;
+  wire _006_;
+  wire _007_;
+  wire _008_;
+  wire _009_;
+  wire _010_;
+  wire _011_;
+  wire _012_;
+  wire _013_;
+  wire _014_;
+  wire _015_;
+  wire _016_;
+  wire _017_;
+  wire _018_;
+  wire _019_;
+  wire _020_;
+  wire _021_;
+  wire _022_;
+  wire _023_;
+  wire _024_;
+  wire _025_;
+  wire _026_;
+  wire _027_;
+  wire _028_;
+  wire _029_;
+  wire _030_;
+  wire _031_;
+  wire _032_;
+  wire _033_;
+  wire _034_;
+  wire _035_;
+  wire _036_;
+  wire _037_;
+  wire _038_;
+  wire _039_;
+  wire _040_;
+  wire _041_;
+  wire _042_;
+  wire _043_;
+  wire _044_;
+  wire _045_;
+  wire _046_;
+  wire _047_;
+  wire _048_;
+  wire _049_;
+  wire _050_;
+  wire _051_;
+  wire _052_;
+  wire _053_;
+  wire _054_;
+  wire _055_;
+  wire _056_;
+  wire _057_;
+  wire _058_;
+  wire _059_;
+  wire _060_;
+  wire _061_;
+  wire _062_;
+  wire _063_;
+  wire _064_;
+  wire _065_;
+  wire _066_;
+  wire _067_;
+  wire _068_;
+  wire _069_;
+  wire _070_;
+  wire _071_;
+  wire _072_;
+  wire _073_;
+  wire _074_;
+  wire _075_;
+  wire _076_;
+  wire _077_;
+  wire _078_;
+  wire _079_;
+  wire _080_;
+  wire _081_;
+  wire _082_;
+  wire _083_;
+  wire _084_;
+  wire _085_;
+  wire _086_;
+  wire _087_;
+  wire _088_;
+  wire _089_;
+  wire _090_;
+  wire _091_;
+  wire _092_;
+  wire _093_;
+  wire _094_;
+  wire _095_;
+  wire _096_;
+  wire _097_;
+  wire _098_;
+  wire _099_;
+  wire _100_;
+  wire _101_;
+  wire _102_;
+  wire _103_;
+  wire _104_;
+  wire _105_;
+  wire _106_;
+  wire _107_;
+  wire _108_;
+  wire _109_;
+  wire _110_;
+  wire _111_;
+  wire _112_;
+  wire _113_;
+  wire _114_;
+  wire _115_;
+  wire _116_;
+  wire _117_;
+  wire _118_;
+  wire _119_;
+  wire _120_;
+  wire _121_;
+  wire _122_;
+  wire _123_;
+  wire _124_;
+  wire _125_;
+  wire _126_;
+  wire _127_;
+  wire _128_;
+  wire _129_;
+  wire _130_;
+  wire _131_;
+  wire _132_;
+  wire _133_;
+  wire _134_;
+  wire _135_;
+  wire _136_;
+  wire _137_;
+  wire _138_;
+  wire _139_;
+  wire _140_;
+  wire _141_;
+  wire _142_;
+  wire _143_;
+  wire _144_;
+  wire _145_;
+  wire _146_;
+  wire _147_;
+  wire _148_;
+  wire _149_;
   (* src = "sensorState.v:6.11-6.14" *)
   input clk;
   (* src = "sensorState.v:40.17-40.24" *)
@@ -1102,856 +690,788 @@ module SENSOR_STATE(clk, reset, p_erase, p_expose, p_expose_clk, p_row_select, p
   wire [3:0] state;
   (* src = "sensorState.v:90.11-90.30" *)
   wire stateSelector_shift;
-  assign _0173_ = ~(state[1] | state[0]);
-  assign _0184_ = state[2] | ~(state[3]);
-  assign _0195_ = _0173_ & ~(_0184_);
-  assign _0206_ = counter[0] | ~(counter[1]);
-  assign _0216_ = counter[3] & ~(counter[2]);
-  assign _0224_ = _0206_ | ~(_0216_);
-  assign _0234_ = counter[4] | counter[5];
-  assign _0243_ = counter[7] | counter[6];
-  assign _0253_ = _0243_ | _0234_;
-  assign _0264_ = _0253_ | _0224_;
-  assign _0275_ = _0195_ & ~(_0264_);
-  assign _0286_ = ~(_0275_ | counter_reset);
-  assign _0297_ = state[1] | ~(state[0]);
-  assign _0308_ = ~(state[3] | state[2]);
-  assign _0319_ = _0308_ & ~(_0297_);
-  assign _0330_ = counter[1] | ~(counter[0]);
-  assign _0341_ = counter[3] | ~(counter[2]);
-  assign _0352_ = _0341_ | _0330_;
-  assign _0363_ = _0352_ | _0253_;
-  assign _0374_ = _0319_ & ~(_0363_);
-  assign _0385_ = state[0] | ~(state[1]);
-  assign _0396_ = _0385_ | ~(_0308_);
-  assign _0407_ = counter[0] & counter[1];
-  assign _0417_ = counter[3] & counter[2];
-  assign _0426_ = _0417_ & _0407_;
-  assign _0436_ = counter[4] & counter[5];
-  assign _0445_ = ~(counter[7] & counter[6]);
-  assign _0456_ = _0445_ | ~(_0436_);
-  assign _0467_ = _0426_ & ~(_0456_);
-  assign _0478_ = _0467_ & ~(_0396_);
-  assign _0489_ = _0478_ | _0374_;
-  assign _0500_ = state[3] | ~(state[2]);
-  assign dRamp_enable = _0173_ & ~(_0500_);
-  assign _0521_ = dRamp_enable & _0467_;
-  assign _0532_ = _0521_ | _0489_;
-  assign _0001_ = _0286_ & ~(_0532_);
-  assign _0002_ = _0275_ & ~(_0532_);
-  assign _0000_ = ~(_0532_ | _0275_);
-  assign _0573_ = counter[0] | counter[1];
-  assign _0584_ = counter[3] | counter[2];
-  assign _0595_ = _0584_ | _0573_;
-  assign _0606_ = _0595_ | _0253_;
-  assign _0616_ = ~counter[0];
-  assign _0625_ = counter[6] | ~(counter[7]);
-  assign _0634_ = _0436_ & ~(_0625_);
-  assign _0644_ = _0445_ & ~(_0634_);
-  assign _0655_ = counter[4] | ~(counter[5]);
-  assign _0666_ = _0655_ | _0625_;
-  assign _0687_ = _0584_ | ~(_0584_);
-  assign _0698_ = _0687_ & ~(_0666_);
-  assign _0709_ = _0644_ & ~(_0698_);
-  assign _0720_ = _0666_ | _0595_;
-  assign _0731_ = _0709_ & ~(_0720_);
-  assign _0742_ = ~counter[7];
-  assign _0753_ = _0720_ & _0709_;
-  assign _0764_ = ~(counter[5] | counter[6]);
-  assign _0775_ = _0764_ ^ counter[7];
-  assign _0786_ = _0753_ ? _0742_ : _0775_;
-  assign _0797_ = ~counter[6];
-  assign _0802_ = counter[5] ^ counter[6];
-  assign _0803_ = _0753_ ? _0797_ : _0802_;
-  assign _0804_ = _0786_ & ~(_0803_);
-  assign _0805_ = ~counter[5];
-  assign _0806_ = ~counter[4];
-  assign _0807_ = _0806_ & ~(_0687_);
-  assign _0808_ = _0807_ ^ _0805_;
-  assign _0809_ = _0753_ ? counter[5] : _0808_;
-  assign _0810_ = _0687_ ^ counter[4];
-  assign _0811_ = _0753_ ? _0806_ : _0810_;
-  assign _0812_ = _0811_ | _0809_;
-  assign _0813_ = _0812_ | ~(_0804_);
-  assign _0814_ = _0813_ | _0595_;
-  assign _0004_ = _0814_ | _0731_;
-  assign _0005_ = ~_0808_;
-  assign _0006_ = _0753_ ? _0805_ : _0005_;
-  assign _0007_ = _0804_ & ~(_0006_);
-  assign _0008_ = _0786_ & ~(_0007_);
-  assign _0009_ = _0687_ & ~(_0813_);
-  assign _0010_ = _0008_ & ~(_0009_);
-  assign _0011_ = _0731_ | ~(_0010_);
-  assign _0012_ = _0004_ & ~(_0011_);
-  assign _0013_ = _0010_ | _0731_;
-  assign _0014_ = _0012_ ? _0731_ : _0013_;
-  assign _0015_ = ~(_0014_ | _0014_);
-  assign _0016_ = ~_0731_;
-  assign _0017_ = _0016_ & ~(_0010_);
-  assign _0018_ = ~_0017_;
-  assign _0019_ = _0012_ ? _0731_ : _0018_;
-  assign _0020_ = ~(_0019_ | _0014_);
-  assign _0021_ = _0020_ & _0015_;
-  assign _0022_ = _0012_ ? _0016_ : _0017_;
-  assign _0023_ = _0022_ & ~(_0014_);
-  assign _0024_ = _0023_ & _0020_;
-  assign _0025_ = _0024_ & _0021_;
-  assign _0026_ = _0014_ | ~(_0015_);
-  assign _0027_ = _0026_ | ~(_0021_);
-  assign _0028_ = _0025_ & ~(_0027_);
-  assign _0029_ = _0010_ ^ _0731_;
-  assign _0030_ = _0012_ ? _0731_ : _0029_;
-  assign _0031_ = _0030_ | _0014_;
-  assign _0032_ = _0031_ | ~(_0023_);
-  assign _0033_ = _0024_ & ~(_0032_);
-  assign _0034_ = _0687_ & ~(_0812_);
-  assign _0035_ = _0006_ & ~(_0034_);
-  assign _0036_ = _0035_ | _0803_;
-  assign _0037_ = _0036_ ^ _0786_;
-  assign _0038_ = _0012_ ? _0786_ : _0037_;
-  assign _0039_ = ~_0803_;
-  assign _0040_ = _0035_ ^ _0803_;
-  assign _0041_ = _0012_ ? _0039_ : _0040_;
-  assign _0042_ = _0038_ & ~(_0041_);
-  assign _0043_ = _0687_ & ~(_0806_);
-  assign _0044_ = _0043_ ^ _0809_;
-  assign _0045_ = _0012_ ? _0006_ : _0044_;
-  assign _0046_ = _0811_ ^ _0687_;
-  assign _0047_ = _0012_ ? _0811_ : _0046_;
-  assign _0048_ = _0045_ | ~(_0047_);
-  assign _0049_ = _0042_ & ~(_0048_);
-  assign _0050_ = _0216_ & ~(_0573_);
-  assign _0051_ = _0050_ & _0049_;
-  assign _0052_ = _0051_ & _0033_;
-  assign _0053_ = ~(_0052_ & _0028_);
-  assign _0054_ = ~(_0015_ | _0014_);
-  assign _0055_ = _0054_ | _0014_;
-  assign _0056_ = _0015_ & ~(_0020_);
-  assign _0057_ = _0015_ & ~(_0056_);
-  assign _0058_ = ~(_0057_ | _0026_);
-  assign _0059_ = _0058_ | _0055_;
-  assign _0060_ = ~(_0014_ | _0019_);
-  assign _0061_ = _0020_ & ~(_0060_);
-  assign _0062_ = _0020_ & ~(_0061_);
-  assign _0063_ = _0021_ & ~(_0062_);
-  assign _0064_ = _0057_ & ~(_0063_);
-  assign _0065_ = ~(_0064_ | _0027_);
-  assign _0066_ = _0065_ | _0059_;
-  assign _0067_ = ~(_0030_ | _0014_);
-  assign _0068_ = _0023_ & ~(_0067_);
-  assign _0069_ = _0060_ & ~(_0068_);
-  assign _0070_ = _0024_ & ~(_0069_);
-  assign _0071_ = _0062_ & ~(_0070_);
-  assign _0072_ = _0047_ | _0045_;
-  assign _0073_ = _0042_ & ~(_0072_);
-  assign _0074_ = _0042_ & ~(_0073_);
-  assign _0075_ = ~(_0417_ | _0216_);
-  assign _0076_ = _0049_ & ~(_0075_);
-  assign _0077_ = _0074_ & ~(_0076_);
-  assign _0078_ = _0033_ & ~(_0077_);
-  assign _0079_ = _0071_ & ~(_0078_);
-  assign _0080_ = _0028_ & ~(_0079_);
-  assign _0081_ = _0080_ | _0066_;
-  assign _0082_ = _0053_ & ~(_0081_);
-  assign _0083_ = _0025_ & ~(_0079_);
-  assign _0084_ = _0064_ & ~(_0083_);
-  assign _0085_ = _0021_ & ~(_0084_);
-  assign _0086_ = _0057_ & ~(_0085_);
-  assign _0087_ = _0015_ & ~(_0086_);
-  assign _0088_ = _0015_ & ~(_0087_);
-  assign _0089_ = _0088_ & ~(_0014_);
-  assign _0090_ = _0089_ ^ _0014_;
-  assign _0091_ = _0082_ ? _0014_ : _0090_;
-  assign _0092_ = ~_0091_;
-  assign _0093_ = _0024_ & ~(_0079_);
-  assign _0094_ = _0062_ & ~(_0093_);
-  assign _0095_ = _0020_ & ~(_0094_);
-  assign _0096_ = _0020_ & ~(_0095_);
-  assign _0097_ = _0096_ & ~(_0014_);
-  assign _0098_ = _0097_ ^ _0014_;
-  assign _0099_ = _0082_ ? _0014_ : _0098_;
-  assign _0100_ = _0096_ ^ _0014_;
-  assign _0101_ = _0082_ ? _0014_ : _0100_;
-  assign _0102_ = ~(_0101_ | _0099_);
-  assign _0103_ = _0094_ & ~(_0019_);
-  assign _0104_ = _0103_ ^ _0014_;
-  assign _0105_ = _0082_ ? _0014_ : _0104_;
-  assign _0106_ = _0094_ ^ _0019_;
-  assign _0107_ = _0082_ ? _0019_ : _0106_;
-  assign _0108_ = _0107_ | _0105_;
-  assign _0109_ = _0102_ & ~(_0108_);
-  assign _0110_ = _0023_ & ~(_0079_);
-  assign _0111_ = _0060_ & ~(_0110_);
-  assign _0112_ = _0111_ & ~(_0019_);
-  assign _0113_ = _0112_ ^ _0014_;
-  assign _0114_ = _0082_ ? _0014_ : _0113_;
-  assign _0115_ = _0111_ ^ _0019_;
-  assign _0116_ = _0082_ ? _0019_ : _0115_;
-  assign _0117_ = ~(_0116_ | _0114_);
-  assign _0118_ = _0079_ & ~(_0014_);
-  assign _0119_ = ~(_0118_ ^ _0019_);
-  assign _0120_ = _0082_ ? _0022_ : _0119_;
-  assign _0121_ = _0079_ ^ _0014_;
-  assign _0122_ = _0082_ ? _0014_ : _0121_;
-  assign _0123_ = _0122_ | ~(_0120_);
-  assign _0124_ = _0123_ | ~(_0117_);
-  assign _0125_ = _0109_ & ~(_0124_);
-  assign _0126_ = _0020_ & ~(_0084_);
-  assign _0127_ = _0020_ & ~(_0126_);
-  assign _0128_ = _0127_ & ~(_0014_);
-  assign _0129_ = _0128_ ^ _0014_;
-  assign _0130_ = _0082_ ? _0014_ : _0129_;
-  assign _0131_ = _0127_ ^ _0014_;
-  assign _0132_ = _0082_ ? _0014_ : _0131_;
-  assign _0133_ = ~(_0132_ | _0130_);
-  assign _0134_ = _0084_ & ~(_0019_);
-  assign _0135_ = _0134_ ^ _0014_;
-  assign _0136_ = _0082_ ? _0014_ : _0135_;
-  assign _0137_ = _0084_ ^ _0019_;
-  assign _0138_ = _0082_ ? _0019_ : _0137_;
-  assign _0139_ = _0138_ | _0136_;
-  assign _0140_ = _0133_ & ~(_0139_);
-  assign _0141_ = _0086_ & ~(_0014_);
-  assign _0142_ = _0141_ ^ _0014_;
-  assign _0143_ = _0082_ ? _0014_ : _0142_;
-  assign _0144_ = _0086_ ^ _0014_;
-  assign _0145_ = _0082_ ? _0014_ : _0144_;
-  assign _0146_ = ~(_0145_ | _0143_);
-  assign _0147_ = _0088_ ^ _0014_;
-  assign _0148_ = _0082_ ? _0014_ : _0147_;
-  assign _0149_ = _0148_ | _0091_;
-  assign _0150_ = _0149_ | ~(_0146_);
-  assign _0151_ = _0150_ | ~(_0140_);
-  assign _0152_ = _0125_ & ~(_0151_);
-  assign _0153_ = ~(_0077_ | _0032_);
-  assign _0154_ = _0069_ & ~(_0153_);
-  assign _0155_ = _0023_ & ~(_0154_);
-  assign _0156_ = _0060_ & ~(_0155_);
-  assign _0157_ = _0156_ & ~(_0019_);
-  assign _0158_ = _0157_ ^ _0014_;
-  assign _0159_ = _0082_ ? _0014_ : _0158_;
-  assign _0160_ = _0156_ ^ _0019_;
-  assign _0161_ = _0082_ ? _0019_ : _0160_;
-  assign _0162_ = ~(_0161_ | _0159_);
-  assign _0163_ = _0154_ & ~(_0014_);
-  assign _0164_ = ~(_0163_ ^ _0019_);
-  assign _0165_ = _0082_ ? _0022_ : _0164_;
-  assign _0166_ = _0154_ ^ _0014_;
-  assign _0167_ = _0082_ ? _0014_ : _0166_;
-  assign _0168_ = _0167_ | ~(_0165_);
-  assign _0169_ = _0162_ & ~(_0168_);
-  assign _0170_ = ~(_0077_ | _0031_);
-  assign _0171_ = _0067_ & ~(_0170_);
-  assign _0172_ = _0171_ & ~(_0014_);
-  assign _0174_ = ~(_0172_ ^ _0019_);
-  assign _0175_ = _0082_ ? _0022_ : _0174_;
-  assign _0176_ = _0171_ ^ _0014_;
-  assign _0177_ = _0082_ ? _0014_ : _0176_;
-  assign _0178_ = _0175_ & ~(_0177_);
-  assign _0179_ = _0077_ & ~(_0030_);
-  assign _0180_ = _0179_ ^ _0014_;
-  assign _0181_ = _0082_ ? _0014_ : _0180_;
-  assign _0182_ = _0077_ ^ _0030_;
-  assign _0183_ = _0082_ ? _0030_ : _0182_;
-  assign _0185_ = _0183_ | _0181_;
-  assign _0186_ = _0185_ | ~(_0178_);
-  assign _0187_ = _0169_ & ~(_0186_);
-  assign _0188_ = ~_0075_;
-  assign _0189_ = _0188_ & ~(_0048_);
-  assign _0190_ = _0072_ & ~(_0189_);
-  assign _0191_ = _0190_ & ~(_0041_);
-  assign _0192_ = _0191_ ^ _0038_;
-  assign _0193_ = _0082_ ? _0038_ : _0192_;
-  assign _0194_ = ~(_0190_ ^ _0041_);
-  assign _0196_ = ~_0194_;
-  assign _0197_ = _0082_ ? _0041_ : _0196_;
-  assign _0198_ = _0193_ & ~(_0197_);
-  assign _0199_ = ~_0045_;
-  assign _0200_ = _0047_ & ~(_0188_);
-  assign _0201_ = _0200_ ^ _0199_;
-  assign _0202_ = ~_0201_;
-  assign _0203_ = _0082_ ? _0199_ : _0202_;
-  assign _0204_ = _0075_ ^ _0047_;
-  assign _0205_ = _0082_ ? _0047_ : _0204_;
-  assign _0207_ = _0205_ | _0203_;
-  assign _0208_ = _0198_ & ~(_0207_);
-  assign _0209_ = ~counter[2];
-  assign _0210_ = ~(_0082_ ^ counter[3]);
-  assign _0211_ = _0210_ | _0209_;
-  assign _0212_ = ~(_0211_ | _0573_);
-  assign _0213_ = _0212_ & _0208_;
-  assign _0214_ = _0213_ & _0187_;
-  assign _0215_ = ~(_0214_ & _0152_);
-  assign _0217_ = ~(_0146_ | _0149_);
-  assign _0218_ = _0217_ | _0149_;
-  assign _0219_ = ~(_0138_ | _0136_);
-  assign _0220_ = _0133_ & ~(_0219_);
-  assign _0221_ = _0133_ & ~(_0220_);
-  assign _0222_ = ~(_0221_ | _0150_);
-  assign _0223_ = _0222_ | _0218_;
-  assign _0225_ = ~(_0107_ | _0105_);
-  assign _0226_ = _0102_ & ~(_0225_);
-  assign _0227_ = _0102_ & ~(_0226_);
-  assign _0228_ = _0120_ & ~(_0122_);
-  assign _0229_ = _0117_ & ~(_0228_);
-  assign _0230_ = _0117_ & ~(_0229_);
-  assign _0231_ = _0109_ & ~(_0230_);
-  assign _0232_ = _0227_ & ~(_0231_);
-  assign _0233_ = ~(_0232_ | _0151_);
-  assign _0235_ = _0233_ | _0223_;
-  assign _0236_ = _0165_ & ~(_0167_);
-  assign _0237_ = _0162_ & ~(_0236_);
-  assign _0238_ = _0162_ & ~(_0237_);
-  assign _0239_ = ~(_0183_ | _0181_);
-  assign _0240_ = _0178_ & ~(_0239_);
-  assign _0241_ = _0178_ & ~(_0240_);
-  assign _0242_ = _0169_ & ~(_0241_);
-  assign _0244_ = _0238_ & ~(_0242_);
-  assign _0245_ = ~_0203_;
-  assign _0246_ = _0198_ & ~(_0245_);
-  assign _0247_ = _0198_ & ~(_0246_);
-  assign _0248_ = _0209_ & ~(_0210_);
-  assign _0249_ = _0208_ & ~(_0248_);
-  assign _0250_ = _0247_ & ~(_0249_);
-  assign _0251_ = _0187_ & ~(_0250_);
-  assign _0252_ = _0244_ & ~(_0251_);
-  assign _0254_ = _0152_ & ~(_0252_);
-  assign _0255_ = _0254_ | _0235_;
-  assign _0256_ = _0215_ & ~(_0255_);
-  assign _0257_ = _0125_ & ~(_0252_);
-  assign _0258_ = _0232_ & ~(_0257_);
-  assign _0259_ = _0140_ & ~(_0258_);
-  assign _0260_ = _0221_ & ~(_0259_);
-  assign _0261_ = _0146_ & ~(_0260_);
-  assign _0262_ = _0146_ & ~(_0261_);
-  assign _0263_ = _0262_ & ~(_0148_);
-  assign _0265_ = ~(_0263_ ^ _0091_);
-  assign _0266_ = _0256_ ? _0092_ : _0265_;
-  assign _0267_ = ~_0266_;
-  assign _0268_ = ~_0099_;
-  assign _0269_ = ~(_0252_ | _0124_);
-  assign _0270_ = _0230_ & ~(_0269_);
-  assign _0271_ = ~(_0270_ | _0108_);
-  assign _0272_ = _0225_ & ~(_0271_);
-  assign _0273_ = _0272_ & ~(_0101_);
-  assign _0274_ = ~(_0273_ ^ _0099_);
-  assign _0276_ = _0256_ ? _0268_ : _0274_;
-  assign _0277_ = _0272_ ^ _0101_;
-  assign _0278_ = _0256_ ? _0101_ : _0277_;
-  assign _0279_ = _0276_ & ~(_0278_);
-  assign _0280_ = ~_0105_;
-  assign _0281_ = _0270_ & ~(_0107_);
-  assign _0282_ = ~(_0281_ ^ _0105_);
-  assign _0283_ = _0256_ ? _0280_ : _0282_;
-  assign _0284_ = _0270_ ^ _0107_;
-  assign _0285_ = _0256_ ? _0107_ : _0284_;
-  assign _0287_ = _0285_ | ~(_0283_);
-  assign _0288_ = _0279_ & ~(_0287_);
-  assign _0289_ = ~_0114_;
-  assign _0290_ = ~(_0252_ | _0123_);
-  assign _0291_ = _0228_ & ~(_0290_);
-  assign _0292_ = _0291_ & ~(_0116_);
-  assign _0293_ = ~(_0292_ ^ _0114_);
-  assign _0294_ = _0256_ ? _0289_ : _0293_;
-  assign _0295_ = _0291_ ^ _0116_;
-  assign _0296_ = _0256_ ? _0116_ : _0295_;
-  assign _0298_ = _0294_ & ~(_0296_);
-  assign _0299_ = _0252_ & ~(_0122_);
-  assign _0300_ = _0299_ ^ _0120_;
-  assign _0301_ = _0256_ ? _0120_ : _0300_;
-  assign _0302_ = _0252_ ^ _0122_;
-  assign _0303_ = _0256_ ? _0122_ : _0302_;
-  assign _0304_ = _0303_ | ~(_0301_);
-  assign _0305_ = _0304_ | ~(_0298_);
-  assign _0306_ = _0288_ & ~(_0305_);
-  assign _0307_ = ~_0130_;
-  assign _0309_ = ~(_0258_ | _0139_);
-  assign _0310_ = _0219_ & ~(_0309_);
-  assign _0311_ = _0310_ & ~(_0132_);
-  assign _0312_ = ~(_0311_ ^ _0130_);
-  assign _0313_ = _0256_ ? _0307_ : _0312_;
-  assign _0314_ = _0310_ ^ _0132_;
-  assign _0315_ = _0256_ ? _0132_ : _0314_;
-  assign _0316_ = _0313_ & ~(_0315_);
-  assign _0317_ = ~_0136_;
-  assign _0318_ = _0258_ & ~(_0138_);
-  assign _0320_ = ~(_0318_ ^ _0136_);
-  assign _0321_ = _0256_ ? _0317_ : _0320_;
-  assign _0322_ = _0258_ ^ _0138_;
-  assign _0323_ = _0256_ ? _0138_ : _0322_;
-  assign _0324_ = _0323_ | ~(_0321_);
-  assign _0325_ = _0324_ | ~(_0316_);
-  assign _0326_ = ~_0143_;
-  assign _0327_ = _0260_ & ~(_0145_);
-  assign _0328_ = ~(_0327_ ^ _0143_);
-  assign _0329_ = _0256_ ? _0326_ : _0328_;
-  assign _0331_ = _0260_ ^ _0145_;
-  assign _0332_ = _0256_ ? _0145_ : _0331_;
-  assign _0333_ = _0332_ | ~(_0329_);
-  assign _0334_ = ~_0333_;
-  assign _0335_ = _0262_ ^ _0148_;
-  assign _0336_ = _0256_ ? _0148_ : _0335_;
-  assign _0337_ = _0266_ & ~(_0336_);
-  assign _0338_ = ~(_0337_ & _0334_);
-  assign _0339_ = _0338_ | _0325_;
-  assign _0340_ = _0306_ & ~(_0339_);
-  assign _0342_ = ~_0159_;
-  assign _0343_ = ~(_0250_ | _0186_);
-  assign _0344_ = _0241_ & ~(_0343_);
-  assign _0345_ = ~(_0344_ | _0168_);
-  assign _0346_ = _0236_ & ~(_0345_);
-  assign _0347_ = _0346_ & ~(_0161_);
-  assign _0348_ = ~(_0347_ ^ _0159_);
-  assign _0349_ = _0256_ ? _0342_ : _0348_;
-  assign _0350_ = ~(_0346_ ^ _0161_);
-  assign _0351_ = ~_0350_;
-  assign _0353_ = _0256_ ? _0161_ : _0351_;
-  assign _0354_ = _0349_ & ~(_0353_);
-  assign _0355_ = _0344_ & ~(_0167_);
-  assign _0356_ = _0355_ ^ _0165_;
-  assign _0357_ = _0256_ ? _0165_ : _0356_;
-  assign _0358_ = _0344_ ^ _0167_;
-  assign _0359_ = _0256_ ? _0167_ : _0358_;
-  assign _0360_ = _0359_ | ~(_0357_);
-  assign _0361_ = _0354_ & ~(_0360_);
-  assign _0362_ = ~(_0250_ | _0185_);
-  assign _0364_ = _0239_ & ~(_0362_);
-  assign _0365_ = _0364_ & ~(_0177_);
-  assign _0366_ = _0365_ ^ _0175_;
-  assign _0367_ = _0256_ ? _0175_ : _0366_;
-  assign _0368_ = ~(_0364_ ^ _0177_);
-  assign _0369_ = ~_0368_;
-  assign _0370_ = _0256_ ? _0177_ : _0369_;
-  assign _0371_ = _0367_ & ~(_0370_);
-  assign _0372_ = ~_0181_;
-  assign _0373_ = _0250_ & ~(_0183_);
-  assign _0375_ = ~(_0373_ ^ _0181_);
-  assign _0376_ = _0256_ ? _0372_ : _0375_;
-  assign _0377_ = _0250_ ^ _0183_;
-  assign _0378_ = _0256_ ? _0183_ : _0377_;
-  assign _0379_ = _0378_ | ~(_0376_);
-  assign _0380_ = _0379_ | ~(_0371_);
-  assign _0381_ = _0361_ & ~(_0380_);
-  assign _0382_ = ~(_0248_ | _0207_);
-  assign _0383_ = _0245_ & ~(_0382_);
-  assign _0384_ = _0383_ & ~(_0197_);
-  assign _0386_ = _0384_ ^ _0193_;
-  assign _0387_ = _0256_ ? _0193_ : _0386_;
-  assign _0388_ = ~(_0383_ ^ _0197_);
-  assign _0389_ = ~_0388_;
-  assign _0390_ = _0256_ ? _0197_ : _0389_;
-  assign _0391_ = _0387_ & ~(_0390_);
-  assign _0392_ = ~_0205_;
-  assign _0393_ = _0392_ & ~(_0248_);
-  assign _0394_ = _0393_ ^ _0203_;
-  assign _0395_ = ~_0394_;
-  assign _0397_ = _0256_ ? _0203_ : _0395_;
-  assign _0398_ = _0248_ ^ _0392_;
-  assign _0399_ = ~_0398_;
-  assign _0400_ = _0256_ ? _0392_ : _0399_;
-  assign _0401_ = _0400_ | _0397_;
-  assign _0402_ = _0391_ & ~(_0401_);
-  assign _0403_ = ~_0210_;
-  assign _0404_ = _0210_ ^ counter[2];
-  assign _0405_ = _0256_ ? _0403_ : _0404_;
-  assign _0406_ = _0256_ ^ _0209_;
-  assign _0408_ = _0406_ | _0405_;
-  assign _0409_ = ~(_0408_ | _0206_);
-  assign _0410_ = _0409_ & _0402_;
-  assign _0411_ = _0410_ & _0381_;
-  assign _0412_ = ~(_0411_ & _0340_);
-  assign _0413_ = _0336_ | ~(_0266_);
-  assign _0414_ = _0329_ & ~(_0332_);
-  assign _0415_ = _0337_ & ~(_0414_);
-  assign _0416_ = _0415_ | _0413_;
-  assign _0418_ = _0321_ & ~(_0323_);
-  assign _0419_ = _0316_ & ~(_0418_);
-  assign _0420_ = _0316_ & ~(_0419_);
-  assign _0421_ = ~(_0420_ | _0338_);
-  assign _0422_ = _0421_ | _0416_;
-  assign _0423_ = _0283_ & ~(_0285_);
-  assign _0424_ = _0279_ & ~(_0423_);
-  assign _0425_ = _0279_ & ~(_0424_);
-  assign _0427_ = _0301_ & ~(_0303_);
-  assign _0428_ = _0298_ & ~(_0427_);
-  assign _0429_ = _0298_ & ~(_0428_);
-  assign _0430_ = _0288_ & ~(_0429_);
-  assign _0431_ = _0425_ & ~(_0430_);
-  assign _0432_ = ~(_0431_ | _0339_);
-  assign _0433_ = _0432_ | _0422_;
-  assign _0434_ = _0357_ & ~(_0359_);
-  assign _0435_ = _0354_ & ~(_0434_);
-  assign _0437_ = _0354_ & ~(_0435_);
-  assign _0438_ = _0376_ & ~(_0378_);
-  assign _0439_ = _0371_ & ~(_0438_);
-  assign _0440_ = _0371_ & ~(_0439_);
-  assign _0441_ = _0361_ & ~(_0440_);
-  assign _0442_ = _0437_ & ~(_0441_);
-  assign _0443_ = _0256_ ? _0245_ : _0394_;
-  assign _0444_ = _0443_ & ~(_0400_);
-  assign _0446_ = _0391_ & ~(_0444_);
-  assign _0447_ = _0391_ & ~(_0446_);
-  assign _0448_ = _0256_ ^ counter[2];
-  assign _0449_ = _0448_ | _0405_;
-  assign _0450_ = counter[1] & ~(_0408_);
-  assign _0451_ = _0449_ & ~(_0450_);
-  assign _0452_ = _0402_ & ~(_0451_);
-  assign _0453_ = _0447_ & ~(_0452_);
-  assign _0454_ = _0381_ & ~(_0453_);
-  assign _0455_ = _0442_ & ~(_0454_);
-  assign _0457_ = _0340_ & ~(_0455_);
-  assign _0458_ = _0457_ | _0433_;
-  assign _0459_ = _0412_ & ~(_0458_);
-  assign _0460_ = _0306_ & ~(_0455_);
-  assign _0461_ = _0431_ & ~(_0460_);
-  assign _0462_ = ~(_0461_ | _0325_);
-  assign _0463_ = _0420_ & ~(_0462_);
-  assign _0464_ = _0334_ & ~(_0463_);
-  assign _0465_ = _0414_ & ~(_0464_);
-  assign _0466_ = _0465_ & ~(_0336_);
-  assign _0468_ = _0466_ ^ _0267_;
-  assign _0469_ = _0459_ ? _0267_ : _0468_;
-  assign _0470_ = _0465_ ^ _0336_;
-  assign _0471_ = _0459_ ? _0336_ : _0470_;
-  assign _0472_ = ~_0471_;
-  assign _0473_ = _0472_ & ~(_0469_);
-  assign _0474_ = _0463_ & ~(_0332_);
-  assign _0475_ = _0474_ ^ _0329_;
-  assign _0476_ = _0459_ ? _0329_ : _0475_;
-  assign _0477_ = _0463_ ^ _0332_;
-  assign _0479_ = _0459_ ? _0332_ : _0477_;
-  assign _0480_ = _0479_ | ~(_0476_);
-  assign _0481_ = _0473_ & ~(_0480_);
-  assign _0482_ = ~(_0461_ | _0324_);
-  assign _0483_ = _0418_ & ~(_0482_);
-  assign _0484_ = _0483_ & ~(_0315_);
-  assign _0485_ = _0484_ ^ _0313_;
-  assign _0486_ = _0459_ ? _0313_ : _0485_;
-  assign _0487_ = _0483_ ^ _0315_;
-  assign _0488_ = _0459_ ? _0315_ : _0487_;
-  assign _0490_ = _0486_ & ~(_0488_);
-  assign _0491_ = _0461_ & ~(_0323_);
-  assign _0492_ = _0491_ ^ _0321_;
-  assign _0493_ = _0459_ ? _0321_ : _0492_;
-  assign _0494_ = _0461_ ^ _0323_;
-  assign _0495_ = _0459_ ? _0323_ : _0494_;
-  assign _0496_ = _0495_ | ~(_0493_);
-  assign _0497_ = _0496_ | ~(_0490_);
-  assign _0498_ = _0481_ & ~(_0497_);
-  assign _0499_ = ~(_0455_ | _0305_);
-  assign _0501_ = _0429_ & ~(_0499_);
-  assign _0502_ = ~(_0501_ | _0287_);
-  assign _0503_ = _0423_ & ~(_0502_);
-  assign _0504_ = _0503_ & ~(_0278_);
-  assign _0505_ = _0504_ ^ _0276_;
-  assign _0506_ = _0459_ ? _0276_ : _0505_;
-  assign _0507_ = _0503_ ^ _0278_;
-  assign _0508_ = _0459_ ? _0278_ : _0507_;
-  assign _0509_ = _0506_ & ~(_0508_);
-  assign _0510_ = ~_0283_;
-  assign _0511_ = _0501_ & ~(_0285_);
-  assign _0512_ = _0511_ ^ _0510_;
-  assign _0513_ = _0459_ ? _0510_ : _0512_;
-  assign _0514_ = _0501_ ^ _0285_;
-  assign _0515_ = _0459_ ? _0285_ : _0514_;
-  assign _0516_ = _0515_ | _0513_;
-  assign _0517_ = _0509_ & ~(_0516_);
-  assign _0518_ = ~(_0455_ | _0304_);
-  assign _0519_ = _0427_ & ~(_0518_);
-  assign _0520_ = _0519_ & ~(_0296_);
-  assign _0522_ = _0520_ ^ _0294_;
-  assign _0523_ = _0459_ ? _0294_ : _0522_;
-  assign _0524_ = _0519_ ^ _0296_;
-  assign _0525_ = _0459_ ? _0296_ : _0524_;
-  assign _0526_ = _0523_ & ~(_0525_);
-  assign _0527_ = ~_0301_;
-  assign _0528_ = _0455_ & ~(_0303_);
-  assign _0529_ = _0528_ ^ _0301_;
-  assign _0530_ = ~_0529_;
-  assign _0531_ = _0459_ ? _0527_ : _0530_;
-  assign _0533_ = _0455_ ^ _0303_;
-  assign _0534_ = _0459_ ? _0303_ : _0533_;
-  assign _0535_ = _0534_ | _0531_;
-  assign _0536_ = _0535_ | ~(_0526_);
-  assign _0537_ = _0536_ | ~(_0517_);
-  assign _0538_ = _0498_ & ~(_0537_);
-  assign _0539_ = ~(_0453_ | _0380_);
-  assign _0540_ = _0440_ & ~(_0539_);
-  assign _0541_ = ~(_0540_ | _0360_);
-  assign _0542_ = _0434_ & ~(_0541_);
-  assign _0543_ = _0542_ & ~(_0353_);
-  assign _0544_ = _0543_ ^ _0349_;
-  assign _0545_ = _0459_ ? _0349_ : _0544_;
-  assign _0546_ = _0542_ ^ _0353_;
-  assign _0547_ = _0459_ ? _0353_ : _0546_;
-  assign _0548_ = _0545_ & ~(_0547_);
-  assign _0549_ = ~_0357_;
-  assign _0550_ = _0540_ & ~(_0359_);
-  assign _0551_ = _0550_ ^ _0549_;
-  assign _0552_ = _0459_ ? _0549_ : _0551_;
-  assign _0553_ = _0540_ ^ _0359_;
-  assign _0554_ = _0459_ ? _0359_ : _0553_;
-  assign _0555_ = _0554_ | _0552_;
-  assign _0556_ = _0548_ & ~(_0555_);
-  assign _0557_ = ~(_0453_ | _0379_);
-  assign _0558_ = _0438_ & ~(_0557_);
-  assign _0559_ = _0558_ & ~(_0370_);
-  assign _0560_ = _0559_ ^ _0367_;
-  assign _0561_ = _0459_ ? _0367_ : _0560_;
-  assign _0562_ = _0558_ ^ _0370_;
-  assign _0563_ = _0459_ ? _0370_ : _0562_;
-  assign _0564_ = _0561_ & ~(_0563_);
-  assign _0565_ = ~_0376_;
-  assign _0566_ = _0453_ & ~(_0378_);
-  assign _0567_ = _0566_ ^ _0376_;
-  assign _0568_ = ~_0567_;
-  assign _0569_ = _0459_ ? _0565_ : _0568_;
-  assign _0570_ = _0453_ ^ _0378_;
-  assign _0571_ = _0459_ ? _0378_ : _0570_;
-  assign _0572_ = _0571_ | _0569_;
-  assign _0574_ = _0572_ | ~(_0564_);
-  assign _0575_ = _0556_ & ~(_0574_);
-  assign _0576_ = ~(_0451_ | _0401_);
-  assign _0577_ = _0444_ & ~(_0576_);
-  assign _0578_ = _0577_ & ~(_0390_);
-  assign _0579_ = _0578_ ^ _0387_;
-  assign _0580_ = _0459_ ? _0387_ : _0579_;
-  assign _0581_ = ~(_0577_ ^ _0390_);
-  assign _0582_ = ~_0581_;
-  assign _0583_ = _0459_ ? _0390_ : _0582_;
-  assign _0585_ = _0580_ & ~(_0583_);
-  assign _0586_ = _0451_ & ~(_0400_);
-  assign _0587_ = _0586_ ^ _0443_;
-  assign _0588_ = ~_0587_;
-  assign _0589_ = _0459_ ? _0397_ : _0588_;
-  assign _0590_ = ~(_0451_ ^ _0400_);
-  assign _0591_ = ~_0590_;
-  assign _0592_ = _0459_ ? _0400_ : _0591_;
-  assign _0593_ = _0592_ | _0589_;
-  assign _0594_ = _0585_ & ~(_0593_);
-  assign _0596_ = _0406_ | counter[1];
-  assign _0597_ = _0596_ ^ _0405_;
-  assign _0598_ = _0459_ ? _0405_ : _0597_;
-  assign _0599_ = ~counter[1];
-  assign _0600_ = _0448_ ^ _0599_;
-  assign _0601_ = _0459_ ? _0448_ : _0600_;
-  assign _0602_ = _0598_ & ~(_0601_);
-  assign _0603_ = _0459_ ^ _0599_;
-  assign _0604_ = counter[0] & ~(_0603_);
-  assign _0605_ = _0604_ & _0602_;
-  assign _0607_ = _0605_ & _0594_;
-  assign _0608_ = _0607_ & _0575_;
-  assign _0609_ = ~(_0608_ & _0538_);
-  assign _0610_ = _0471_ | _0469_;
-  assign _0611_ = _0476_ & ~(_0479_);
-  assign _0612_ = _0473_ & ~(_0611_);
-  assign _0613_ = _0612_ | _0610_;
-  assign _0614_ = _0493_ & ~(_0495_);
-  assign _0615_ = _0490_ & ~(_0614_);
-  assign _0617_ = _0490_ & ~(_0615_);
-  assign _0618_ = _0481_ & ~(_0617_);
-  assign _0619_ = _0618_ | _0613_;
-  assign _0620_ = ~(_0515_ | _0513_);
-  assign _0621_ = _0509_ & ~(_0620_);
-  assign _0622_ = _0509_ & ~(_0621_);
-  assign _0623_ = ~(_0534_ | _0531_);
-  assign _0624_ = _0526_ & ~(_0623_);
-  assign _0626_ = _0526_ & ~(_0624_);
-  assign _0627_ = _0517_ & ~(_0626_);
-  assign _0628_ = _0622_ & ~(_0627_);
-  assign _0629_ = _0498_ & ~(_0628_);
-  assign _0630_ = _0629_ | _0619_;
-  assign _0631_ = ~(_0554_ | _0552_);
-  assign _0632_ = _0548_ & ~(_0631_);
-  assign _0633_ = _0548_ & ~(_0632_);
-  assign _0635_ = ~(_0571_ | _0569_);
-  assign _0636_ = _0564_ & ~(_0635_);
-  assign _0637_ = _0564_ & ~(_0636_);
-  assign _0638_ = _0556_ & ~(_0637_);
-  assign _0639_ = _0633_ & ~(_0638_);
-  assign _0640_ = ~(_0592_ | _0589_);
-  assign _0641_ = _0585_ & ~(_0640_);
-  assign _0642_ = _0585_ & ~(_0641_);
-  assign _0643_ = _0616_ & ~(_0603_);
-  assign _0645_ = _0602_ & ~(_0643_);
-  assign _0646_ = _0598_ & ~(_0645_);
-  assign _0647_ = _0594_ & ~(_0646_);
-  assign _0648_ = _0642_ & ~(_0647_);
-  assign _0649_ = _0575_ & ~(_0648_);
-  assign _0650_ = _0639_ & ~(_0649_);
-  assign _0651_ = _0538_ & ~(_0650_);
-  assign _0652_ = _0651_ | _0630_;
-  assign _0653_ = _0609_ & ~(_0652_);
-  assign _0654_ = _0653_ ^ _0616_;
-  assign _0656_ = _0603_ ^ _0616_;
-  assign _0657_ = _0653_ ? _0603_ : _0656_;
-  assign _0658_ = _0657_ | _0654_;
-  assign _0659_ = ~_0601_;
-  assign _0660_ = _0643_ ^ _0601_;
-  assign _0661_ = _0653_ ? _0659_ : _0660_;
-  assign _0662_ = ~_0598_;
-  assign _0663_ = _0659_ & ~(_0643_);
-  assign _0664_ = _0663_ ^ _0598_;
-  assign _0665_ = _0653_ ? _0662_ : _0664_;
-  assign _0667_ = _0665_ | _0661_;
-  assign _0668_ = _0667_ | _0658_;
-  assign _0669_ = _0646_ ^ _0592_;
-  assign _0670_ = _0653_ ? _0592_ : _0669_;
-  assign _0671_ = _0646_ & ~(_0592_);
-  assign _0672_ = _0671_ ^ _0589_;
-  assign _0673_ = _0653_ ? _0589_ : _0672_;
-  assign _0674_ = _0673_ | _0670_;
-  assign _0675_ = ~(_0646_ | _0593_);
-  assign _0676_ = _0640_ & ~(_0675_);
-  assign _0677_ = _0676_ ^ _0583_;
-  assign _0678_ = _0653_ ? _0583_ : _0677_;
-  assign _0679_ = _0676_ & ~(_0583_);
-  assign _0680_ = _0679_ ^ _0580_;
-  assign _0681_ = _0653_ ? _0580_ : _0680_;
-  assign _0682_ = _0678_ | ~(_0681_);
-  assign _0683_ = _0682_ | _0674_;
-  assign _0684_ = _0683_ | _0668_;
-  assign _0685_ = _0648_ ^ _0571_;
-  assign _0686_ = _0653_ ? _0571_ : _0685_;
-  assign _0688_ = _0648_ & ~(_0571_);
-  assign _0689_ = _0688_ ^ _0569_;
-  assign _0690_ = _0653_ ? _0569_ : _0689_;
-  assign _0691_ = _0690_ | _0686_;
-  assign _0692_ = ~(_0648_ | _0572_);
-  assign _0693_ = _0635_ & ~(_0692_);
-  assign _0694_ = _0693_ ^ _0563_;
-  assign _0695_ = _0653_ ? _0563_ : _0694_;
-  assign _0696_ = _0693_ & ~(_0563_);
-  assign _0697_ = _0696_ ^ _0561_;
-  assign _0699_ = _0653_ ? _0561_ : _0697_;
-  assign _0700_ = _0695_ | ~(_0699_);
-  assign _0701_ = _0700_ | _0691_;
-  assign _0702_ = ~(_0648_ | _0574_);
-  assign _0703_ = _0637_ & ~(_0702_);
-  assign _0704_ = _0703_ ^ _0554_;
-  assign _0705_ = _0653_ ? _0554_ : _0704_;
-  assign _0706_ = _0703_ & ~(_0554_);
-  assign _0707_ = _0706_ ^ _0552_;
-  assign _0708_ = _0653_ ? _0552_ : _0707_;
-  assign _0710_ = _0708_ | _0705_;
-  assign _0711_ = ~_0547_;
-  assign _0712_ = ~(_0703_ | _0555_);
-  assign _0713_ = _0712_ | ~(_0631_);
-  assign _0714_ = _0713_ ^ _0547_;
-  assign _0715_ = _0653_ ? _0711_ : _0714_;
-  assign _0716_ = _0711_ & ~(_0713_);
-  assign _0717_ = _0716_ ^ _0545_;
-  assign _0718_ = _0653_ ? _0545_ : _0717_;
-  assign _0719_ = ~(_0718_ & _0715_);
-  assign _0721_ = _0719_ | _0710_;
-  assign _0722_ = _0721_ | _0701_;
-  assign _0723_ = _0722_ | _0684_;
-  assign _0724_ = _0650_ ^ _0534_;
-  assign _0725_ = _0653_ ? _0534_ : _0724_;
-  assign _0726_ = _0650_ & ~(_0534_);
-  assign _0727_ = _0726_ ^ _0531_;
-  assign _0728_ = _0653_ ? _0531_ : _0727_;
-  assign _0729_ = _0728_ | _0725_;
-  assign _0730_ = ~(_0650_ | _0535_);
-  assign _0732_ = _0623_ & ~(_0730_);
-  assign _0733_ = _0732_ ^ _0525_;
-  assign _0734_ = _0653_ ? _0525_ : _0733_;
-  assign _0735_ = _0732_ & ~(_0525_);
-  assign _0736_ = _0735_ ^ _0523_;
-  assign _0737_ = _0653_ ? _0523_ : _0736_;
-  assign _0738_ = _0734_ | ~(_0737_);
-  assign _0739_ = _0738_ | _0729_;
-  assign _0740_ = ~(_0650_ | _0536_);
-  assign _0741_ = _0626_ & ~(_0740_);
-  assign _0743_ = _0741_ ^ _0515_;
-  assign _0744_ = _0653_ ? _0515_ : _0743_;
-  assign _0745_ = _0741_ & ~(_0515_);
-  assign _0746_ = _0745_ ^ _0513_;
-  assign _0747_ = _0653_ ? _0513_ : _0746_;
-  assign _0748_ = _0747_ | _0744_;
-  assign _0749_ = ~_0508_;
-  assign _0750_ = ~(_0741_ | _0516_);
-  assign _0751_ = _0750_ | ~(_0620_);
-  assign _0752_ = _0751_ ^ _0508_;
-  assign _0754_ = _0653_ ? _0749_ : _0752_;
-  assign _0755_ = _0749_ & ~(_0751_);
-  assign _0756_ = _0755_ ^ _0506_;
-  assign _0757_ = _0653_ ? _0506_ : _0756_;
-  assign _0758_ = ~(_0757_ & _0754_);
-  assign _0759_ = _0758_ | _0748_;
-  assign _0760_ = _0759_ | _0739_;
-  assign _0761_ = ~(_0650_ | _0537_);
-  assign _0762_ = _0628_ & ~(_0761_);
-  assign _0763_ = _0762_ ^ _0495_;
-  assign _0765_ = _0653_ ? _0495_ : _0763_;
-  assign _0766_ = _0762_ & ~(_0495_);
-  assign _0767_ = _0766_ ^ _0493_;
-  assign _0768_ = _0653_ ? _0493_ : _0767_;
-  assign _0769_ = _0765_ | ~(_0768_);
-  assign _0770_ = ~(_0762_ | _0496_);
-  assign _0771_ = _0614_ & ~(_0770_);
-  assign _0772_ = _0771_ ^ _0488_;
-  assign _0773_ = _0653_ ? _0488_ : _0772_;
-  assign _0774_ = _0771_ & ~(_0488_);
-  assign _0776_ = _0774_ ^ _0486_;
-  assign _0777_ = _0653_ ? _0486_ : _0776_;
-  assign _0778_ = _0773_ | ~(_0777_);
-  assign _0779_ = _0778_ | _0769_;
-  assign _0780_ = ~(_0762_ | _0497_);
-  assign _0781_ = _0617_ & ~(_0780_);
-  assign _0782_ = _0781_ ^ _0479_;
-  assign _0783_ = _0653_ ? _0479_ : _0782_;
-  assign _0784_ = _0781_ & ~(_0479_);
-  assign _0785_ = _0784_ ^ _0476_;
-  assign _0787_ = _0653_ ? _0476_ : _0785_;
-  assign _0788_ = _0783_ | ~(_0787_);
-  assign _0789_ = ~(_0781_ | _0480_);
-  assign _0790_ = _0789_ | ~(_0611_);
-  assign _0791_ = _0790_ ^ _0472_;
-  assign _0792_ = _0653_ ? _0471_ : _0791_;
-  assign _0793_ = _0472_ & ~(_0790_);
-  assign _0794_ = _0793_ ^ _0469_;
-  assign _0795_ = _0653_ ? _0469_ : _0794_;
-  assign _0796_ = _0795_ | _0792_;
-  assign _0798_ = _0796_ | _0788_;
-  assign _0799_ = _0798_ | _0779_;
-  assign _0800_ = _0799_ | _0760_;
-  assign _0801_ = _0800_ | _0723_;
-  assign _0003_ = _0606_ & ~(_0801_);
-  assign rowSelect_enable = state[3] & ~(counter_reset);
-  assign p_erase = state[0] & ~(counter_reset);
-  assign p_expose = state[1] & ~(counter_reset);
-  assign _0815_ = ~_0000_;
-  assign master_reset = internal_reset | reset;
-  assign master_counter_reset = master_reset | counter_reset;
-  assign _0816_ = _0001_ ? _0003_ : rowSelect_inc;
-  assign _0818_ = _0000_ ? 1'h0 : stateSelector_shift;
-  assign _0820_ = _0002_ ? 1'h1 : internal_reset;
-  assign _0817_ = counter_reset ? 1'h0 : _0815_;
-  assign _0819_ = counter_reset ? 1'h1 : _0818_;
-  assign _0821_ = counter_reset ? 1'h0 : _0820_;
+  NOT _150_ (
+    .A(counter_reset),
+    .Y(_081_)
+  );
+  NOT _151_ (
+    .A(state[1]),
+    .Y(_082_)
+  );
+  NOT _152_ (
+    .A(state[0]),
+    .Y(_083_)
+  );
+  NOT _153_ (
+    .A(state[3]),
+    .Y(_084_)
+  );
+  NOT _154_ (
+    .A(counter[0]),
+    .Y(_085_)
+  );
+  NOT _155_ (
+    .A(counter[3]),
+    .Y(_086_)
+  );
+  NOT _156_ (
+    .A(counter[2]),
+    .Y(_087_)
+  );
+  NOT _157_ (
+    .A(counter[4]),
+    .Y(_088_)
+  );
+  NOT _158_ (
+    .A(counter[5]),
+    .Y(_089_)
+  );
+  NOT _159_ (
+    .A(counter[7]),
+    .Y(_090_)
+  );
+  NOT _160_ (
+    .A(counter[6]),
+    .Y(_091_)
+  );
+  NOR _161_ (
+    .A(state[1]),
+    .B(state[0]),
+    .Y(_092_)
+  );
+  NAND _162_ (
+    .A(state[2]),
+    .B(_092_),
+    .Y(_093_)
+  );
+  NOR _163_ (
+    .A(state[3]),
+    .B(_093_),
+    .Y(dRamp_enable)
+  );
+  NOR _164_ (
+    .A(state[2]),
+    .B(state[3]),
+    .Y(_094_)
+  );
+  NAND _165_ (
+    .A(state[1]),
+    .B(_094_),
+    .Y(_095_)
+  );
+  NOR _166_ (
+    .A(state[0]),
+    .B(_095_),
+    .Y(_096_)
+  );
+  NOR _167_ (
+    .A(dRamp_enable),
+    .B(_096_),
+    .Y(_097_)
+  );
+  NAND _168_ (
+    .A(counter[0]),
+    .B(counter[2]),
+    .Y(_098_)
+  );
+  NAND _169_ (
+    .A(counter[4]),
+    .B(counter[5]),
+    .Y(_099_)
+  );
+  NOR _170_ (
+    .A(_098_),
+    .B(_099_),
+    .Y(_100_)
+  );
+  NAND _171_ (
+    .A(counter[1]),
+    .B(counter[3]),
+    .Y(_101_)
+  );
+  NOT _172_ (
+    .A(_101_),
+    .Y(_102_)
+  );
+  NAND _173_ (
+    .A(counter[7]),
+    .B(counter[6]),
+    .Y(_103_)
+  );
+  NOR _174_ (
+    .A(_101_),
+    .B(_103_),
+    .Y(_104_)
+  );
+  NAND _175_ (
+    .A(_100_),
+    .B(_104_),
+    .Y(_105_)
+  );
+  NOR _176_ (
+    .A(_097_),
+    .B(_105_),
+    .Y(_106_)
+  );
+  NOR _177_ (
+    .A(counter[5]),
+    .B(counter[6]),
+    .Y(_107_)
+  );
+  NAND _178_ (
+    .A(_090_),
+    .B(_107_),
+    .Y(_108_)
+  );
+  NOR _179_ (
+    .A(counter[4]),
+    .B(_108_),
+    .Y(_109_)
+  );
+  NOT _180_ (
+    .A(_109_),
+    .Y(_110_)
+  );
+  NOR _181_ (
+    .A(counter[1]),
+    .B(counter[3]),
+    .Y(_111_)
+  );
+  NAND _182_ (
+    .A(state[0]),
+    .B(_111_),
+    .Y(_112_)
+  );
+  NOR _183_ (
+    .A(_098_),
+    .B(_112_),
+    .Y(_113_)
+  );
+  NOT _184_ (
+    .A(_113_),
+    .Y(_114_)
+  );
+  NAND _185_ (
+    .A(_082_),
+    .B(_094_),
+    .Y(_115_)
+  );
+  NOR _186_ (
+    .A(_114_),
+    .B(_115_),
+    .Y(_116_)
+  );
+  NAND _187_ (
+    .A(_109_),
+    .B(_116_),
+    .Y(_117_)
+  );
+  NOR _188_ (
+    .A(counter[0]),
+    .B(counter[2]),
+    .Y(_118_)
+  );
+  NOR _189_ (
+    .A(state[2]),
+    .B(_084_),
+    .Y(_119_)
+  );
+  NAND _190_ (
+    .A(_118_),
+    .B(_119_),
+    .Y(_120_)
+  );
+  NAND _191_ (
+    .A(_092_),
+    .B(_102_),
+    .Y(_121_)
+  );
+  NOR _192_ (
+    .A(_120_),
+    .B(_121_),
+    .Y(_122_)
+  );
+  NAND _193_ (
+    .A(_109_),
+    .B(_122_),
+    .Y(_123_)
+  );
+  NAND _194_ (
+    .A(_117_),
+    .B(_123_),
+    .Y(_124_)
+  );
+  NOR _195_ (
+    .A(_106_),
+    .B(_124_),
+    .Y(_125_)
+  );
+  NAND _196_ (
+    .A(state[3]),
+    .B(_109_),
+    .Y(_126_)
+  );
+  NOR _197_ (
+    .A(state[2]),
+    .B(_101_),
+    .Y(_127_)
+  );
+  NAND _198_ (
+    .A(_118_),
+    .B(_127_),
+    .Y(_128_)
+  );
+  NOT _199_ (
+    .A(_128_),
+    .Y(_129_)
+  );
+  NAND _200_ (
+    .A(_092_),
+    .B(_129_),
+    .Y(_130_)
+  );
+  NOR _201_ (
+    .A(_126_),
+    .B(_130_),
+    .Y(_131_)
+  );
+  NAND _202_ (
+    .A(_081_),
+    .B(_125_),
+    .Y(_132_)
+  );
+  NOT _203_ (
+    .A(_132_),
+    .Y(_133_)
+  );
+  NOR _204_ (
+    .A(counter_reset),
+    .B(stateSelector_shift),
+    .Y(_134_)
+  );
+  NOR _205_ (
+    .A(_133_),
+    .B(_134_),
+    .Y(_002_)
+  );
+  NOR _206_ (
+    .A(counter_reset),
+    .B(_125_),
+    .Y(_001_)
+  );
+  NAND _207_ (
+    .A(rowSelect_inc),
+    .B(_132_),
+    .Y(_135_)
+  );
+  NOR _208_ (
+    .A(counter[5]),
+    .B(_090_),
+    .Y(_136_)
+  );
+  NAND _209_ (
+    .A(_089_),
+    .B(counter[7]),
+    .Y(_137_)
+  );
+  NOR _210_ (
+    .A(_091_),
+    .B(_136_),
+    .Y(_138_)
+  );
+  NAND _211_ (
+    .A(counter[6]),
+    .B(_137_),
+    .Y(_139_)
+  );
+  NOR _212_ (
+    .A(_089_),
+    .B(counter[7]),
+    .Y(_140_)
+  );
+  NAND _213_ (
+    .A(counter[5]),
+    .B(_090_),
+    .Y(_141_)
+  );
+  NOR _214_ (
+    .A(counter[5]),
+    .B(_103_),
+    .Y(_142_)
+  );
+  NOT _215_ (
+    .A(_142_),
+    .Y(_143_)
+  );
+  NOR _216_ (
+    .A(_140_),
+    .B(_142_),
+    .Y(_144_)
+  );
+  NAND _217_ (
+    .A(_141_),
+    .B(_143_),
+    .Y(_145_)
+  );
+  NOR _218_ (
+    .A(counter[4]),
+    .B(_145_),
+    .Y(_146_)
+  );
+  NAND _219_ (
+    .A(_088_),
+    .B(_144_),
+    .Y(_147_)
+  );
+  NAND _220_ (
+    .A(_138_),
+    .B(_146_),
+    .Y(_148_)
+  );
+  NOR _221_ (
+    .A(counter[6]),
+    .B(_137_),
+    .Y(_149_)
+  );
+  NAND _222_ (
+    .A(_091_),
+    .B(_136_),
+    .Y(_004_)
+  );
+  NAND _223_ (
+    .A(counter[4]),
+    .B(_149_),
+    .Y(_005_)
+  );
+  NAND _224_ (
+    .A(_148_),
+    .B(_005_),
+    .Y(_006_)
+  );
+  NOT _225_ (
+    .A(_006_),
+    .Y(_007_)
+  );
+  NOR _226_ (
+    .A(_139_),
+    .B(_146_),
+    .Y(_008_)
+  );
+  NAND _227_ (
+    .A(_138_),
+    .B(_147_),
+    .Y(_009_)
+  );
+  NOR _228_ (
+    .A(_149_),
+    .B(_008_),
+    .Y(_010_)
+  );
+  NAND _229_ (
+    .A(_004_),
+    .B(_009_),
+    .Y(_011_)
+  );
+  NOR _230_ (
+    .A(_088_),
+    .B(_011_),
+    .Y(_012_)
+  );
+  NAND _231_ (
+    .A(counter[4]),
+    .B(_010_),
+    .Y(_013_)
+  );
+  NOR _232_ (
+    .A(counter[4]),
+    .B(_010_),
+    .Y(_014_)
+  );
+  NAND _233_ (
+    .A(_088_),
+    .B(_011_),
+    .Y(_015_)
+  );
+  NOR _234_ (
+    .A(_012_),
+    .B(_014_),
+    .Y(_016_)
+  );
+  NAND _235_ (
+    .A(_013_),
+    .B(_015_),
+    .Y(_017_)
+  );
+  NOR _236_ (
+    .A(counter[3]),
+    .B(_017_),
+    .Y(_018_)
+  );
+  NAND _237_ (
+    .A(_086_),
+    .B(_016_),
+    .Y(_019_)
+  );
+  NOR _238_ (
+    .A(_144_),
+    .B(_014_),
+    .Y(_020_)
+  );
+  NAND _239_ (
+    .A(_145_),
+    .B(_015_),
+    .Y(_021_)
+  );
+  NOR _240_ (
+    .A(counter[4]),
+    .B(_004_),
+    .Y(_022_)
+  );
+  NAND _241_ (
+    .A(_088_),
+    .B(_149_),
+    .Y(_023_)
+  );
+  NOR _242_ (
+    .A(_020_),
+    .B(_022_),
+    .Y(_024_)
+  );
+  NAND _243_ (
+    .A(_021_),
+    .B(_023_),
+    .Y(_025_)
+  );
+  NOR _244_ (
+    .A(_018_),
+    .B(_024_),
+    .Y(_026_)
+  );
+  NAND _245_ (
+    .A(_019_),
+    .B(_025_),
+    .Y(_027_)
+  );
+  NOR _246_ (
+    .A(_006_),
+    .B(_026_),
+    .Y(_028_)
+  );
+  NAND _247_ (
+    .A(_007_),
+    .B(_027_),
+    .Y(_029_)
+  );
+  NOR _248_ (
+    .A(counter[3]),
+    .B(_028_),
+    .Y(_030_)
+  );
+  NAND _249_ (
+    .A(_086_),
+    .B(_029_),
+    .Y(_031_)
+  );
+  NOR _250_ (
+    .A(_086_),
+    .B(_029_),
+    .Y(_032_)
+  );
+  NAND _251_ (
+    .A(counter[3]),
+    .B(_028_),
+    .Y(_033_)
+  );
+  NOR _252_ (
+    .A(_030_),
+    .B(_032_),
+    .Y(_034_)
+  );
+  NAND _253_ (
+    .A(_031_),
+    .B(_033_),
+    .Y(_035_)
+  );
+  NOR _254_ (
+    .A(counter[2]),
+    .B(_035_),
+    .Y(_036_)
+  );
+  NAND _255_ (
+    .A(_087_),
+    .B(_034_),
+    .Y(_037_)
+  );
+  NOR _256_ (
+    .A(_016_),
+    .B(_030_),
+    .Y(_038_)
+  );
+  NAND _257_ (
+    .A(_017_),
+    .B(_031_),
+    .Y(_039_)
+  );
+  NOR _258_ (
+    .A(_007_),
+    .B(_019_),
+    .Y(_040_)
+  );
+  NAND _259_ (
+    .A(_006_),
+    .B(_018_),
+    .Y(_041_)
+  );
+  NOR _260_ (
+    .A(_038_),
+    .B(_040_),
+    .Y(_042_)
+  );
+  NAND _261_ (
+    .A(_039_),
+    .B(_041_),
+    .Y(_043_)
+  );
+  NOR _262_ (
+    .A(_036_),
+    .B(_042_),
+    .Y(_044_)
+  );
+  NAND _263_ (
+    .A(_037_),
+    .B(_043_),
+    .Y(_045_)
+  );
+  NAND _264_ (
+    .A(_006_),
+    .B(_019_),
+    .Y(_046_)
+  );
+  NAND _265_ (
+    .A(_024_),
+    .B(_046_),
+    .Y(_047_)
+  );
+  NAND _266_ (
+    .A(_027_),
+    .B(_047_),
+    .Y(_048_)
+  );
+  NOT _267_ (
+    .A(_048_),
+    .Y(_049_)
+  );
+  NOR _268_ (
+    .A(_044_),
+    .B(_049_),
+    .Y(_050_)
+  );
+  NAND _269_ (
+    .A(_045_),
+    .B(_048_),
+    .Y(_051_)
+  );
+  NOR _270_ (
+    .A(counter[2]),
+    .B(_050_),
+    .Y(_052_)
+  );
+  NAND _271_ (
+    .A(_087_),
+    .B(_051_),
+    .Y(_053_)
+  );
+  NOR _272_ (
+    .A(_034_),
+    .B(_052_),
+    .Y(_054_)
+  );
+  NAND _273_ (
+    .A(_035_),
+    .B(_053_),
+    .Y(_055_)
+  );
+  NOR _274_ (
+    .A(_035_),
+    .B(_053_),
+    .Y(_056_)
+  );
+  NAND _275_ (
+    .A(_034_),
+    .B(_052_),
+    .Y(_057_)
+  );
+  NOR _276_ (
+    .A(_054_),
+    .B(_056_),
+    .Y(_058_)
+  );
+  NAND _277_ (
+    .A(_055_),
+    .B(_057_),
+    .Y(_059_)
+  );
+  NAND _278_ (
+    .A(counter[1]),
+    .B(_058_),
+    .Y(_060_)
+  );
+  NOR _279_ (
+    .A(_036_),
+    .B(_048_),
+    .Y(_061_)
+  );
+  NOR _280_ (
+    .A(_043_),
+    .B(_061_),
+    .Y(_062_)
+  );
+  NOR _281_ (
+    .A(_044_),
+    .B(_062_),
+    .Y(_063_)
+  );
+  NOR _282_ (
+    .A(_059_),
+    .B(_063_),
+    .Y(_064_)
+  );
+  NOR _283_ (
+    .A(counter[1]),
+    .B(_064_),
+    .Y(_065_)
+  );
+  NOR _284_ (
+    .A(_087_),
+    .B(_051_),
+    .Y(_066_)
+  );
+  NAND _285_ (
+    .A(counter[2]),
+    .B(_050_),
+    .Y(_067_)
+  );
+  NOR _286_ (
+    .A(_052_),
+    .B(_066_),
+    .Y(_068_)
+  );
+  NAND _287_ (
+    .A(_053_),
+    .B(_067_),
+    .Y(_069_)
+  );
+  NOR _288_ (
+    .A(counter[0]),
+    .B(_068_),
+    .Y(_070_)
+  );
+  NOR _289_ (
+    .A(_085_),
+    .B(_069_),
+    .Y(_071_)
+  );
+  NOR _290_ (
+    .A(_070_),
+    .B(_071_),
+    .Y(_072_)
+  );
+  NAND _291_ (
+    .A(_111_),
+    .B(_118_),
+    .Y(_073_)
+  );
+  NOR _292_ (
+    .A(_110_),
+    .B(_073_),
+    .Y(_074_)
+  );
+  NOR _293_ (
+    .A(_132_),
+    .B(_074_),
+    .Y(_075_)
+  );
+  NAND _294_ (
+    .A(_072_),
+    .B(_075_),
+    .Y(_076_)
+  );
+  NOR _295_ (
+    .A(_065_),
+    .B(_076_),
+    .Y(_077_)
+  );
+  NAND _296_ (
+    .A(_060_),
+    .B(_077_),
+    .Y(_078_)
+  );
+  NAND _297_ (
+    .A(_135_),
+    .B(_078_),
+    .Y(_000_)
+  );
+  NOR _298_ (
+    .A(counter_reset),
+    .B(_084_),
+    .Y(rowSelect_enable)
+  );
+  NOR _299_ (
+    .A(counter_reset),
+    .B(_083_),
+    .Y(p_erase)
+  );
+  NOR _300_ (
+    .A(counter_reset),
+    .B(_082_),
+    .Y(p_expose)
+  );
+  NOR _301_ (
+    .A(internal_reset),
+    .B(reset),
+    .Y(_079_)
+  );
+  NOT _302_ (
+    .A(_079_),
+    .Y(master_reset)
+  );
+  NAND _303_ (
+    .A(_081_),
+    .B(_079_),
+    .Y(master_counter_reset)
+  );
+  NOR _304_ (
+    .A(internal_reset),
+    .B(_131_),
+    .Y(_080_)
+  );
+  NOR _305_ (
+    .A(counter_reset),
+    .B(_080_),
+    .Y(_003_)
+  );
   (* src = "sensorState.v:107.5-141.8" *)
-  DFF _1650_ (
+  DFF _306_ (
     .C(clk),
-    .D(_0816_),
+    .D(_000_),
     .Q(rowSelect_inc)
   );
   (* src = "sensorState.v:107.5-141.8" *)
-  DFF _1651_ (
+  DFF _307_ (
     .C(clk),
-    .D(_0817_),
+    .D(_001_),
     .Q(counter_reset)
   );
   (* src = "sensorState.v:107.5-141.8" *)
-  DFF _1652_ (
+  DFF _308_ (
     .C(clk),
-    .D(_0819_),
+    .D(_002_),
     .Q(stateSelector_shift)
   );
   (* src = "sensorState.v:107.5-141.8" *)
-  DFF _1653_ (
+  DFF _309_ (
     .C(clk),
-    .D(_0821_),
+    .D(_003_),
     .Q(internal_reset)
   );
   (* src = "sensorState.v:46.36-51.6" *)
