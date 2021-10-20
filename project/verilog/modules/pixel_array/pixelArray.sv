@@ -1,4 +1,5 @@
-`include "../pixel_row/pixelRow.v"
+`include "../../pixel_sensor_config.sv"
+`include "../pixel_row/pixelRow.sv"
 
 module PIXEL_ARRAY(
    input logic      VBN1,
@@ -10,8 +11,8 @@ module PIXEL_ARRAY(
    output [PIXEL_ARRAY_WIDTH-1:0][7:0] DATA_OUT
 );
 
-    parameter PIXEL_ARRAY_HEIGHT = 2;
-    parameter PIXEL_ARRAY_WIDTH = 2;
+    import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
 
     // TODO: photodiode input scene
 
@@ -20,7 +21,6 @@ module PIXEL_ARRAY(
         for (i = 0; i < PIXEL_ARRAY_HEIGHT; i++) begin
             PIXEL_ROW #(
                 // TODO: photodiode input
-                .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH)
             ) pr(
                 .VBN1(VBN1),
                 .RAMP(RAMP),

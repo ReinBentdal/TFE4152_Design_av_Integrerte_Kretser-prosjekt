@@ -1,5 +1,5 @@
 
-`include "sensorTop.v"
+`include "sensorTop.sv"
 
 `timescale 1 ns / 1 ps
 
@@ -13,8 +13,8 @@ module sensorTop_tb ();
 
     always #clk_period clk=~clk;
 
-    parameter PIXEL_ARRAY_WIDTH = 128;
-    parameter PIXEL_ARRAY_HEIGHT = 128;
+    parameter PIXEL_ARRAY_WIDTH = 3;
+    parameter PIXEL_ARRAY_HEIGHT = 3;
 
     SENSOR_TOP #(
         .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH),
@@ -24,10 +24,30 @@ module sensorTop_tb ();
         .reset(reset)
     );
 
+    integer file;
+    reg [8:0] c;
+    byte      q[$];
+    int       i;
+    int line;
+
     initial begin
 
         $dumpfile("sensorTop_tb.vcd");
         $dumpvars(0,sensorTop_tb);
+
+
+        file = $fopen("scene.txt", "r");
+        c = $fgetc(file);
+        while (c != 'h1ff) begin
+            q.push_back(c);
+            if (c == 'ha) begin
+                i = 0;
+                line++;
+            end
+            else
+                $display("Got char index [%0d], line [%0d] 0x%0h", i++, line, c);
+            c = $fgetc(file);
+        end
 
         clk = 0;
 

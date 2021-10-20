@@ -1,4 +1,5 @@
-`include "../pixel_sensor/pixelSensor.v"
+`include "../pixel_sensor/pixelSensor.sv"
+`include "../../pixel_sensor_config.sv"
 
 module PIXEL_ROW(
    input logic      VBN1,
@@ -10,13 +11,10 @@ module PIXEL_ROW(
    output [PIXEL_ARRAY_WIDTH-1:0][7:0] DATA_OUT
 );
 
-    parameter PIXEL_ARRAY_WIDTH = 2;
-
-    // row index
-    parameter j = 0;
+    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
 
     // photodiode light for each pixel
-    parameter [PIXEL_ARRAY_WIDTH-1:0] photodiode_lightintensity_row = ~0;
+    parameter [PIXEL_ARRAY_WIDTH-1:0] photodiode_lightintensity_row = {PIXEL_ARRAY_WIDTH{1'b0}};
 
     genvar i;
     generate

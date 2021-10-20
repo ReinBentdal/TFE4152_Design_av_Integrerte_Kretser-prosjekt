@@ -1,6 +1,6 @@
 # sensor state
 sim:
-	iverilog -g2012 -Wall -o sensorTop.out sensorTop_tb.v
+	iverilog -g2012 -Wall -o sensorTop.out sensorTop_tb.sv
 	vvp -n sensorTop.out
 
 synth:
@@ -8,9 +8,9 @@ synth:
 	yosys sensorTop.ys
 	
 # include nesecary library
-	sed -i "" '1{h;s/.*//;G;}' sensorTop_netlist.v
-	sed -i "" '1{h;s/.*/`include "gates.v"/;G;}' sensorTop_netlist.v
-	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' sensorTop_netlist.v
+	sed -i "" '1{h;s/.*//;G;}' sensorTop_netlist.sv
+	sed -i "" '1{h;s/.*/`include "gates.v"/;G;}' sensorTop_netlist.sv
+	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' sensorTop_netlist.sv
 
 # create circuit diagram
 #	rm sensorTop_diagram.svg
