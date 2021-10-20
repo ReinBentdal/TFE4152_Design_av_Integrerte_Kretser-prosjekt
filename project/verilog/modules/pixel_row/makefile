@@ -1,4 +1,4 @@
 # pixel row
 pr:
-	iverilog -g2012 -Wall -o modules/pixel_row/pixelRow.out modules/pixel_row/pixelRow_tb.v
+	iverilog -g2012 -Wall -o pixelRow.out pixelRow_tb.sv
 	vvp -n pixelRow.out

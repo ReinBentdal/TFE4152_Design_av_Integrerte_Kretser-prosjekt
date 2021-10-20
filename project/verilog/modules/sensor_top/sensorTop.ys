@@ -33,7 +33,7 @@ abc -liberty gates.lib
 opt
 
 # writes netlist version. -v makes the output more verbous
-write_verilog -v sensorTop_netlist.v
+write_verilog -v sensorTop_netlist.sv
 
 # json used to create svg of circuit
 write_json sensorTop.json

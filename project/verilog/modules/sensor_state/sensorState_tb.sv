@@ -1,12 +1,12 @@
 // `define RUN_NETLIST
 
-`include "../../components/shifter.v"
-`include "../../components/counter.v"
+`include "../../components/shifter.sv"
+`include "../../components/counter.sv"
 
 `ifdef RUN_NETLIST
-    `include "sensorState_netlist.v"
+    `include "sensorState_netlist.sv"
 `else
-    `include "sensorState.v"
+    `include "sensorState.sv"
 `endif
 
 `timescale 1 ns / 1 ps

@@ -1,6 +1,6 @@
 
-`include "../sensor_state/sensorState.v"
-`include "../pixel_array/pixelArray.v"
+`include "../sensor_state/sensorState.sv"
+`include "../pixel_array/pixelArray.sv"
 
 module SENSOR_TOP(
     input clk,
