@@ -16,11 +16,12 @@ module CircularShifter(
     assign out = outputEnable ? local_out : 'X;
 
     always_ff @(posedge clk, posedge reset) begin
-        if (reset)
-            local_out = 1;
+        if (reset) begin
+            local_out <= 1;
+        end
         else if (inputEnable) begin
             local_out[0] <= local_out[length-1];
-            local_out = local_out << 1;
+            local_out <= local_out << 1;
         end
     end
 
@@ -41,9 +42,9 @@ module Shifter(
 
     always_ff @(posedge clk) begin
         if (reset) begin
-            local_out = 1;
+            local_out <= 1;
         end
-        local_out = local_out << 1;
+        local_out <= local_out << 1;
     end
 endmodule
 
