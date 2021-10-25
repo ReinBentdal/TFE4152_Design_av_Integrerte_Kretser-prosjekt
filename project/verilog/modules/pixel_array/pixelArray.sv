@@ -8,19 +8,18 @@ module PIXEL_ARRAY(
    input logic      EXPOSE,
    input [PIXEL_ARRAY_HEIGHT-1:0] READ,
    input [7:0] COUNTER,
-   output [PIXEL_ARRAY_WIDTH-1:0][7:0] DATA_OUT
+   output [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] DATA_OUT
 );
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
     import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
-
-    // TODO: photodiode input scene
+    import PixelSensorConfig::PIXEL_BITS;
 
     genvar i;
     generate
         for (i = 0; i < PIXEL_ARRAY_HEIGHT; i++) begin
             PIXEL_ROW #(
-                // TODO: photodiode input
+                .row_index(i)
             ) pr(
                 .VBN1(VBN1),
                 .RAMP(RAMP),

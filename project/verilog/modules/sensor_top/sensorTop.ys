@@ -1,5 +1,6 @@
 # read design
-read_verilog -sv sensorTop.v
+# read_verilog -Dsynthesize -sv2012 sensorTop.sv
+verific -vlog-define synthesize -sv2012 sensorTop.sv
 
 # convert high-level behavioral parts ("processes") to d-type flip-flops and muxes
 proc; 
