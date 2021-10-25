@@ -1,5 +1,6 @@
-`include "../../components/counter.v"
-`include "../../components/shifter.v"
+`include "../../pixel_sensor_config.sv"
+`include "../../components/counter.sv"
+`include "../../components/shifter.sv"
 
 // reset should be triggered before use
 module SENSOR_STATE(
@@ -9,12 +10,14 @@ module SENSOR_STATE(
     output p_expose,
     output tri p_expose_clk,
     output [PIXEL_ARRAY_HEIGHT-1:0] p_row_select,
+    output new_row,
     output p_aRamp,
-    output [7:0] p_dRamp
+    output [PIXEL_BITS-1:0] p_dRamp
 );
 
-    parameter PIXEL_ARRAY_HEIGHT = 2;
-    parameter PIXEL_ARRAY_WIDTH = 2;
+    import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+    import PixelSensorConfig::PIXEL_BITS;
 
     parameter erase_time = 5;
     parameter expose_time = 255;
@@ -59,7 +62,7 @@ module SENSOR_STATE(
     //------------------------------------------------------------
     // Digital RAMP
     //------------------------------------------------------------
-    logic [7:0] dRamp;
+    logic [PIXEL_BITS-1:0] dRamp;
 
     logic dRamp_reset;
     wire master_dRamp_reset;
@@ -84,9 +87,8 @@ module SENSOR_STATE(
     wire rowSelect_enable;
     assign rowSelect_enable = idle ? 0 : state[3];
 
-    logic rowSelect_reset;
     wire master_rowSelect_reset;
-    assign master_rowSelect_reset = master_reset | rowSelect_reset;
+    assign master_rowSelect_reset = master_reset;
 
     CircularShifter #(
         .length(PIXEL_ARRAY_HEIGHT)
@@ -97,6 +99,8 @@ module SENSOR_STATE(
         .reset(master_rowSelect_reset),
         .out(p_row_select)
     );
+
+    assign new_row = rowSelect_inc | (stateSelector_shift & state[3]);
 
 
     //------------------------------------------------------------
@@ -120,7 +124,7 @@ module SENSOR_STATE(
     // State machine
     //------------------------------------------------------------
     wire idle;
-    assign idle = counter_reset;
+    assign idle = master_counter_reset;
 
     always_ff @(posedge clk) begin
 
@@ -141,16 +145,15 @@ module SENSOR_STATE(
             end
 
             // cycle is finished and resets entire module
-            else if (state == read_state && counter == read_time) begin
+            else if (state == read_state && counter + 1 == read_time) begin
                 counter_reset <= 1;
                 internal_reset <= 1;
             end
             else begin
                 stateSelector_shift <= 0;
 
-                // TODO: only run when state == read_state
                 // handle which row is selected
-                if (counter != 0 && counter % row_read_time == 0)
+                if (state == read_state && counter != 0 && (counter + 1) % row_read_time == 0)
                     rowSelect_inc <= 1;
                 else
                     rowSelect_inc <= 0;
@@ -165,5 +168,12 @@ module SENSOR_STATE(
     assign p_expose = idle ? 0 : state[1];
     assign p_aRamp = state == convert_state ? clk : 1'bX;
     assign p_expose_clk = state == expose_state ? clk : 1'bX;
+
+    always_ff @(posedge reset ) begin
+        rowSelect_inc <= 0;
+    end
+
+    // always_ff @(negedge internal_reset)
+    //     $stop;
 
 endmodule

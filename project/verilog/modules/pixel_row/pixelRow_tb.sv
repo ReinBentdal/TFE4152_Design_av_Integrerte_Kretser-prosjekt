@@ -1,4 +1,3 @@
-`include "../../pixel_sensor_config.sv"
 `include "pixelRow.sv"
 
 `timescale 1 ns / 1 ps
@@ -6,14 +5,15 @@
 module pixelRow_tb;
 
    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+   import PixelSensorConfig::PIXEL_BITS;
+   import PixelSensorConfig::MAIN_CLK_PERIOD;
 
     logic clk = 0;
     logic reset = 0;
 
-    parameter integer clk_period = 500;
-    parameter integer sim_end = clk_period*2400;
+    parameter integer sim_end = MAIN_CLK_PERIOD*2400;
 
-    always #clk_period clk=~clk;
+    always #MAIN_CLK_PERIOD clk=~clk;
 
     logic analog_bias;
     logic analog_ramp;
@@ -23,9 +23,9 @@ module pixelRow_tb;
     logic expose;
     logic read;
 
-    logic [7:0] pixel_counter;
+    logic [PIXEL_BITS-1:0] pixel_counter;
 
-    logic [PIXEL_ARRAY_WIDTH-1:0][7:0] rowData;
+    logic [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowData;
 
     PIXEL_ROW pixel_row(
         .VBN1(analog_bias),
@@ -137,7 +137,7 @@ module pixelRow_tb;
    //------------------------------------------------------------
    // DAC and ADC model
    //------------------------------------------------------------
-   logic [PIXEL_ARRAY_WIDTH-1:0][7:0] data;
+   logic [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] data;
 
 
    // If we are to convert, then provide a clock via anaRamp
@@ -169,7 +169,7 @@ module pixelRow_tb;
    //------------------------------------------------------------
    // Readout from databus
    //------------------------------------------------------------
-   logic [PIXEL_ARRAY_WIDTH-1:0][7:0] rowDataOut;
+   logic [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowDataOut;
    always_ff @(posedge clk or posedge reset) begin
       if(reset) begin
          rowDataOut = 0;
@@ -184,7 +184,7 @@ module pixelRow_tb;
 
         reset = 1;
 
-        #clk_period  reset=0;
+        #MAIN_CLK_PERIOD  reset=0;
 
         $dumpfile("pixelRow_tb.vcd");
         $dumpvars(0,pixelRow_tb);

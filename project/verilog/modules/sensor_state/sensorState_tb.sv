@@ -1,8 +1,5 @@
 // `define RUN_NETLIST
 
-`include "../../components/shifter.sv"
-`include "../../components/counter.sv"
-
 `ifdef RUN_NETLIST
     `include "sensorState_netlist.sv"
 `else
@@ -13,27 +10,25 @@
 
 module sensorState_tb ();
 
-    parameter PIXEL_ARRAY_HEIGHT = 4;
-    parameter PIXEL_ARRAY_WIDTH = 4;
+    import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+    import PixelSensorConfig::PIXEL_BITS;
+    import PixelSensorConfig::MAIN_CLK_PERIOD;
 
     logic clk;
     logic reset;
 
-    parameter integer clk_period = 50;
-    parameter integer sim_end = clk_period*2400;
+    parameter integer sim_end = MAIN_CLK_PERIOD*2400;
 
-    always #clk_period clk=~clk;
+    always #MAIN_CLK_PERIOD clk=~clk;
 
     wire p_erase;
     wire p_expose_clk;
     wire p_expose;
     wire [PIXEL_ARRAY_HEIGHT-1:0] p_row_select;
-    wire [7:0] p_dRamp;
+    wire [PIXEL_BITS-1:0] p_dRamp;
 
-    SENSOR_STATE #(
-        .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH),
-        .PIXEL_ARRAY_HEIGHT(PIXEL_ARRAY_HEIGHT)
-    ) sensor(
+    SENSOR_STATE sensor(
         .clk(clk),
         .reset(reset),
         .p_erase(p_erase),
@@ -52,7 +47,7 @@ module sensorState_tb ();
 
         reset = 1;
 
-        #clk_period reset=0;
+        #MAIN_CLK_PERIOD reset=0;
 
         #sim_end
           $stop;

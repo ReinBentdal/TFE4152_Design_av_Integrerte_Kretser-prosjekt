@@ -41,6 +41,9 @@
 //====================================================================
 module pixelSensor_tb;
 
+   import PixelSensorConfig::PIXEL_BITS;
+   import PixelSensorConfig::MAIN_CLK_PERIOD;
+
    //------------------------------------------------------------
    // Testbench clock
    //------------------------------------------------------------
@@ -48,17 +51,16 @@ module pixelSensor_tb;
    logic reset =0;
 
    // hvor mange av "bigscale" som tilsvarer en periode
-   parameter integer clk_period = 500;
-   parameter integer sim_end = clk_period*2400;
+   // parameter integer clk_period = 500;
+   parameter integer sim_end = MAIN_CLK_PERIOD*2400;
 
    // når man har # forran, betyr dette at den kalles hver gang den tidsperioden har gått
    // clk = not clk, altså alternerer den
-   always #clk_period clk=~clk;
+   always #MAIN_CLK_PERIOD clk=~clk;
 
    //------------------------------------------------------------
    // Pixel
    //------------------------------------------------------------
-   parameter real    dv_pixel = 0.5;  //Set the expected photodiode current (0-1)
 
    //Analog signals
    logic              anaBias1;
@@ -69,12 +71,20 @@ module pixelSensor_tb;
    logic              erase;
    logic              expose;
    logic              read;
-   tri[7:0]         pixData; //  We need this to be a wire, because we're tristating it
+   tri[PIXEL_BITS-1:0]         pixData; //  We need this to be a wire, because we're tristating it
 
-   logic [7:0] pixel_counter;
+   logic [PIXEL_BITS-1:0] pixel_counter;
 
    //Instanciate the pixel
-   PIXEL_SENSOR  #(.dv_pixel(dv_pixel))  ps1(anaBias1, anaRamp, erase, expose, read, pixel_counter, pixData);
+   PIXEL_SENSOR ps1(
+      anaBias1, 
+      anaRamp, 
+      erase, 
+      expose, 
+      read, 
+      pixel_counter, 
+      pixData
+   );
 
    //------------------------------------------------------------
    // State Machine
@@ -176,7 +186,7 @@ module pixelSensor_tb;
    //------------------------------------------------------------
    // DAC and ADC model
    //------------------------------------------------------------
-   logic[7:0] data;
+   logic[PIXEL_BITS-1:0] data;
 
 
    // If we are to convert, then provide a clock via anaRamp
@@ -208,7 +218,7 @@ module pixelSensor_tb;
    //------------------------------------------------------------
    // Readout from databus
    //------------------------------------------------------------
-   logic [7:0] pixelDataOut;
+   logic [PIXEL_BITS-1:0] pixelDataOut;
    always_ff @(posedge clk or posedge reset) begin
       if(reset) begin
          pixelDataOut = 0;
@@ -226,7 +236,7 @@ module pixelSensor_tb;
      begin
         reset = 1;
 
-        #clk_period  reset=0;
+        #MAIN_CLK_PERIOD  reset=0;
 
         $dumpfile("pixelSensor_tb.vcd");
         $dumpvars(0,pixelSensor_tb);
