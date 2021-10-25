@@ -34,6 +34,9 @@
 //  - Readout of latched value
 //----------------------------------------------------------------
 
+`include "../../pixel_sensor_config.sv"
+
+`timescale 1 ns / 1 ps
 
 module PIXEL_SENSOR
   (
@@ -42,23 +45,49 @@ module PIXEL_SENSOR
    input logic      ERASE,
    input logic      EXPOSE,
    input logic      READ,
-   input [7:0] COUNTER,
-   output [7:0] DATA
+   input [PIXEL_BITS-1:0] COUNTER,
+   output [PIXEL_BITS-1:0] DATA
    );
+
+   import PixelSensorConfig::PIXEL_BITS;
+   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+
+   parameter integer width_index = 0;
+   parameter integer height_index = 0;
+
+   logic            cmp;
+   logic [PIXEL_BITS-1:0]      p_data;
+
+      //----------------------------------------------------------------
+   // Memory latch
+   //----------------------------------------------------------------
+   always_ff @(posedge cmp)  begin
+      p_data = COUNTER;
+   end
+
+   //----------------------------------------------------------------
+   // Readout
+   //----------------------------------------------------------------
+   // Assign data to bus when pixRead = 0
+   // Antar at når READ kalles så er p_data satt
+   assign DATA = READ ? p_data : 8'bZ;
+
+   //----------------------------------------------------------------
+   // Non synthesize-able
+   //----------------------------------------------------------------
+`ifndef synthesize
+   import PixelSensorConfig::SCENE;
 
    parameter real             v_erase = 1.2;
 
    // hvor mye spenning per steg
-   parameter real             lsb = v_erase/255;
+   parameter real             lsb = v_erase/(2**PIXEL_BITS);
    
-   // lysintensitet
-   parameter real   dv_pixel = 0.5;
-
    real             tmp;
-   logic            cmp;
    real             adc;
+   real light_intensity;
 
-   logic [7:0]      p_data;
 
    //----------------------------------------------------------------
    // ERASE
@@ -76,8 +105,10 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    // Use bias to provide a clock for integration when exposing
    always_ff @(posedge VBN1) begin
-      if(EXPOSE)
-        tmp = tmp - dv_pixel*lsb;
+      if(EXPOSE) begin
+         light_intensity = real'(SCENE[height_index][width_index])/real'(2**PIXEL_BITS);
+         tmp = tmp - light_intensity*lsb;
+      end
    end
 
    //----------------------------------------------------------------
@@ -91,18 +122,6 @@ module PIXEL_SENSOR
         cmp <= 1;
    end
 
-   //----------------------------------------------------------------
-   // Memory latch
-   //----------------------------------------------------------------
-   always_ff @(posedge cmp)  begin
-      p_data = COUNTER;
-   end
-
-   //----------------------------------------------------------------
-   // Readout
-   //----------------------------------------------------------------
-   // Assign data to bus when pixRead = 0
-   // Antar at når READ kalles så er p_data satt
-   assign DATA = READ ? p_data : 8'bZ;
+`endif
 
 endmodule // re_control

@@ -1,5 +1,6 @@
 # read design
-read_verilog -sv sensorTop.v
+# read_verilog -Dsynthesize -sv2012 sensorTop.sv
+verific -vlog-define synthesize -sv2012 sensorTop.sv
 
 # convert high-level behavioral parts ("processes") to d-type flip-flops and muxes
 proc; 
@@ -33,7 +34,7 @@ abc -liberty gates.lib
 opt
 
 # writes netlist version. -v makes the output more verbous
-write_verilog -v sensorTop_netlist.v
+write_verilog -v sensorTop_netlist.sv
 
 # json used to create svg of circuit
 write_json sensorTop.json

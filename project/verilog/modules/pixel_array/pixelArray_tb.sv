@@ -1,41 +1,51 @@
-`include "../../config.v"
-`include "pixelRow.v"
+`include "pixelArray.sv"
 
 `timescale 1 ns / 1 ps
 
-module pixelRow_tb;
+module pixelArray_tb;
 
-    logic clk = 0;
-    logic reset = 0;
+   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+   import PixelSensorConfig::PIXEL_BITS;
+   import PixelSensorConfig::MAIN_CLK_PERIOD;
 
-    parameter integer clk_period = 500;
-    parameter integer sim_end = clk_period*2400;
+   logic clk = 0;
+   logic reset = 0;
 
-    always #clk_period clk=~clk;
+   //State duration in clock cycles
+   parameter integer c_erase = 5;
+   parameter integer c_expose = 255;
+   parameter integer c_convert = 255;
+   parameter integer c_read_row = 5;
+   parameter integer c_read = c_read_row*PIXEL_ARRAY_HEIGHT;
 
-    logic analog_bias;
-    logic analog_ramp;
-    logic analog_reset;
+   parameter integer sim_end = MAIN_CLK_PERIOD*2400;
 
-    logic erase;
-    logic expose;
-    logic read;
+   always #MAIN_CLK_PERIOD clk=~clk;
 
-    logic [7:0] pixel_counter;
+   logic analog_bias;
+   logic analog_ramp;
+   logic analog_reset;
 
-    logic [PIXEL_ARRAY_WIDTH-1:0][7:0] rowData;
+   logic erase;
+   logic expose;
+   logic [PIXEL_ARRAY_HEIGHT-1:0] read;
 
-    PIXEL_ROW #(.PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH)) pixel_row(
-        .VBN1(analog_bias),
-        .RAMP(analog_ramp),
-        .ERASE(erase),
-        .EXPOSE(expose),
-        .READ(read),
-        .DATA_OUT(rowData),
-        .COUNTER(pixel_counter)
-    );
+   logic [7:0] pixel_counter;
 
-    //------------------------------------------------------------
+   wire [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowData;
+
+   PIXEL_ARRAY pixel_array(
+      .VBN1(analog_bias),
+      .RAMP(analog_ramp),
+      .ERASE(erase),
+      .EXPOSE(expose),
+      .READ(read),
+      .DATA_OUT(rowData),
+      .COUNTER(pixel_counter)
+   );
+
+   //------------------------------------------------------------
    // State Machine
    //------------------------------------------------------------
    parameter ERASE=0, EXPOSE=1, CONVERT=2, READ=3, IDLE=4;
@@ -44,12 +54,9 @@ module pixelRow_tb;
    logic               convert_stop;
    logic [2:0]         state,next_state;   //States
    integer           counter;            //Delay counter in state machine
+   integer           read_counter = 0;
 
-   //State duration in clock cycles
-   parameter integer c_erase = 5;
-   parameter integer c_expose = 255;
-   parameter integer c_convert = 255;
-   parameter integer c_read = 5;
+   logic [PIXEL_ARRAY_HEIGHT-1:0] read_register = 1;
 
    // Control the output signals
    always_ff @(negedge clk ) begin
@@ -74,7 +81,7 @@ module pixelRow_tb;
         end
         READ: begin
            erase <= 0;
-           read <= 1;
+           read <= read_register;
            expose <= 0;
            convert <= 0;
         end
@@ -83,7 +90,6 @@ module pixelRow_tb;
            read <= 0;
            expose <= 0;
            convert <= 0;
-
         end
       endcase // case (state)
    end // always @ (state)
@@ -117,11 +123,22 @@ module pixelRow_tb;
                  state <= IDLE;
               end
            end
-           READ:
-             if(counter == c_read) begin
-                state <= IDLE;
-                next_state <= ERASE;
-             end
+           READ: begin
+
+               if(counter == c_read) begin
+                  read_register <= 1;
+                  read_counter <= 0;
+                  state <= IDLE;
+                  next_state <= ERASE;
+               end
+               else begin
+                  read_counter = read_counter + 1;
+                  if (read_counter == c_read_row) begin
+                     read_register <= read_register << 1;
+                     read_counter <= 0;
+                  end
+               end
+           end
            IDLE:
              state <= next_state;
          endcase // case (state)
@@ -135,8 +152,7 @@ module pixelRow_tb;
    //------------------------------------------------------------
    // DAC and ADC model
    //------------------------------------------------------------
-   logic [PIXEL_ARRAY_WIDTH-1:0][7:0] data;
-
+   logic [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] data;
 
    // If we are to convert, then provide a clock via anaRamp
    // This does not model the real world behavior, as anaRamp would be a voltage from the ADC
@@ -167,13 +183,13 @@ module pixelRow_tb;
    //------------------------------------------------------------
    // Readout from databus
    //------------------------------------------------------------
-   logic [PIXEL_ARRAY_WIDTH-1:0][7:0] rowDataOut;
+   logic [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowDataOut;
    always_ff @(posedge clk or posedge reset) begin
       if(reset) begin
          rowDataOut = 0;
       end
       else begin
-         if(read)
+         if(read != 0)
            rowDataOut <= rowData;
       end
    end
@@ -182,10 +198,10 @@ module pixelRow_tb;
 
         reset = 1;
 
-        #clk_period  reset=0;
+        #MAIN_CLK_PERIOD  reset=0;
 
-        $dumpfile("pixelRow_tb.vcd");
-        $dumpvars(0,pixelRow_tb);
+        $dumpfile("pixelArray_tb.vcd");
+        $dumpvars(0,pixelArray_tb);
 
         #sim_end
           $stop;

@@ -1,4 +1,5 @@
-`include "../pixel_row/pixelRow.v"
+`include "../../pixel_sensor_config.sv"
+`include "../pixel_row/pixelRow.sv"
 
 module PIXEL_ARRAY(
    input logic      VBN1,
@@ -7,18 +8,18 @@ module PIXEL_ARRAY(
    input logic      EXPOSE,
    input [PIXEL_ARRAY_HEIGHT-1:0] READ,
    input [7:0] COUNTER,
-   output [PIXEL_ARRAY_WIDTH-1:0][7:0] DATA_OUT
+   output [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] DATA_OUT
 );
 
-    parameter PIXEL_ARRAY_HEIGHT = 2;
-    parameter PIXEL_ARRAY_WIDTH = 2;
+    import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+    import PixelSensorConfig::PIXEL_BITS;
 
     genvar i;
     generate
         for (i = 0; i < PIXEL_ARRAY_HEIGHT; i++) begin
             PIXEL_ROW #(
-                .dv_row(i), 
-                .PIXEL_ARRAY_WIDTH(PIXEL_ARRAY_WIDTH)
+                .row_index(i)
             ) pr(
                 .VBN1(VBN1),
                 .RAMP(RAMP),
