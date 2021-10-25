@@ -14,10 +14,10 @@ package PixelSensorConfig;
 
     localparam MAIN_CLK_PERIOD = 500;
 
-    // calculates the clock speed needed to keep up with data from the pixel array
-    localparam integer OUTPUT_CLK_PERIOD = $floor(5*MAIN_CLK_PERIOD*OUTPUT_BUS_WIDTH/PIXEL_ARRAY_WIDTH) - 10;
-
-    // logic [3:0][3:0] te  = '{4'b1111, 4'b1111, 4'b1111, 4'b1111};
+    // calculates the clock speed needed to keep up with data from the pixel array.
+    // 1 extra output buffer clk for each clk to compensate for clock offset.
+    localparam real _CLK_RATIO = real'(PIXEL_ARRAY_WIDTH)/real'(OUTPUT_BUS_WIDTH) + 1;
+    localparam integer OUTPUT_CLK_PERIOD = $floor(real'(5*MAIN_CLK_PERIOD)/_CLK_RATIO);
 
 `ifndef synthesize
     int SCENE [PIXEL_ARRAY_HEIGHT-1:0][PIXEL_ARRAY_WIDTH-1:0];

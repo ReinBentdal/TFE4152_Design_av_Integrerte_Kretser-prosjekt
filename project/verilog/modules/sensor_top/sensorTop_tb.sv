@@ -19,8 +19,9 @@ module sensorTop_tb ();
     wire output_clk;
     wire [OUTPUT_BUS_WIDTH-1:0][PIXEL_BITS-1:0] data_out;
     wire new_row;
+    wire pixel_frame_finished;
 
-    parameter integer sim_end = MAIN_CLK_PERIOD*2400;
+    parameter integer sim_end_max = MAIN_CLK_PERIOD*2400;
 
     always #MAIN_CLK_PERIOD clk=~clk;
     always #OUTPUT_CLK_PERIOD buffer_clk=~buffer_clk;
@@ -30,12 +31,16 @@ module sensorTop_tb ();
         .buffer_clk(buffer_clk),
         .output_clk(output_clk),
         .reset(reset),
-        .data_out(data_out)
+        .data_out(data_out),
+        .pixel_frame_finished(pixel_frame_finished)
     );
 
+    //------------------------------------------------------------
+    // WRITE OUTPUT FROM SENSOR_TOP TO FILE
+    //------------------------------------------------------------
     integer writeFile = $fopen("image.txt", "w");
 
-    always @( posedge output_clk ) begin
+    always @( negedge output_clk ) begin
         if (!reset) begin
             for (int i = 0; i < OUTPUT_BUS_WIDTH; i++) begin
                 $fdisplay(writeFile, data_out[i]);
@@ -43,6 +48,9 @@ module sensorTop_tb ();
         end
     end
 
+    //------------------------------------------------------------
+    // READ SCENE TO ARRAY
+    //------------------------------------------------------------
     int file;
     reg [8:0] c;
     int index;
@@ -52,15 +60,10 @@ module sensorTop_tb ();
     int width_index;
     int height_index;
 
-
-    initial begin
-
-        $dumpfile("sensorTop_tb.vcd");
-        $dumpvars(0,sensorTop_tb);
-
+    task readScene(string filename);
         $display("FILE READ START");
-
-        file = $fopen("scene.txt", "r");
+        
+        file = $fopen(filename, "r");
 
         while (!$feof(file)) begin
             $fscanf(file,"%d\n",line);
@@ -77,6 +80,27 @@ module sensorTop_tb ();
         $display("FILE READ FINISHED");
 
         $fclose(file);
+    endtask
+
+    // end simulation when first image-cycle is finished
+    logic pixel_frame_finished_no_x;
+    assign pixel_frame_finished_no_x = pixel_frame_finished === 1'bX ? 0 : pixel_frame_finished;
+
+    always @(negedge pixel_frame_finished_no_x) begin
+        if (!reset)
+            $stop;
+    end
+
+//------------------------------------------------------------
+// SIMULATION SETUP
+//------------------------------------------------------------
+    initial begin
+
+        $dumpfile("sensorTop_tb.vcd");
+        $dumpvars(0,sensorTop_tb);
+
+        // load the scene to simulate takin a picture
+        readScene("scene.txt");
 
         clk = 0;
         buffer_clk = 0;
@@ -85,7 +109,8 @@ module sensorTop_tb ();
 
         #MAIN_CLK_PERIOD reset=0;
 
-        #sim_end
+        // if simulation doesnt stop elsewhere in the program this prevent the simulation from continuing infinetly
+        #sim_end_max
           $stop;
     end
 

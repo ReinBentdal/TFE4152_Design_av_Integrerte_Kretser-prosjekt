@@ -67,6 +67,6 @@ module OUTPUT_BUFFER(
 
     // assign output_clk = new_out_sending ? clk : 0;
 
-    assign data_out = data_buffer[0:OUTPUT_BUS_WIDTH];
+    assign data_out = data_buffer[0:OUTPUT_BUS_WIDTH-1];
 
 endmodule

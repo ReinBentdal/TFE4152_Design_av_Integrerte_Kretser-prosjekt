@@ -12,10 +12,10 @@ module Counter(
 
     always_ff @(posedge clk, posedge reset) begin
         if (reset) begin
-            out = 0;
+            out <= 0;
         end
         else if (enable) begin
-            out = out + 1;
+            out <= out + 1;
         end
     end
 endmodule

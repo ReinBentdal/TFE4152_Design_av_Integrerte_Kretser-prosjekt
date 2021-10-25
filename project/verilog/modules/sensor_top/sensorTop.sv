@@ -8,7 +8,8 @@ module SENSOR_TOP(
     input reset,
     input buffer_clk,
     output output_clk,
-    output [OUTPUT_BUS_WIDTH-1:0][PIXEL_BITS-1:0] data_out
+    output [OUTPUT_BUS_WIDTH-1:0][PIXEL_BITS-1:0] data_out,
+    output pixel_frame_finished
 );
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
@@ -44,7 +45,8 @@ module SENSOR_TOP(
         .p_row_select(sensor_row_select),
         .new_row(sensor_new_row),
         .p_aRamp(sensor_analog_ramp),
-        .p_dRamp(sensor_digital_ramp)
+        .p_dRamp(sensor_digital_ramp),
+        .pixel_frame_finished(pixel_frame_finished)
     );
 
     OUTPUT_BUFFER OutputBuffer(
