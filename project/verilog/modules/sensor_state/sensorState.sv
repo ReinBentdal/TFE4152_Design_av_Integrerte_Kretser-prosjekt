@@ -12,7 +12,8 @@ module SENSOR_STATE(
     output [PIXEL_ARRAY_HEIGHT-1:0] p_row_select,
     output new_row,
     output p_aRamp,
-    output [PIXEL_BITS-1:0] p_dRamp
+    output [PIXEL_BITS-1:0] p_dRamp,
+    output pixel_frame_finished
 );
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
@@ -36,6 +37,7 @@ module SENSOR_STATE(
 
     // reset for the entire module
     logic internal_reset;
+    assign pixel_frame_finished = internal_reset;
     wire master_reset;
     assign master_reset = reset | internal_reset;
 

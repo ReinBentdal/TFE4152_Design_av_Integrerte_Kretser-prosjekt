@@ -56,13 +56,13 @@ module PIXEL_SENSOR
    parameter integer width_index = 0;
    parameter integer height_index = 0;
 
-   logic            cmp;
-   logic [PIXEL_BITS-1:0]      p_data;
+   logic cmp;
+   logic [PIXEL_BITS-1:0] p_data;
 
-      //----------------------------------------------------------------
+   //----------------------------------------------------------------
    // Memory latch
    //----------------------------------------------------------------
-   always_ff @(posedge cmp)  begin
+   always_ff @(posedge cmp) begin
       p_data = COUNTER;
    end
 
@@ -73,19 +73,22 @@ module PIXEL_SENSOR
    // Antar at når READ kalles så er p_data satt
    assign DATA = READ ? p_data : 8'bZ;
 
-   //----------------------------------------------------------------
-   // Non synthesize-able
-   //----------------------------------------------------------------
+//----------------------------------------------------------------
+// Non synthesize-able
+//----------------------------------------------------------------
+//
+// always_ff -> always to prevent non-synthesizable warnings
+//
 `ifndef synthesize
    import PixelSensorConfig::SCENE;
 
-   parameter real             v_erase = 1.2;
+   parameter real v_erase = 1.2;
 
    // hvor mye spenning per steg
-   parameter real             lsb = v_erase/(2**PIXEL_BITS);
+   parameter real lsb = v_erase/(2**PIXEL_BITS);
    
-   real             tmp;
-   real             adc;
+   real tmp;
+   real adc;
    real light_intensity;
 
 
@@ -93,7 +96,7 @@ module PIXEL_SENSOR
    // ERASE
    //----------------------------------------------------------------
    // Reset the pixel value on pixRst
-   always_ff @(posedge ERASE) begin
+   always @(posedge ERASE) begin
       tmp = v_erase;
       p_data = 0;
       cmp  = 0;
@@ -104,7 +107,7 @@ module PIXEL_SENSOR
    // SENSOR
    //----------------------------------------------------------------
    // Use bias to provide a clock for integration when exposing
-   always_ff @(posedge VBN1) begin
+   always @(posedge VBN1) begin
       if(EXPOSE) begin
          light_intensity = real'(SCENE[height_index][width_index])/real'(2**PIXEL_BITS);
          tmp = tmp - light_intensity*lsb;
@@ -116,7 +119,7 @@ module PIXEL_SENSOR
    //----------------------------------------------------------------
    // Use ramp to provide a clock for ADC conversion, assume that ramp
    // and COUNTER are synchronous
-   always_ff @(posedge RAMP) begin
+   always @(posedge RAMP) begin
       adc = adc + lsb;
       if(adc > tmp) // TODO: mulig å fjerne compare
         cmp <= 1;

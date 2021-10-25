@@ -11,8 +11,7 @@ arr = np.loadtxt(os.path.join(script_dir, 'image.txt'), dtype=int)
 
 arrReshape = np.reshape(arr, (HEIGHT, WIDTH))
 
-plt.imshow(arrReshape, cmap='Greys')
+plt.imshow(arrReshape, cmap='Greys', interpolation='none')
 plt.axis('off')
-plt.savefig(os.path.join(script_dir, 'hello_world.png'), bbox_inches='tight')
-
-
+# plt.savefig(os.path.join(script_dir, 'hello_world.png'), bbox_inches='tight')
+plt.show()
