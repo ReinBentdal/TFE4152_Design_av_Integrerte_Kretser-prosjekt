@@ -49,6 +49,7 @@ module OUTPUT_BUFFER(
     ) DataBuffer(
         .clk(CLK),
         .set(new_input),
+        .set_select(SET_BUFFER),
         .reset(RESET),
         .shift(CLK & should_shift),
         .data_in(DATA_IN),
