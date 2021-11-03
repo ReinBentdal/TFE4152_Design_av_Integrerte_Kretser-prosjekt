@@ -8,7 +8,7 @@
 
 package PixelSensorConfig;
 
-    localparam integer PIXEL_ARRAY_HEIGHT = 3;
+    localparam integer PIXEL_ARRAY_HEIGHT = 12;
     localparam integer PIXEL_ARRAY_WIDTH = 24;
     localparam PIXEL_BITS = 8;
     

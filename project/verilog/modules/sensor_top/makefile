@@ -25,7 +25,7 @@ svg:
 	netlistsvg sensorTop.json -o output/sensorTop_diagram.svg --config diagram_conf.json
 
 synth:
-	yosys sensorTop.ys
+	yosys -q -q sensorTop.ys
 	
 # include nesecary library
 	sed -i "" '1{h;s/.*//;G;}' sensorTop_netlist.v

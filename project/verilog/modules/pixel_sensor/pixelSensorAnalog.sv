@@ -4,7 +4,8 @@
 `include "../../components/counter.sv"
 `endif
 
-
+// Simulation of analog part of the sensor. 
+// The circuit for "synthesize" is there to verify the rest of the design as well as preventing yosys from omitting the entire design
 module PIXEL_SENSOR_ANALOG(
    input EXPOSE,
    input RAMP,
@@ -18,23 +19,27 @@ module PIXEL_SENSOR_ANALOG(
 // synthesizable dummy-sensor for testing the rest of the synthesizable circuits
 `ifdef synthesize
 
-    parameter integer expose_value = ((width_index + 1)*(height_index + 1)) % 256;
+   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
 
-    logic [7:0] expose_cmp;
+   // create some pattern which is recognizable when simulated
+   parameter integer expose_value = 256 - $ceil(($cos(6.28*(1 + 0.7*width_index + height_index)/(1 + PIXEL_ARRAY_WIDTH + PIXEL_ARRAY_HEIGHT))+1)*128);
 
-    Counter #(.bits(8)) Counter(
-        .clk(RAMP),
-        .reset(ERASE),
-        .enable(1'b1),
-        .out(expose_cmp)
-    );
+   logic [7:0] expose_cmp;
 
-    always_ff @( posedge RAMP or posedge ERASE ) begin
-        if (ERASE)
-            CMP <= 0;
-        else if (expose_cmp == expose_value)
-            CMP <= 1;
-    end
+   Counter #(.bits(8)) Counter(
+      .clk(RAMP),
+      .reset(ERASE),
+      .enable(1'b1),
+      .out(expose_cmp)
+   );
+
+   always_ff @( posedge RAMP or posedge ERASE ) begin
+      if (ERASE)
+         CMP <= 0;
+      else if (expose_cmp == expose_value)
+         CMP <= 1;
+   end
 
 
 // non synthesizable code

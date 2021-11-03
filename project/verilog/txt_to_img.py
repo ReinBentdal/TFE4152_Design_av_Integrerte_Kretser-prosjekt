@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import os.path
 
-HEIGHT = 2
+HEIGHT = 12
 WIDTH = 24
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
