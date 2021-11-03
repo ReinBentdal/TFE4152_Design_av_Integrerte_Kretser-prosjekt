@@ -1,6 +1,8 @@
 `ifndef _COUNTER
 `define _COUNTER
 
+`default_nettype none
+
 module Counter(
     input clk,
     input reset,

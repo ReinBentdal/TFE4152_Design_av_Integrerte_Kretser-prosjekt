@@ -1,24 +1,24 @@
 `include "../../pixel_sensor_config.sv"
 `include "../../components/counter.sv"
-`include "../../components/shifter.sv"
+`include "../../components/selector.sv"
+`include "../../components/tristate.sv"
 
 // reset should be triggered before use
-module SENSOR_STATE(
-    input clk,
-    input reset,
-    output p_erase,
-    output p_expose,
-    output tri p_expose_clk,
-    output [PIXEL_ARRAY_HEIGHT-1:0] p_row_select,
-    output new_row,
-    output p_aRamp,
-    output [PIXEL_BITS-1:0] p_dRamp,
-    output pixel_frame_finished
-);
+module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NEW_ROW, PIXEL_ANALOG_RAMP, PIXEL_CONVERT_COUNTER, FRAME_FINISHED);
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
     import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
     import PixelSensorConfig::PIXEL_BITS;
+
+    input CLK;
+    input RESET;
+    output PIXEL_ERASE;
+    output PIXEL_EXPOSE;
+    output [PIXEL_ARRAY_HEIGHT-1:0] SENSOR_ROW_SELECT;
+    output logic NEW_ROW;
+    output PIXEL_ANALOG_RAMP;
+    output [PIXEL_BITS-1:0] PIXEL_CONVERT_COUNTER;
+    output FRAME_FINISHED;
 
     parameter erase_time = 5;
     parameter expose_time = 255;
@@ -37,9 +37,9 @@ module SENSOR_STATE(
 
     // reset for the entire module
     logic internal_reset;
-    assign pixel_frame_finished = internal_reset;
+    assign FRAME_FINISHED = internal_reset;
     wire master_reset;
-    assign master_reset = reset | internal_reset;
+    assign master_reset = RESET | internal_reset;
 
 
 
@@ -50,10 +50,10 @@ module SENSOR_STATE(
     
     logic counter_reset;
     wire master_counter_reset;
-    assign master_counter_reset = master_reset | counter_reset;
+    assign master_counter_reset = master_reset || counter_reset;
 
     Counter #(.bits(counter_bits)) Counter(
-        .clk(clk),
+        .clk(CLK),
         .reset(master_counter_reset),
         .enable(1'b1),
         .out(counter)
@@ -66,21 +66,33 @@ module SENSOR_STATE(
     //------------------------------------------------------------
     logic [PIXEL_BITS-1:0] dRamp;
 
-    logic dRamp_reset;
-    wire master_dRamp_reset;
-    assign master_dRamp_reset = master_reset | dRamp_reset;
-
-    wire dRamp_enable;
-    assign dRamp_enable = state == convert_state;
+    logic dRamp_enable;
+    assign dRamp_enable = state[2];
 
     Counter #(.bits(8)) DRamp(
-        .clk(clk),
-        .reset(master_dRamp_reset),
+        .clk(CLK),
+        .reset(master_reset),
         .enable(dRamp_enable),
-        .out(p_dRamp)
+        .out(PIXEL_CONVERT_COUNTER)
     );
 
 
+    //------------------------------------------------------------
+    // Row selector counter
+    //------------------------------------------------------------
+    logic rowSelect_counter_reset;
+    logic rowSelect_counter_enable;
+    logic [2:0] rowSelect_count;
+
+    assign rowSelect_counter_enable = state[3];
+    assign rowSelect_counter_reset = rowSelect_inc | (stateSelector_shift & state[3]);
+    
+    Counter #(.bits(3)) RowSelectorCounter(
+        .clk(CLK),
+        .reset(rowSelect_counter_reset || master_reset),
+        .enable(rowSelect_counter_enable),
+        .out(rowSelect_count)
+    );
 
     //------------------------------------------------------------
     // Row selector shifter
@@ -92,17 +104,15 @@ module SENSOR_STATE(
     wire master_rowSelect_reset;
     assign master_rowSelect_reset = master_reset;
 
-    CircularShifter #(
+    Selector #(
         .length(PIXEL_ARRAY_HEIGHT)
     ) RowSelector(
         .clk(rowSelect_inc),
         .inputEnable(rowSelect_enable),
         .outputEnable(rowSelect_enable),
         .reset(master_rowSelect_reset),
-        .out(p_row_select)
+        .out(SENSOR_ROW_SELECT)
     );
-
-    assign new_row = rowSelect_inc | (stateSelector_shift & state[3]);
 
 
     //------------------------------------------------------------
@@ -111,7 +121,7 @@ module SENSOR_STATE(
     logic stateSelector_shift;
     logic [states-1:0] state;
 
-    CircularShifter #(
+    Selector #(
         .length(states)
     ) StateSelector(
         .clk(stateSelector_shift),
@@ -128,54 +138,56 @@ module SENSOR_STATE(
     wire idle;
     assign idle = master_counter_reset;
 
-    always_ff @(posedge clk) begin
+    always_ff @(posedge CLK or posedge RESET) begin
 
-        if (idle) begin
-            stateSelector_shift <= 1;
-            counter_reset <= 0;
+        if (RESET) begin
+            rowSelect_inc <= 0;
+            stateSelector_shift <= 0;
+            NEW_ROW <= 0;
             internal_reset <= 0;
+            counter_reset <= 0;
         end
         else begin
+            NEW_ROW <= rowSelect_inc | (stateSelector_shift & state[3]);
 
-            // continue to next stage if current stage is finished
-            if (
-                (state == erase_state && counter == erase_time) || 
-                (state == expose_state && counter == expose_time) ||
-                (state == convert_state && counter == convert_time)
-            ) begin             
-                counter_reset <= 1;
-            end
-
-            // cycle is finished and resets entire module
-            else if (state == read_state && counter + 1 == read_time) begin
-                counter_reset <= 1;
-                internal_reset <= 1;
+            if (idle) begin
+                stateSelector_shift <= 1;
+                counter_reset <= 0;
+                internal_reset <= 0;
             end
             else begin
+
                 stateSelector_shift <= 0;
 
-                // handle which row is selected
-                if (state == read_state && counter != 0 && (counter + 1) % row_read_time == 0)
+                // continue to next stage if current stage is finished
+                if (
+                    (state == erase_state && counter == erase_time) || 
+                    (state == expose_state && counter == expose_time) ||
+                    (state == convert_state && counter == convert_time)
+                ) begin             
+                    counter_reset <= 1;
+                end
+
+                // cycle is finished and resets entire module
+                else if (state == read_state && counter + 1 == read_time) begin
+                    counter_reset <= 1;
+                    internal_reset <= 1;
+                end
+                else if (state == read_state && rowSelect_count == (row_read_time - 2)) begin
                     rowSelect_inc <= 1;
+                end
                 else
                     rowSelect_inc <= 0;
-            end    
+            end
         end
     end
 
     //------------------------------------------------------------
     // output assign
     //------------------------------------------------------------
-    assign p_erase = idle ? 0 : state[0];
-    assign p_expose = idle ? 0 : state[1];
-    assign p_aRamp = state == convert_state ? clk : 1'bX;
-    assign p_expose_clk = state == expose_state ? clk : 1'bX;
+    assign PIXEL_ERASE = idle ? 0 : state[0];
+    assign PIXEL_EXPOSE = idle ? 0 : state[1];
+    assign PIXEL_ANALOG_RAMP = state == convert_state ? CLK : 0;
 
-    always_ff @(posedge reset ) begin
-        rowSelect_inc <= 0;
-    end
-
-    // always_ff @(negedge internal_reset)
-    //     $stop;
 
 endmodule

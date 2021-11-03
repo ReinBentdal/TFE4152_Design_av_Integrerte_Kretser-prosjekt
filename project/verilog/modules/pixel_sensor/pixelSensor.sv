@@ -35,16 +35,15 @@
 //----------------------------------------------------------------
 
 `include "../../pixel_sensor_config.sv"
-
-`timescale 1 ns / 1 ps
+`include "../../components/tristate.sv"
+`include "../pixel_sensor/pixelSensorAnalog.sv"
 
 module PIXEL_SENSOR
   (
-   input logic      VBN1,
-   input logic      RAMP,
-   input logic      ERASE,
-   input logic      EXPOSE,
-   input logic      READ,
+   input RAMP,
+   input ERASE,
+   input EXPOSE,
+   input READ,
    input [PIXEL_BITS-1:0] COUNTER,
    output [PIXEL_BITS-1:0] DATA
    );
@@ -56,75 +55,30 @@ module PIXEL_SENSOR
    parameter integer width_index = 0;
    parameter integer height_index = 0;
 
+   logic [PIXEL_BITS-1:0] local_data;
+
+   Tristate Tristate[PIXEL_BITS-1:0](
+      .A(local_data),
+      .EN(READ),
+      .Y(DATA)
+   );
+
    logic cmp;
-   logic [PIXEL_BITS-1:0] p_data;
 
-   //----------------------------------------------------------------
-   // Memory latch
-   //----------------------------------------------------------------
-   always_ff @(posedge cmp) begin
-      p_data = COUNTER;
+   always_comb begin
+      if (!cmp)
+         local_data = COUNTER;
    end
 
-   //----------------------------------------------------------------
-   // Readout
-   //----------------------------------------------------------------
-   // Assign data to bus when pixRead = 0
-   // Antar at når READ kalles så er p_data satt
-   assign DATA = READ ? p_data : 8'bZ;
-
-//----------------------------------------------------------------
-// Non synthesize-able
-//----------------------------------------------------------------
-//
-// always_ff -> always to prevent non-synthesizable warnings
-//
-`ifndef synthesize
-   import PixelSensorConfig::SCENE;
-
-   parameter real v_erase = 1.2;
-
-   // hvor mye spenning per steg
-   parameter real lsb = v_erase/(2**PIXEL_BITS);
-   
-   real tmp;
-   real adc;
-   real light_intensity;
-
-
-   //----------------------------------------------------------------
-   // ERASE
-   //----------------------------------------------------------------
-   // Reset the pixel value on pixRst
-   always @(posedge ERASE) begin
-      tmp = v_erase;
-      p_data = 0;
-      cmp  = 0;
-      adc = 0;
-   end
-
-   //----------------------------------------------------------------
-   // SENSOR
-   //----------------------------------------------------------------
-   // Use bias to provide a clock for integration when exposing
-   always @(posedge VBN1) begin
-      if(EXPOSE) begin
-         light_intensity = real'(SCENE[height_index][width_index])/real'(2**PIXEL_BITS);
-         tmp = tmp - light_intensity*lsb;
-      end
-   end
-
-   //----------------------------------------------------------------
-   // Comparator
-   //----------------------------------------------------------------
-   // Use ramp to provide a clock for ADC conversion, assume that ramp
-   // and COUNTER are synchronous
-   always @(posedge RAMP) begin
-      adc = adc + lsb;
-      if(adc > tmp) // TODO: mulig å fjerne compare
-        cmp <= 1;
-   end
-
-`endif
+   // PIXEL SENSOR and comparator digital model of analog circuit
+   PIXEL_SENSOR_ANALOG #(
+      .width_index(width_index),
+      .height_index(height_index)
+   ) PixelSensorAnalog(
+      .EXPOSE(EXPOSE),
+      .RAMP(RAMP),
+      .ERASE(ERASE),
+      .CMP(cmp)
+   );
 
 endmodule // re_control

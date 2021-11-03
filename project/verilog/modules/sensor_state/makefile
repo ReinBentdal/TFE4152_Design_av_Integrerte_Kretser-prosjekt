@@ -7,9 +7,9 @@ synth:
 
 	yosys sensorState.ys
 	
-# include nesecary library
+# include nesecary library in netlist file
 	sed -i "" '1{h;s/.*//;G;}' sensorState_netlist.sv
-	sed -i "" '1{h;s/.*/`include "gates.v"/;G;}' sensorState_netlist.sv
+	sed -i "" '1{h;s/.*/`include "..\/..\/..\/lib\/gates.lib"/;G;}' sensorState_netlist.sv
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' sensorState_netlist.sv
 
 # create circuit diagram
