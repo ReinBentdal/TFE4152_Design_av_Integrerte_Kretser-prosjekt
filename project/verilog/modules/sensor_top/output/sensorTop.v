@@ -344,6 +344,7 @@ endmodule
 module RegisterShifter (
 	clk,
 	set,
+	set_select,
 	reset,
 	shift,
 	data_in,
@@ -351,6 +352,7 @@ module RegisterShifter (
 );
 	input clk;
 	input set;
+	input set_select;
 	input reset;
 	input shift;
 	parameter integer bits = 4;
@@ -359,21 +361,13 @@ module RegisterShifter (
 	output wire [bits - 1:0] data_out;
 	wire [(length * bits) - 1:0] local_data_out;
 	assign data_out = local_data_out[0+:bits];
-	reg set_pulse;
-	always @(posedge set or posedge set_pulse or posedge reset)
-		if (reset)
-			set_pulse <= 0;
-		else if (set_pulse)
-			set_pulse <= 0;
-		else
-			set_pulse <= 1;
 	genvar i;
 	generate
 		for (i = 0; i < length; i = i + 1) begin : genblk1
 			Register #(.bits(bits)) Register(
-				.set(set_pulse | shift),
+				.set(set | shift),
 				.reset(reset),
-				.data_in((set ? data_in[i * bits+:bits] : (i == (length - 1) ? {bits {1'bx}} : local_data_out[(i + 1) * bits+:bits]))),
+				.data_in((set_select ? data_in[i * bits+:bits] : (i == (length - 1) ? {bits {1'bx}} : local_data_out[(i + 1) * bits+:bits]))),
 				.data_out(local_data_out[i * bits+:bits])
 			);
 		end
@@ -416,6 +410,7 @@ module OUTPUT_BUFFER (
 	) DataBuffer(
 		.clk(CLK),
 		.set(new_input),
+		.set_select(SET_BUFFER),
 		.reset(RESET),
 		.shift(CLK & should_shift),
 		.data_in(DATA_IN),

@@ -23,10 +23,14 @@ module Register(set, reset, data_in, data_out);
 
 endmodule
 
-module RegisterShifter(clk, set, reset, shift, data_in, data_out);
+/*
+Distinguishing between set and set_select because set_select needs to hold for longer
+*/
+module RegisterShifter(clk, set, set_select, reset, shift, data_in, data_out);
 
     input clk;
     input set;
+    input set_select;
     input reset;
     input shift;
     input [bits*length-1:0] data_in;
@@ -39,27 +43,14 @@ module RegisterShifter(clk, set, reset, shift, data_in, data_out);
 
     assign data_out = local_data_out[0];
 
-    logic set_pulse;
-
-    always_ff @( posedge set or posedge set_pulse or posedge reset) begin
-        if (reset) begin
-            set_pulse <= 0;
-        end
-        else if (set_pulse) begin
-            set_pulse <= 0;
-        end
-        else begin
-            set_pulse <= 1;
-        end
-    end
 
     genvar i;
     generate
         for (i = 0; i < length; i++) begin
             Register #(.bits(bits)) Register(
-                .set(set_pulse | shift), // probably should not do set & clk because they originates from circuits with different clk and can result in very small pulse
+                .set(set | shift),
                 .reset(reset),
-                .data_in(set 
+                .data_in(set_select 
                     ? data_in[i*bits +: bits] 
                     : i == length-1 
                         ? {bits{1'bX}} 
