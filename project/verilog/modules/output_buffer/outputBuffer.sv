@@ -40,7 +40,7 @@ module OUTPUT_BUFFER(
     );
 
     logic should_shift;
-
+    logic set_register;
     wire [(OUTPUT_BUS_WIDTH*PIXEL_BITS)-1:0] local_data_out;
 
     RegisterShifter #(
@@ -48,8 +48,8 @@ module OUTPUT_BUFFER(
         .length(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH)
     ) DataBuffer(
         .clk(CLK),
-        .set(new_input),
-        .set_select(SET_BUFFER),
+        .set(set_register & CLK),
+        .set_select(SET_BUFFER & ~should_shift),
         .reset(RESET),
         .shift(CLK & should_shift),
         .data_in(DATA_IN),
@@ -75,6 +75,7 @@ module OUTPUT_BUFFER(
             sending_data <= 0;
             counter_reset <= 0;   
             should_shift <= 0;
+            set_register <= 0;
         end
         else begin
             
@@ -88,6 +89,11 @@ module OUTPUT_BUFFER(
 
             if (new_input) begin
                 sending_data <= 1;
+                set_register <= 1;
+            end
+
+            if (set_register) begin
+                set_register <= 0;
             end
             else begin
 
@@ -108,5 +114,6 @@ module OUTPUT_BUFFER(
         .EN(sending_data),
         .Y(DATA_OUT)
     );
+
 
 endmodule

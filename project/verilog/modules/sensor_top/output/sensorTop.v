@@ -80,7 +80,7 @@ module SENSOR_STATE (
 	input RESET;
 	output wire PIXEL_ERASE;
 	output wire PIXEL_EXPOSE;
-	localparam integer PIXEL_ARRAY_HEIGHT = 3;
+	localparam integer PIXEL_ARRAY_HEIGHT = 12;
 	output wire [PIXEL_ARRAY_HEIGHT - 1:0] SENSOR_ROW_SELECT;
 	output reg NEW_ROW;
 	output wire PIXEL_ANALOG_RAMP;
@@ -204,7 +204,9 @@ module PIXEL_SENSOR_ANALOG (
 	output reg CMP;
 	parameter integer width_index = 0;
 	parameter integer height_index = 0;
-	parameter integer expose_value = ((width_index + 1) * (height_index + 1)) % 256;
+	localparam integer PIXEL_ARRAY_HEIGHT = 12;
+	localparam integer PIXEL_ARRAY_WIDTH = 24;
+	parameter integer expose_value = $ceil(($sin((6.28 * ((1 + width_index) + height_index)) / ((1 + PIXEL_ARRAY_WIDTH) + PIXEL_ARRAY_HEIGHT)) + 1) * 128) % 256;
 	wire [7:0] expose_cmp;
 	Counter #(.bits(8)) Counter(
 		.clk(RAMP),
@@ -301,7 +303,7 @@ module PIXEL_ARRAY (
 	input RAMP;
 	input ERASE;
 	input EXPOSE;
-	localparam integer PIXEL_ARRAY_HEIGHT = 3;
+	localparam integer PIXEL_ARRAY_HEIGHT = 12;
 	input [PIXEL_ARRAY_HEIGHT - 1:0] READ;
 	input [7:0] COUNTER;
 	localparam integer PIXEL_ARRAY_WIDTH = 24;
@@ -401,21 +403,22 @@ module OUTPUT_BUFFER (
 		.out(counter_out)
 	);
 	reg should_shift;
+	reg set_register;
 	localparam PIXEL_BITS = 8;
 	wire [63:0] local_data_out;
-	reg new_input;
 	RegisterShifter #(
 		.bits(64),
 		.length(PIXEL_ARRAY_WIDTH / OUTPUT_BUS_WIDTH)
 	) DataBuffer(
 		.clk(CLK),
-		.set(new_input),
-		.set_select(SET_BUFFER),
+		.set(set_register & CLK),
+		.set_select(SET_BUFFER & ~should_shift),
 		.reset(RESET),
 		.shift(CLK & should_shift),
 		.data_in(DATA_IN),
 		.data_out(local_data_out)
 	);
+	reg new_input;
 	always @(*)
 		if (SET_BUFFER & ~sending_data)
 			new_input = 1;
@@ -426,14 +429,19 @@ module OUTPUT_BUFFER (
 			sending_data <= 0;
 			counter_reset <= 0;
 			should_shift <= 0;
+			set_register <= 0;
 		end
 		else begin
 			if (sending_data)
 				should_shift <= 1;
 			if (counter_reset)
 				counter_reset <= 0;
-			if (new_input)
+			if (new_input) begin
 				sending_data <= 1;
+				set_register <= 1;
+			end
+			if (set_register)
+				set_register <= 0;
 			else if (counter_out == counter_cycles) begin
 				counter_reset <= 1;
 				sending_data <= 0;
@@ -465,7 +473,7 @@ module SENSOR_TOP (
 	output wire FRAME_FINISHED;
 	wire sensor_erase;
 	wire sensor_expose;
-	localparam integer PIXEL_ARRAY_HEIGHT = 3;
+	localparam integer PIXEL_ARRAY_HEIGHT = 12;
 	wire [PIXEL_ARRAY_HEIGHT - 1:0] sensor_row_select;
 	wire sensor_new_row;
 	wire sensor_analog_ramp;

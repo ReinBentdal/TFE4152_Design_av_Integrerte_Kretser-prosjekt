@@ -49,10 +49,10 @@ module sensorTop_tb ();
     //------------------------------------------------------------
     integer writeFile = $fopen("../../image.txt", "w");
 
-    always @( posedge (output_clk & start_read) ) begin
-        if (!reset) begin
+    always @( posedge output_clk ) begin
+        if (!reset & start_read) begin
             for (int i = 0; i < OUTPUT_BUS_WIDTH; i++) begin
-                // $display("%h", data_out[i]);
+                // $display("%0t: %h", $time, data_out[i]);
                 $fdisplay(writeFile, data_out[i]);
             end
         end
@@ -72,6 +72,8 @@ module sensorTop_tb ();
 // SIMULATION SETUP
 //------------------------------------------------------------
     initial begin
+
+        $timeformat(-9, 2, " ns", 20);
 
         $dumpfile("sensorTop_tb.vcd");
         $dumpvars(0,sensorTop_tb);

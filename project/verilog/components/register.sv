@@ -50,7 +50,7 @@ module RegisterShifter(clk, set, set_select, reset, shift, data_in, data_out);
             Register #(.bits(bits)) Register(
                 .set(set | shift),
                 .reset(reset),
-                .data_in(set_select 
+                .data_in(set_select
                     ? data_in[i*bits +: bits] 
                     : i == length-1 
                         ? {bits{1'bX}} 

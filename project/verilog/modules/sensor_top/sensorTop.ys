@@ -5,6 +5,8 @@ read_liberty -lib ../../lib/gates.lib
 # convert high-level behavioral parts ("processes") to d-type flip-flops and muxes
 proc; 
 fsm;
+
+# mux -> tri if z input
 tribuf -merge
 
 # simple optimizations
@@ -36,10 +38,13 @@ dfflibmap -liberty ../../lib/gates.lib
 abc -liberty ../../lib/gates.lib
 
 
+# removes all modules
+# flatten
+
 # simple optimizations
 opt
 
-# show -format svg SENSOR_TOP
+# show -format dot
 
 # writes netlist version. -v makes the output more verbous
 write_verilog -v sensorTop_netlist.v
@@ -47,4 +52,4 @@ write_verilog -v sensorTop_netlist.v
 # json used to create svg of circuit
 write_json sensorTop.json
 
-check -noinit
+# check -noinit

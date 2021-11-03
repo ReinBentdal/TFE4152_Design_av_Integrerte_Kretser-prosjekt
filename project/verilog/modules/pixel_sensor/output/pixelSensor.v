@@ -83,11 +83,16 @@ module PIXEL_SENSOR (
 	input READ;
 	input [PIXEL_BITS - 1:0] COUNTER;
 	output wire [PIXEL_BITS - 1:0] DATA;
+	localparam [3:0] test = 4'ha;
 	parameter integer width_index = 0;
 	parameter integer height_index = 0;
 	localparam PIXEL_BITS = 8;
 	reg [7:0] local_data;
-	assign DATA = (READ ? local_data : 'bz);
+	Tristate Tristate[7:0](
+		.A(local_data),
+		.EN(READ),
+		.Y(DATA)
+	);
 	wire cmp;
 	always @(*)
 		if (!cmp)
