@@ -23,19 +23,17 @@ module sensorState_tb ();
     always #MAIN_CLK_PERIOD clk=~clk;
 
     wire p_erase;
-    wire p_expose_clk;
     wire p_expose;
     wire [PIXEL_ARRAY_HEIGHT-1:0] p_row_select;
     wire [PIXEL_BITS-1:0] p_dRamp;
 
     SENSOR_STATE sensor(
-        .clk(clk),
-        .reset(reset),
-        .p_erase(p_erase),
-        .p_expose_clk(p_expose_clk),
-        .p_expose(p_expose),
-        .p_row_select(p_row_select),
-        .p_dRamp(p_dRamp)
+        .CLK(clk),
+        .RESET(reset),
+        .PIXEL_ERASE(p_erase),
+        .PIXEL_EXPOSE(p_expose),
+        .SENSOR_ROW_SELECT(p_row_select),
+        .PIXEL_CONVERT_COUNTER(p_dRamp)
     );
 
     initial begin

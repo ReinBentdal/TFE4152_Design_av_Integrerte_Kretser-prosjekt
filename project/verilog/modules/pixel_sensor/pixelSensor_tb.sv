@@ -43,6 +43,7 @@ module pixelSensor_tb;
 
    import PixelSensorConfig::PIXEL_BITS;
    import PixelSensorConfig::MAIN_CLK_PERIOD;
+   import PixelSensorConfig::readScene;
 
    //------------------------------------------------------------
    // Testbench clock
@@ -63,7 +64,6 @@ module pixelSensor_tb;
    //------------------------------------------------------------
 
    //Analog signals
-   logic              anaBias1;
    logic              anaRamp;
    logic              anaReset;
 
@@ -71,19 +71,18 @@ module pixelSensor_tb;
    logic              erase;
    logic              expose;
    logic              read;
-   tri[PIXEL_BITS-1:0]         pixData; //  We need this to be a wire, because we're tristating it
+   logic [PIXEL_BITS-1:0] pixel_data; //  We need this to be a wire, because we're tristating it
 
    logic [PIXEL_BITS-1:0] pixel_counter;
 
    //Instanciate the pixel
    PIXEL_SENSOR ps1(
-      anaBias1, 
-      anaRamp, 
-      erase, 
-      expose, 
-      read, 
-      pixel_counter, 
-      pixData
+      .RAMP(anaRamp),
+      .ERASE(erase),
+      .EXPOSE(expose),
+      .READ(read),
+      .COUNTER(pixel_counter),
+      .DATA(pixel_data)
    );
 
    //------------------------------------------------------------
@@ -194,12 +193,8 @@ module pixelSensor_tb;
    // however, we cheat
    assign anaRamp = convert ? clk : 0;
 
-   // During expoure, provide a clock via anaBias1.
-   // Again, no resemblence to real world, but we cheat.
-   assign anaBias1 = expose ? clk : 0;
-
-   // If we're not reading the pixData, then we should drive the bus
-   assign pixData = read ? 8'bZ: data;
+   // If we're not reading the pixel_data, then we should drive the bus
+   // assign pixel_data = read ? 8'bZ: data;
 
    // When convert, then run a analog ramp (via anaRamp clock) and digtal ramp via
    // data bus. Assert convert_stop to return control to main state machine.
@@ -225,7 +220,7 @@ module pixelSensor_tb;
       end
       else begin
          if(read)
-           pixelDataOut <= pixData;
+           pixelDataOut <= pixel_data;
       end
    end
 
@@ -240,6 +235,8 @@ module pixelSensor_tb;
 
         $dumpfile("pixelSensor_tb.vcd");
         $dumpvars(0,pixelSensor_tb);
+
+        readScene("../../scene.txt");
 
         #sim_end
           $stop;

@@ -23,7 +23,6 @@ module pixelArray_tb;
 
    always #MAIN_CLK_PERIOD clk=~clk;
 
-   logic analog_bias;
    logic analog_ramp;
    logic analog_reset;
 
@@ -36,7 +35,6 @@ module pixelArray_tb;
    wire [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowData;
 
    PIXEL_ARRAY pixel_array(
-      .VBN1(analog_bias),
       .RAMP(analog_ramp),
       .ERASE(erase),
       .EXPOSE(expose),
@@ -158,10 +156,6 @@ module pixelArray_tb;
    // This does not model the real world behavior, as anaRamp would be a voltage from the ADC
    // however, we cheat
    assign analog_ramp = convert ? clk : 0;
-
-   // During expoure, provide a clock via anaBias1.
-   // Again, no resemblence to real world, but we cheat.
-   assign analog_bias = expose ? clk : 0;
 
    // If we're not reading the pixData, then we should drive the bus
 //    assign rowData = read ? 8'bZ : data;

@@ -24,10 +24,10 @@ opt
 synth -top SENSOR_STATE
 
 # map internal register types to the ones from the cell library
-dfflibmap -liberty gates.lib
+dfflibmap -liberty ../../lib/gates.lib
 
 # use ABC to map remaining logic to cells from the cell library
-abc -liberty gates.lib
+abc -liberty ../../lib/gates.lib
 
 # simple optimizations
 opt

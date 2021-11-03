@@ -1,5 +1,10 @@
+`ifdef NETLIST
+    `include "sensorTop_netlist.v"
+`else
+    `include "sensorTop.sv"
+`endif
 
-`include "sensorTop.sv"
+`include "../../pixel_sensor_config.sv"
 
 `timescale 1 ns / 1 ps
 
@@ -12,14 +17,18 @@ module sensorTop_tb ();
     import PixelSensorConfig::PIXEL_BITS;
     import PixelSensorConfig::OUTPUT_BUS_WIDTH;
     import PixelSensorConfig::SCENE;
+    import PixelSensorConfig::readScene;
     
     logic reset;
     logic clk;
     logic buffer_clk;
+    logic start_read = 0;
     wire output_clk;
     wire [OUTPUT_BUS_WIDTH-1:0][PIXEL_BITS-1:0] data_out;
     wire new_row;
     wire pixel_frame_finished;
+
+    int cycles = 0;
 
     parameter integer sim_end_max = MAIN_CLK_PERIOD*2400;
 
@@ -27,68 +36,36 @@ module sensorTop_tb ();
     always #OUTPUT_CLK_PERIOD buffer_clk=~buffer_clk;
 
     SENSOR_TOP SensorTop(
-        .clk(clk),
-        .buffer_clk(buffer_clk),
-        .output_clk(output_clk),
-        .reset(reset),
-        .data_out(data_out),
-        .pixel_frame_finished(pixel_frame_finished)
+        .CLK(clk),
+        .BUFFER_CLK(buffer_clk),
+        .OUTPUT_CLK(output_clk),
+        .RESET(reset),
+        .DATA_OUT(data_out),
+        .FRAME_FINISHED(pixel_frame_finished)
     );
 
     //------------------------------------------------------------
     // WRITE OUTPUT FROM SENSOR_TOP TO FILE
     //------------------------------------------------------------
-    integer writeFile = $fopen("image.txt", "w");
+    integer writeFile = $fopen("../../image.txt", "w");
 
-    always @( negedge output_clk ) begin
+    always @( posedge (output_clk & start_read) ) begin
         if (!reset) begin
             for (int i = 0; i < OUTPUT_BUS_WIDTH; i++) begin
+                // $display("%h", data_out[i]);
                 $fdisplay(writeFile, data_out[i]);
             end
         end
     end
-
-    //------------------------------------------------------------
-    // READ SCENE TO ARRAY
-    //------------------------------------------------------------
-    int file;
-    reg [8:0] c;
-    int index;
-    reg [7:0] line;
-    int pixel_value;
-    int line_index;
-    int width_index;
-    int height_index;
-
-    task readScene(string filename);
-        $display("FILE READ START");
-        
-        file = $fopen(filename, "r");
-
-        while (!$feof(file)) begin
-            $fscanf(file,"%d\n",line);
-            pixel_value = line;
-
-            width_index = line_index % PIXEL_ARRAY_WIDTH;
-            height_index = line_index/PIXEL_ARRAY_WIDTH;
-
-            SCENE[height_index][width_index] = pixel_value;
-
-            line_index++;
-        end
-
-        $display("FILE READ FINISHED");
-
-        $fclose(file);
-    endtask
 
     // end simulation when first image-cycle is finished
     logic pixel_frame_finished_no_x;
     assign pixel_frame_finished_no_x = pixel_frame_finished === 1'bX ? 0 : pixel_frame_finished;
 
     always @(negedge pixel_frame_finished_no_x) begin
-        if (!reset)
-            $stop;
+        if (!reset && cycles == 1)
+            #MAIN_CLK_PERIOD $stop;
+        cycles ++;
     end
 
 //------------------------------------------------------------
@@ -99,15 +76,19 @@ module sensorTop_tb ();
         $dumpfile("sensorTop_tb.vcd");
         $dumpvars(0,sensorTop_tb);
 
+        $display("Main clk: %0f", 1.0/MAIN_CLK_PERIOD);
+        $display("Output clk: %0f", 1.0/OUTPUT_CLK_PERIOD);
+
         // load the scene to simulate takin a picture
-        readScene("scene.txt");
+        readScene("../../scene.txt");
 
         clk = 0;
         buffer_clk = 0;
-
         reset = 1;
 
         #MAIN_CLK_PERIOD reset=0;
+
+        #MAIN_CLK_PERIOD start_read = 1;
 
         // if simulation doesnt stop elsewhere in the program this prevent the simulation from continuing infinetly
         #sim_end_max
