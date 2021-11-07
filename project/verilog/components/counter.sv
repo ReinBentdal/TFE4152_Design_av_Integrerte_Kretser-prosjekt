@@ -10,7 +10,7 @@ module Counter(
     output logic [bits-1:0] out
 );
 
-    parameter byte bits = 2;
+    parameter byte bits = 4;
 
     always_ff @(posedge clk, posedge reset) begin
         if (reset) begin

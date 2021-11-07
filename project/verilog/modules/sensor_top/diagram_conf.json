@@ -3,13 +3,13 @@
       "enable": "modules",
       "expandLevel": 2,
       "expandModules": {
-        "types": ["OUTPUT_BUFFER", "Counter", "PIXEL_ARRAY", "PIXEL_ROW"],
+        "types": [],
         "ids": []
       },
       "colour": ["#e9e9e9"]
     },
     "top": {
-      "enable": false,
-      "module": ""
+      "enable": true,
+      "module": "OUTPUT_BUFFER"
     }
   }
