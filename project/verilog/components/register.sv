@@ -26,9 +26,8 @@ endmodule
 /*
 Distinguishing between set and set_select because set_select needs to hold for longer
 */
-module RegisterShifter(clk, set, set_select, reset, shift, data_in, data_out);
+module RegisterShifter(set, set_select, reset, shift, data_in, data_out);
 
-    input clk;
     input set;
     input set_select;
     input reset;

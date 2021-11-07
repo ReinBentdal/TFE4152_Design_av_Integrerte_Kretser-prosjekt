@@ -1,6 +1,7 @@
 .DS_Store
 .idea
 tmp/
+.vnc
 *.pid
 *.raw
 *.vcd
