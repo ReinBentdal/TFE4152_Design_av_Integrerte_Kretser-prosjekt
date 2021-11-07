@@ -1,6 +1,7 @@
 .DS_Store
 .idea
 tmp/
+.vnc
 *.pid
 *.raw
 *.vcd
@@ -9,3 +10,4 @@ tmp/
 *.log
 *.out
 *.sim
+*.gtkw
