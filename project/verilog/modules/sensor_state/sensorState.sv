@@ -20,20 +20,20 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     output [PIXEL_BITS-1:0] PIXEL_CONVERT_COUNTER;
     output FRAME_FINISHED;
 
-    parameter erase_time = 5;
-    parameter expose_time = 255;
-    parameter convert_time = 255;
-    parameter row_read_time = 5;
-    parameter read_time = row_read_time*PIXEL_ARRAY_HEIGHT;
+    localparam erase_time = 5;
+    localparam expose_time = 255;
+    localparam convert_time = 255;
+    localparam row_read_time = 5;
+    localparam read_time = row_read_time*PIXEL_ARRAY_HEIGHT;
 
-    parameter counter_bits = 10;
+    localparam counter_bits = 10;
 
-    parameter states = 4; // does not count idle state
-    parameter idle_state = 0;
-    parameter erase_state = 1;
-    parameter expose_state = 1 << 1;
-    parameter convert_state = 1 << 2;
-    parameter read_state = 1 << 3;
+    localparam states = 4; // does not count idle state
+    localparam idle_state = 0;
+    localparam erase_state = 1;
+    localparam expose_state = 1 << 1;
+    localparam convert_state = 1 << 2;
+    localparam read_state = 1 << 3;
 
     // reset for the entire module
     logic internal_reset;
