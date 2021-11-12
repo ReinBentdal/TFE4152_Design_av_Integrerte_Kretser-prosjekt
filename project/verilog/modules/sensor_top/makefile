@@ -1,6 +1,12 @@
+PW?=24
+PH?=12
+
+plot:
+	python3 /Users/rein/Documents/Kode/PIXEL_SENSOR_project/project/verilog/txt_to_img.py ${PW} ${PH}
+
 # sensor state
 sim:
-	iverilog -g2012 -Wall -o sensorTop.out sensorTop_tb.sv
+	iverilog -DPIXEL_WIDTH=${PW} -DPIXEL_HEIGHT=${PH} -g2012 -Wall -o sensorTop.out sensorTop_tb.sv
 	vvp -n sensorTop.out
 
 # simulates netlist
@@ -10,12 +16,12 @@ simnet:
 
 # synthesizes and then simulates the generated netlist
 synthsim:
-	${MAKE} sv2v 
-	${MAKE} synth 
-	${MAKE} simnet 
+	${MAKE} sv2v PW=${PW} PH=${PH}
+	${MAKE} synth
+	${MAKE} simnet
 
 sv2v:
-	sv2v --define=synthesize --write=output/sensorTop.v sensorTop.sv
+	sv2v --define=synthesize --define=PIXEL_WIDTH=${PW} --define=PIXEL_HEIGHT=${PH} --write=output/sensorTop.v sensorTop.sv
 
 # fixes one naming bug
 	find . -name 'sensorTop.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"

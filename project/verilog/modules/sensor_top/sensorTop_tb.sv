@@ -82,7 +82,7 @@ module sensorTop_tb ();
         $display("Output clk: %0f", 1.0/OUTPUT_CLK_PERIOD);
 
         // load the scene to simulate takin a picture
-        readScene("../../scene.txt");
+        readScene("../../scene_16x16.txt");
 
         clk = 0;
         buffer_clk = 0;

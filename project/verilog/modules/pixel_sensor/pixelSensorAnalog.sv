@@ -1,11 +1,10 @@
 `include "../../pixel_sensor_config.sv"
-
-`ifdef synthesize
 `include "../../components/counter.sv"
-`endif
 
 // Simulation of analog part of the sensor. 
-// The circuit for "synthesize" is there to verify the rest of the design as well as preventing yosys from omitting the entire design
+// synthesizable dummy-sensor for testing the rest of the synthesizable circuits
+// This is completely different from how the analog circuit actually would work.
+// This does not simulate the expose part, as the expose value is fixed in expose_value
 module PIXEL_SENSOR_ANALOG(
    input EXPOSE,
    input RAMP,
@@ -16,14 +15,14 @@ module PIXEL_SENSOR_ANALOG(
    parameter integer width_index = 0;
    parameter integer height_index = 0;
 
-// synthesizable dummy-sensor for testing the rest of the synthesizable circuits
-`ifdef synthesize
-
    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
    import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+   import PixelSensorConfig::SCENE_24;
 
    // create some pattern which is recognizable when simulated
-   parameter integer expose_value = 256 - $ceil(($cos(6.28*(1 + 0.7*width_index + height_index)/(1 + PIXEL_ARRAY_WIDTH + PIXEL_ARRAY_HEIGHT))+1)*128);
+   parameter integer expose_value = 255 - SCENE_24[8*(width_index + (height_index*24)) +: 8];
+   logic [7:0] EXPOSE_VALUE;
+   assign EXPOSE_VALUE = expose_value;
 
    logic [7:0] expose_cmp;
 
@@ -40,45 +39,5 @@ module PIXEL_SENSOR_ANALOG(
       else if (expose_cmp == expose_value)
          CMP <= 1;
    end
-
-
-// non synthesizable code
-`else
-
-   import PixelSensorConfig::SCENE;
-   import PixelSensorConfig::PIXEL_BITS;
-   import PixelSensorConfig::MAIN_CLK_PERIOD;
-
-   localparam real v_erase = 1.2;
-
-   // hvor mye spenning per steg
-   parameter real lsb = v_erase/(2**PIXEL_BITS);
-   
-   real tmp;
-   real adc;
-   real light_intensity;
-
-   logic expose_clk = 0;
-   always #MAIN_CLK_PERIOD expose_clk = ~expose_clk;
-
-   always @(posedge expose_clk) begin
-      if (EXPOSE) begin
-         light_intensity = real'(SCENE[height_index][width_index])/real'(2**PIXEL_BITS);
-         tmp = tmp - light_intensity*lsb;
-      end
-   end
-
-   always @(posedge RAMP) begin
-      adc = adc + lsb;
-      if(adc > tmp)
-        CMP <= 1;
-   end
-
-   always @(posedge ERASE) begin
-      tmp <= v_erase;
-      CMP  <= 0;
-      adc <= 0;
-   end
-`endif
 
 endmodule
