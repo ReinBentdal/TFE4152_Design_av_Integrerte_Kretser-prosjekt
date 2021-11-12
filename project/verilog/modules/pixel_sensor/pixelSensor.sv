@@ -4,11 +4,11 @@
 
 module PIXEL_SENSOR
   (
-   input RAMP,
+   input ANALOG_RAMP,
    input ERASE,
    input EXPOSE,
    input READ,
-   input [PIXEL_BITS-1:0] COUNTER,
+   input [PIXEL_BITS-1:0] DIGITAL_RAMP,
    output [PIXEL_BITS-1:0] DATA
    );
 
@@ -31,7 +31,7 @@ module PIXEL_SENSOR
 
    always_comb begin
       if (!cmp)
-         local_data = COUNTER;
+         local_data = DIGITAL_RAMP;
    end
 
    // PIXEL SENSOR and comparator digital model of analog circuit
@@ -40,7 +40,7 @@ module PIXEL_SENSOR
       .height_index(height_index)
    ) PixelSensorAnalog(
       .EXPOSE(EXPOSE),
-      .RAMP(RAMP),
+      .RAMP(ANALOG_RAMP),
       .ERASE(ERASE),
       .CMP(cmp)
    );

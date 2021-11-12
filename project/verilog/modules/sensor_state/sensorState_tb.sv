@@ -33,7 +33,7 @@ module sensorState_tb ();
         .PIXEL_ERASE(p_erase),
         .PIXEL_EXPOSE(p_expose),
         .SENSOR_ROW_SELECT(p_row_select),
-        .PIXEL_CONVERT_COUNTER(p_dRamp)
+        .PIXEL_DIGITAL_RAMP(p_dRamp)
     );
 
     initial begin

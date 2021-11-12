@@ -2,6 +2,7 @@
 
 `include "../../pixel_sensor_config.sv"
 `include "../../components/counter.sv"
+`include "../../components/graycounter.sv"
 `include "../../components/register.sv"
 `include "../../components/tristate.sv"
 
@@ -24,6 +25,13 @@ module OUTPUT_BUFFER(
 
     parameter integer counter_bits = $ceil($clog2(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH));
     parameter integer counter_cycles = (PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH) - 1;
+
+    wire [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] data_in_decode;
+
+    Graycounter_decode #(.WIDTH(PIXEL_BITS)) decoder[PIXEL_ARRAY_WIDTH-1:0] (
+        .in(DATA_IN),
+        .out(data_in_decode)
+    );
 
     logic sending_data;
     logic counter_reset;
@@ -54,7 +62,7 @@ module OUTPUT_BUFFER(
         .set_select(set_select),
         .reset(RESET),
         .shift(CLK & should_shift),
-        .data_in(DATA_IN),
+        .data_in(data_in_decode),
         .data_out(local_data_out)
     );
 

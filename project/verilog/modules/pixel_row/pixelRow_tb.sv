@@ -27,12 +27,12 @@ module pixelRow_tb;
     logic [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowData;
 
     PIXEL_ROW pixel_row(
-        .RAMP(analog_ramp),
+        .ANALOG_RAMP(analog_ramp),
         .ERASE(erase),
         .EXPOSE(expose),
         .READ(read),
         .DATA_OUT(rowData),
-        .COUNTER(pixel_counter)
+        .DIGITAL_RAMP(pixel_counter)
     );
 
     //------------------------------------------------------------

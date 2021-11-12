@@ -1,10 +1,11 @@
 `include "../../pixel_sensor_config.sv"
 `include "../../components/counter.sv"
+`include "../../components/graycounter.sv"
 `include "../../components/selector.sv"
 `include "../../components/tristate.sv"
 
 // reset should be triggered before use
-module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NEW_ROW, PIXEL_ANALOG_RAMP, PIXEL_CONVERT_COUNTER, FRAME_FINISHED);
+module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NEW_ROW, PIXEL_ANALOG_RAMP, PIXEL_DIGITAL_RAMP, FRAME_FINISHED);
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
     import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
@@ -17,7 +18,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     output [PIXEL_ARRAY_HEIGHT-1:0] SENSOR_ROW_SELECT;
     output logic NEW_ROW;
     output PIXEL_ANALOG_RAMP;
-    output [PIXEL_BITS-1:0] PIXEL_CONVERT_COUNTER;
+    output [PIXEL_BITS-1:0] PIXEL_DIGITAL_RAMP;
     output FRAME_FINISHED;
 
     localparam erase_time = 5;
@@ -69,11 +70,10 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     logic dRamp_enable;
     assign dRamp_enable = state[2];
 
-    Counter #(.bits(8)) DRamp(
-        .clk(CLK),
+    Graycounter #(.WIDTH(8)) DRamp(
+        .clk(CLK & dRamp_enable),
         .reset(master_reset),
-        .enable(dRamp_enable),
-        .out(PIXEL_CONVERT_COUNTER)
+        .out(PIXEL_DIGITAL_RAMP)
     );
 
 

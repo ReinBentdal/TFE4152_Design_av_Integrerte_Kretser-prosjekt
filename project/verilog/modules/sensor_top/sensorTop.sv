@@ -32,15 +32,15 @@ module SENSOR_TOP(
     wire [PIXEL_ARRAY_HEIGHT-1:0] sensor_row_select;
     wire sensor_new_row;
     wire sensor_analog_ramp;
-    wire [7:0] pixel_convert_counter;
+    wire [7:0] pixel_digital_ramp;
     wire [PIXEL_ARRAY_WIDTH-1:0][7:0] sensor_data_out;
 
     PIXEL_ARRAY PixelArray(
         .ERASE(sensor_erase),
         .EXPOSE(sensor_expose),
         .READ(sensor_row_select),
-        .COUNTER(pixel_convert_counter),
-        .RAMP(sensor_analog_ramp),
+        .DIGITAL_RAMP(pixel_digital_ramp),
+        .ANALOG_RAMP(sensor_analog_ramp),
         .DATA_OUT(sensor_data_out)
     );
 
@@ -52,7 +52,7 @@ module SENSOR_TOP(
         .SENSOR_ROW_SELECT(sensor_row_select),
         .NEW_ROW(sensor_new_row),
         .PIXEL_ANALOG_RAMP(sensor_analog_ramp),
-        .PIXEL_CONVERT_COUNTER(pixel_convert_counter),
+        .PIXEL_DIGITAL_RAMP(pixel_digital_ramp),
         .FRAME_FINISHED(FRAME_FINISHED)
     );
 

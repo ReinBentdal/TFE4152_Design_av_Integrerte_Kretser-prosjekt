@@ -77,11 +77,11 @@ module pixelSensor_tb;
 
    //Instanciate the pixel
    PIXEL_SENSOR ps1(
-      .RAMP(anaRamp),
+      .ANALOG_RAMP(anaRamp),
       .ERASE(erase),
       .EXPOSE(expose),
       .READ(read),
-      .COUNTER(pixel_counter),
+      .DIGITAL_RAMP(pixel_counter),
       .DATA(pixel_data)
    );
 

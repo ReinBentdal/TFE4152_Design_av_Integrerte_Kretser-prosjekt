@@ -35,12 +35,12 @@ module pixelArray_tb;
    wire [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] rowData;
 
    PIXEL_ARRAY pixel_array(
-      .RAMP(analog_ramp),
+      .ANALOG_RAMP(analog_ramp),
       .ERASE(erase),
       .EXPOSE(expose),
       .READ(read),
       .DATA_OUT(rowData),
-      .COUNTER(pixel_counter)
+      .DIGITAL_RAMP(pixel_counter)
    );
 
    //------------------------------------------------------------
