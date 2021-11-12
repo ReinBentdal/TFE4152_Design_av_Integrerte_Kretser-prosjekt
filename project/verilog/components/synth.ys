@@ -1,0 +1,44 @@
+read_verilog -sv register.v
+
+read_liberty -lib ../lib/gates.lib
+
+# convert high-level behavioral parts ("processes") to d-type flip-flops and muxes
+proc; 
+fsm;
+
+# mux -> tri if z input
+tribuf -merge
+
+# simple optimizations
+opt; 
+
+# convert high-level memory constructs to d-type flip-flops and multiplexers
+memory; 
+
+# simple optimizations
+opt
+
+# convert design to (logical) gate-level netlists
+techmap; 
+
+# Cover trees of $_MUX_ cells with $_MUX{4,8,16}_ cells
+# muxcover
+
+# simple optimizations
+opt
+
+# generic synthesis
+synth -top RegisterShifter
+
+
+# map internal register types to the ones from the cell library
+dfflibmap -liberty ../lib/gates.lib
+
+# use ABC to map remaining logic to cells from the cell library
+abc -liberty ../lib/gates.lib
+
+# simple optimizations
+opt
+
+# json used to create svg of circuit
+write_json register_netlist.json
