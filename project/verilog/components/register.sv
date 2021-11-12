@@ -14,7 +14,7 @@ module Register(set, reset, data_in, data_out);
 
     always_ff @( posedge set or posedge reset ) begin
         if (reset) begin
-            data_out <= 0;
+            data_out <= 'bx;
         end
         else begin
             data_out <= data_in;

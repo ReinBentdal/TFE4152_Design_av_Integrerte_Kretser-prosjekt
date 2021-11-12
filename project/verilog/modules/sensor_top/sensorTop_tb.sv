@@ -59,12 +59,9 @@ module sensorTop_tb ();
     end
 
     // end simulation when first image-cycle is finished
-    logic pixel_frame_finished_no_x;
-    assign pixel_frame_finished_no_x = pixel_frame_finished === 1'bX ? 0 : pixel_frame_finished;
-
-    always @(negedge pixel_frame_finished_no_x) begin
+    always @(negedge pixel_frame_finished) begin
         if (!reset && cycles == 1)
-            #MAIN_CLK_PERIOD $stop;
+            #(14*MAIN_CLK_PERIOD) $stop;
         cycles ++;
     end
 
@@ -82,7 +79,7 @@ module sensorTop_tb ();
         $display("Output clk: %0f", 1.0/OUTPUT_CLK_PERIOD);
 
         // load the scene to simulate takin a picture
-        readScene("../../scene_16x16.txt");
+        readScene("../../scene_128x128.txt");
 
         clk = 0;
         buffer_clk = 0;

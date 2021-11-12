@@ -26,6 +26,9 @@ module OUTPUT_BUFFER(
     parameter integer counter_bits = $ceil($clog2(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH));
     parameter integer counter_cycles = (PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH) - 1;
 
+    //------------------------------------------------------------
+    // Graycounter decode
+    //------------------------------------------------------------    
     wire [PIXEL_ARRAY_WIDTH-1:0][PIXEL_BITS-1:0] data_in_decode;
 
     Graycounter_decode #(.WIDTH(PIXEL_BITS)) decoder[PIXEL_ARRAY_WIDTH-1:0] (
@@ -33,10 +36,12 @@ module OUTPUT_BUFFER(
         .out(data_in_decode)
     );
 
+    //------------------------------------------------------------
+    // Internal counter to track shifting progress
+    //------------------------------------------------------------
     logic sending_data;
     logic counter_reset;
     wire [counter_bits-1:0] counter_out;
-
 
     Counter #(
         .bits(counter_bits)
@@ -47,7 +52,15 @@ module OUTPUT_BUFFER(
         .out(counter_out)
     );
 
+    //------------------------------------------------------------
+    // Data shift register 
+    //------------------------------------------------------------
     logic should_shift;
+
+    // only used for simulations
+    logic shift; 
+    assign shift = should_shift & CLK;
+
     logic set_register;
     wire [(OUTPUT_BUS_WIDTH*PIXEL_BITS)-1:0] local_data_out;
 
@@ -66,6 +79,10 @@ module OUTPUT_BUFFER(
         .data_out(local_data_out)
     );
 
+
+    //------------------------------------------------------------
+    // Comb to  bridge between two clock frequencies
+    //------------------------------------------------------------
     logic new_input;
 
     always_comb begin
@@ -77,8 +94,9 @@ module OUTPUT_BUFFER(
         end
     end
 
-
-    // SET_BUFFER is async because the flag originates from a circuit with a different clock, SENSOR_STATE
+    //------------------------------------------------------------
+    // State machine
+    //------------------------------------------------------------
     always_ff @(posedge CLK or posedge RESET) begin
 
         if (RESET) begin
@@ -117,6 +135,9 @@ module OUTPUT_BUFFER(
         end
     end
 
+    //------------------------------------------------------------
+    // OUTPUT
+    //------------------------------------------------------------
     assign OUTPUT_CLK = sending_data ? ~CLK : 0;
 
     Tristate Tristate [(OUTPUT_BUS_WIDTH*PIXEL_BITS)-1:0] (

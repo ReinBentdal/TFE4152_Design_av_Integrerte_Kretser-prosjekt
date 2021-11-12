@@ -72,7 +72,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
 
     Graycounter #(.WIDTH(8)) DRamp(
         .clk(CLK & dRamp_enable),
-        .reset(master_reset),
+        .reset(master_reset | counter_reset),
         .out(PIXEL_DIGITAL_RAMP)
     );
 
@@ -104,6 +104,9 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     wire master_rowSelect_reset;
     assign master_rowSelect_reset = master_reset;
 
+    wire [PIXEL_ARRAY_HEIGHT-1:0] local_row_select;
+    assign SENSOR_ROW_SELECT = rowSelect_enable ? local_row_select : 0;
+
     Selector #(
         .length(PIXEL_ARRAY_HEIGHT)
     ) RowSelector(
@@ -111,7 +114,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
         .inputEnable(rowSelect_enable),
         .outputEnable(rowSelect_enable),
         .reset(master_rowSelect_reset),
-        .out(SENSOR_ROW_SELECT)
+        .out(local_row_select)
     );
 
 
@@ -187,7 +190,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     //------------------------------------------------------------
     assign PIXEL_ERASE = idle ? 0 : state[0];
     assign PIXEL_EXPOSE = idle ? 0 : state[1];
-    assign PIXEL_ANALOG_RAMP = state == convert_state ? CLK : 0;
+    assign PIXEL_ANALOG_RAMP = state == convert_state & ~idle ? CLK : 0;
 
 
 endmodule
