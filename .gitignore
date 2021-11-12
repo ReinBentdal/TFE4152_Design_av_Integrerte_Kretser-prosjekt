@@ -11,3 +11,5 @@ tmp/
 *.out
 *.sim
 *.gtkw
+
+.bash_history
