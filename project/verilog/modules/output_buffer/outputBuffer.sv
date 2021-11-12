@@ -43,13 +43,15 @@ module OUTPUT_BUFFER(
     logic set_register;
     wire [(OUTPUT_BUS_WIDTH*PIXEL_BITS)-1:0] local_data_out;
 
+    wire set_select;
+    assign set_select = new_input | (set_register & CLK);
+
     RegisterShifter #(
         .bits(PIXEL_BITS*OUTPUT_BUS_WIDTH), 
         .length(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH)
     ) DataBuffer(
-        .clk(CLK),
         .set(set_register & CLK),
-        .set_select(SET_BUFFER & ~should_shift),
+        .set_select(set_select),
         .reset(RESET),
         .shift(CLK & should_shift),
         .data_in(DATA_IN),
