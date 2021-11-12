@@ -47,9 +47,9 @@ opt
 # show -format dot
 
 # writes netlist version. -v makes the output more verbous
-write_verilog -v sensorTop_netlist.v
+write_verilog -v output/sensorTop_netlist.v
 
 # json used to create svg of circuit
-write_json sensorTop.json
+write_json output/sensorTop.json
 
 # check -noinit

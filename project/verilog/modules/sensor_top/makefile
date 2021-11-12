@@ -6,13 +6,13 @@ plot:
 
 # sensor state
 sim:
-	iverilog -DPIXEL_WIDTH=${PW} -DPIXEL_HEIGHT=${PH} -g2012 -Wall -o sensorTop.out sensorTop_tb.sv
-	vvp -n sensorTop.out
+	iverilog -DPIXEL_WIDTH=${PW} -DPIXEL_HEIGHT=${PH} -g2012 -Wall -o output/sensorTop.out sensorTop_tb.sv
+	vvp -n output/sensorTop.out
 
 # simulates netlist
 simnet:
-	iverilog -DNETLIST -g2012 -Wall -o sensorTop.out sensorTop_tb.sv
-	vvp -n sensorTop.out	
+	iverilog -DNETLIST -g2012 -Wall -o output/sensorTop.out sensorTop_tb.sv
+	vvp -n output/sensorTop.out
 
 # synthesizes and then simulates the generated netlist
 synthsim:
@@ -28,16 +28,16 @@ sv2v:
 
 svg:
 #	rm output/sensorTop_diagram.svg
-	netlistsvg sensorTop.json -o output/sensorTop_diagram.svg --config diagram_conf.json
+	netlistsvg output/sensorTop.json -o output/sensorTop_diagram.svg --config netlistsvg_conf.json
 
 synth:
 	yosys -q -q sensorTop.ys
 	
 # include nesecary library
-	sed -i "" '1{h;s/.*//;G;}' sensorTop_netlist.v
-	sed -i "" '1{h;s/.*/`include "..\/..\/lib\/gates.v"/;G;}' sensorTop_netlist.v
-	sed -i "" '1{h;s/.*/`include "..\/pixel_sensor\/pixelSensorAnalog.sv"/;G;}' sensorTop_netlist.v
-	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' sensorTop_netlist.v
+	sed -i "" '1{h;s/.*//;G;}' output/sensorTop_netlist.v
+	sed -i "" '1{h;s/.*/`include "..\/..\/lib\/gates.v"/;G;}' output/sensorTop_netlist.v
+	sed -i "" '1{h;s/.*/`include "..\/pixel_sensor\/pixelSensorAnalog.sv"/;G;}' output/sensorTop_netlist.v
+	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/sensorTop_netlist.v
 
 # log circuit components count
 	sleep 1
@@ -48,7 +48,7 @@ synth:
 	$(eval nor=$(shell cat sensorTop_netlist.v|grep -w NOR|wc -l))
 	$(eval or=$(shell cat sensorTop_netlist.v|grep -w OR|wc -l))
 	$(eval datestring=$(shell date +%FT%T))
-	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' component_count.log
+	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
 
 all:
 	${MAKE} sv2v;

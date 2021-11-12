@@ -30,10 +30,10 @@ module PIXEL_SENSOR_ANALOG(
    // assign expose_value = PIXEL_BITS'(255) - PIXEL_BITS'(SCENE[height_index][width_index]); // larger simulations
 
    // simulation view value
-   logic [7:0] EXPOSE_VALUE;
+   logic [PIXEL_BITS-1:0] EXPOSE_VALUE;
    assign EXPOSE_VALUE = expose_value;
 
-   logic [7:0] expose_cmp;
+   logic [PIXEL_BITS-1:0] expose_cmp;
 
    Counter #(.bits(8)) Counter(
       .clk(RAMP),
