@@ -15,7 +15,7 @@ if (len(sys.argv) == 3):
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-arr = np.loadtxt(os.path.join(script_dir, 'image.txt'), dtype=int)
+arr = np.loadtxt(os.path.join(script_dir, 'output/image.log'), dtype=int)
 
 # Change from 1D array of pixel values to a 2d array where 
 # width and height are equal to sensor pixel array width and height

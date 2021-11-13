@@ -2,7 +2,7 @@ PW?=24
 PH?=12
 
 plot:
-	python3 /Users/rein/Documents/Kode/PIXEL_SENSOR_project/project/verilog/txt_to_img.py ${PW} ${PH}
+	python3 txt_to_img.py ${PW} ${PH}
 
 # sensor state
 sim:

@@ -47,7 +47,7 @@ module sensorTop_tb ();
     //------------------------------------------------------------
     // WRITE OUTPUT FROM SENSOR_TOP TO FILE
     //------------------------------------------------------------
-    integer writeFile = $fopen("../../image.txt", "w");
+    integer writeFile = $fopen("output/image.log", "w");
 
     always @( posedge output_clk ) begin
         if (!reset & start_read) begin
@@ -79,7 +79,7 @@ module sensorTop_tb ();
         $display("Output clk: %0f", 1.0/OUTPUT_CLK_PERIOD);
 
         // load the scene to simulate takin a picture
-        readScene("../../scene_128x128.txt");
+        readScene("scene_128x128.txt");
 
         clk = 0;
         buffer_clk = 0;
