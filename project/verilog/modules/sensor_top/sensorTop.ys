@@ -30,7 +30,6 @@ opt
 # generic synthesis
 synth -top SENSOR_TOP
 
-
 # map internal register types to the ones from the cell library
 dfflibmap -liberty ../../lib/gates.lib
 
