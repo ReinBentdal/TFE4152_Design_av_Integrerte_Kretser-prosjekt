@@ -5,7 +5,7 @@
 `include "../pixel_array/pixelArray.sv"
 `include "../output_buffer/outputBuffer.sv"
 
-
+// wiring together the individual modules of the final sensor
 module SENSOR_TOP(
     CLK,
     RESET,

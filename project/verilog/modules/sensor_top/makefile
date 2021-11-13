@@ -41,12 +41,12 @@ synth:
 
 # log circuit components count
 	sleep 1
-	$(eval dffsr=$(shell cat sensorTop_netlist.v |grep -w DFFSR|wc -l))
-	$(eval dff=$(shell cat sensorTop_netlist.v |grep -w DFF|wc -l))
-	$(eval nand=$(shell cat sensorTop_netlist.v|grep -w NAND|wc -l))
-	$(eval and=$(shell cat sensorTop_netlist.v|grep -w AND|wc -l))
-	$(eval nor=$(shell cat sensorTop_netlist.v|grep -w NOR|wc -l))
-	$(eval or=$(shell cat sensorTop_netlist.v|grep -w OR|wc -l))
+	$(eval dffsr=$(shell cat output/sensorTop_netlist.v |grep -w DFFSR|wc -l))
+	$(eval dff=$(shell cat output/sensorTop_netlist.v |grep -w DFF|wc -l))
+	$(eval nand=$(shell cat output/sensorTop_netlist.v|grep -w NAND|wc -l))
+	$(eval and=$(shell cat output/sensorTop_netlist.v|grep -w AND|wc -l))
+	$(eval nor=$(shell cat output/sensorTop_netlist.v|grep -w NOR|wc -l))
+	$(eval or=$(shell cat output/sensorTop_netlist.v|grep -w OR|wc -l))
 	$(eval datestring=$(shell date +%FT%T))
 	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
 

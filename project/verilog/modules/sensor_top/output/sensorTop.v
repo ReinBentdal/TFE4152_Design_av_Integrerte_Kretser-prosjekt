@@ -151,7 +151,7 @@ module SENSOR_STATE (
 	assign dRamp_enable = state[2];
 	Graycounter #(.WIDTH(8)) DRamp(
 		.clk(CLK & dRamp_enable),
-		.reset(master_reset),
+		.reset(master_reset | counter_reset),
 		.out(PIXEL_DIGITAL_RAMP)
 	);
 	wire rowSelect_counter_reset;
@@ -220,7 +220,7 @@ module SENSOR_STATE (
 		end
 	assign PIXEL_ERASE = (idle ? 0 : state[0]);
 	assign PIXEL_EXPOSE = (idle ? 0 : state[1]);
-	assign PIXEL_ANALOG_RAMP = (state == convert_state ? CLK : 0);
+	assign PIXEL_ANALOG_RAMP = ((state == convert_state) & ~idle ? CLK : 0);
 endmodule
 `default_nettype none
 `default_nettype none
@@ -374,7 +374,7 @@ module Register (
 	output reg [bits - 1:0] data_out;
 	always @(posedge set or posedge reset)
 		if (reset)
-			data_out <= 0;
+			data_out <= 'bx;
 		else
 			data_out <= data_in;
 endmodule

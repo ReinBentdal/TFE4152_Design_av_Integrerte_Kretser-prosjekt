@@ -1,5 +1,5 @@
 `ifdef NETLIST
-    `include "sensorTop_netlist.v"
+    `include "output/sensorTop_netlist.v"
 `else
     `include "sensorTop.sv"
 `endif
