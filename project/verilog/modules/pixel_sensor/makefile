@@ -5,15 +5,26 @@ sim:
 
 sv2v:
 	sv2v --define=synthesize --write=output/pixelSensor.v pixelSensor.sv
+
+ifeq ($(shell uname),Darwin)
 	find . -name 'pixelSensor.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"
+else
+	sed -i "s/PixelSensorConfig_//g" output/pixelSensor.v
+endif
 
 synth:
 	yosys pixelSensor.ys
 
 # include nesecary library in netlist file
+ifeq ($(shell uname), Darwin)
 	sed -i "" '1{h;s/.*//;G;}' output/pixelSensor_netlist.v
 	sed -i "" '1{h;s/.*/`include "..\/..\/..\/lib\/gates.lib"/;G;}' output/pixelSensor_netlist.v
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/pixelSensor_netlist.v
+else
+	sed -i '1{h;s/.*//;G;}' output/pixelSensor_netlist.v
+	sed -i '1{h;s/.*/`include "..\/..\/..\/lib\/gates.lib"/;G;}' output/pixelSensor_netlist.v
+	sed -i '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/pixelSensor_netlist.v
+endif
 
 # log circuit components count
 	$(eval dffsr=$(shell cat output/pixelSensor_netlist.v |grep DFFSR|wc -l))
@@ -23,10 +34,12 @@ synth:
 	$(eval nor=$(shell cat output/pixelSensor_netlist.v|grep '\| ~'|wc -l))
 	$(eval or=$(shell cat output/pixelSensor_netlist.v|grep -E '\| ([^~]|$$)'|wc -l))
 	$(eval datestring=$(shell date +%FT%T))
-	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
 
-	find . -name 'pixelSensor.json' -print0 | xargs -0 sed -i "" "s/NAND/\$$$ nand/g"
-	find . -name 'pixelSensor.json' -print0 | xargs -0 sed -i "" "s/NOT/\$$$ not/g"
+ifeq ($(shell uname), Darwin)
+	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
+else
+	sed -i '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
+endif
 
 svg:
 	netlistsvg output/pixelSensor.json -o output/pixelSensor_diagram.svg

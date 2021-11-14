@@ -8,9 +8,15 @@ synth:
 	yosys sensorState.ys
 	
 # include nesecary library in netlist file
+ifeq ($(shell uname), Darwin)
 	sed -i "" '1{h;s/.*//;G;}' output/sensorState_netlist.sv
 	sed -i "" '1{h;s/.*/`include "..\/..\/..\/lib\/gates.lib"/;G;}' output/sensorState_netlist.sv
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/sensorState_netlist.sv
+else
+	sed -i '1{h;s/.*//;G;}' output/sensorState_netlist.sv
+	sed -i '1{h;s/.*/`include "..\/..\/..\/lib\/gates.lib"/;G;}' output/sensorState_netlist.sv
+	sed -i '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/sensorState_netlist.sv
+endif
 
 # create circuit diagram
 # rm output/sensorState_diagram.svg
@@ -24,10 +30,19 @@ synth:
 	$(eval nor=$(shell cat output/sensorState_netlist.v|grep '\| ~'|wc -l))
 	$(eval or=$(shell cat output/sensorState_netlist.v|grep -E '\| ([^~]|$$)'|wc -l))
 	$(eval datestring=$(shell date +%FT%T))
+
+ifeq ($(shell uname), Darwin)
 	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
+else
+	sed -i '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
+endif
 
 sv2v:
 	sv2v --define=synthesize --define=PIXEL_WIDTH=${PW} --define=PIXEL_HEIGHT=${PH} --write=output/sensorState.v sensorState.sv
 
 # fixes one naming bug
+ifeq ($(shell uname),Darwin)
 	find . -name 'sensorState.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"
+else
+	sed -i "s/PixelSensorConfig_//g" output/sensorState.v
+endif

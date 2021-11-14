@@ -20,11 +20,16 @@ synthsim:
 	${MAKE} synth
 	${MAKE} simnet
 
+
 sv2v:
 	sv2v --define=synthesize --define=PIXEL_WIDTH=${PW} --define=PIXEL_HEIGHT=${PH} --write=output/sensorTop.v sensorTop.sv
 
-# fixes one naming bug
+# fixes one naming bug. Different from mac and linux
+ifeq ($(shell uname),Darwin)
 	find . -name 'sensorTop.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"
+else
+	sed -i "s/PixelSensorConfig_//g" output/sensorTop.v
+endif
 
 svg:
 #	rm output/sensorTop_diagram.svg
@@ -35,13 +40,21 @@ synth:
 	yosys -q -q sensorTop.ys
 	
 # include nesecary library
+	sleep 1
+
+ifeq ($(shell uname), Darwin)
 	sed -i "" '1{h;s/.*//;G;}' output/sensorTop_netlist.v
 	sed -i "" '1{h;s/.*/`include "..\/..\/lib\/gates.v"/;G;}' output/sensorTop_netlist.v
 	sed -i "" '1{h;s/.*/`include "..\/..\/pixel_sensor\/pixelSensorAnalog.sv"/;G;}' output/sensorTop_netlist.v
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/sensorTop_netlist.v
+else
+	sed -i '1{h;s/.*//;G;}' output/sensorTop_netlist.v
+	sed -i '1{h;s/.*/`include "..\/..\/lib\/gates.v"/;G;}' output/sensorTop_netlist.v
+	sed -i '1{h;s/.*/`include "..\/..\/pixel_sensor\/pixelSensorAnalog.sv"/;G;}' output/sensorTop_netlist.v
+	sed -i '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/sensorTop_netlist.v
+endif
 
 # log circuit components count
-	sleep 1
 	$(eval dffsr=$(shell cat output/sensorTop_netlist.v |grep -w DFFSR|wc -l))
 	$(eval dff=$(shell cat output/sensorTop_netlist.v |grep -w DFF|wc -l))
 	$(eval nand=$(shell cat output/sensorTop_netlist.v|grep -w NAND|wc -l))
@@ -49,7 +62,11 @@ synth:
 	$(eval nor=$(shell cat output/sensorTop_netlist.v|grep -w NOR|wc -l))
 	$(eval or=$(shell cat output/sensorTop_netlist.v|grep -w OR|wc -l))
 	$(eval datestring=$(shell date +%FT%T))
+ifeq ($(shell uname), Darwin)
 	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
+else
+	sed -i '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
+endif
 
 all:
 	${MAKE} sv2v PW=${PW} PH=${PH};
