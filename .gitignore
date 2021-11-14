@@ -14,5 +14,8 @@ tmp/
 
 .bash_history
 .vscode
-
+.cache
+.config
+.npm
+.yosys_history
 output/

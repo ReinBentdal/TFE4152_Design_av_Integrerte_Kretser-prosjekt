@@ -32,3 +32,5 @@ export PATH="/opt/eda/bin:/usr/local/opt/qt/bin:~/.emacs.d/bin:$PATH"
 [ -e "$HOME/.dircolors" ] && DIR_COLORS="$HOME/.dircolors"
 [ -e "$DIR_COLORS" ] || DIR_COLORS=""
 eval "`dircolors -b $DIR_COLORS`"
+
+export PATH="/Users/ciceda/bin/:$PATH"
