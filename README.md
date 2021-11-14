@@ -4,6 +4,7 @@
 ## Required software
 In addition to the software provided by Dicex/Ciceda, these programs has to be installed for certain commands to work
 * [NetlistSVG](https://github.com/nturley/netlistsvg) for creating circuit diagrams
+* [pyperclip](https://pypi.org/project/pyperclip/), when cresating scene it is copied to clipboard
 
 ## Digital
 Navigate to project/verilog. To run top module, navigate further to modules/sensor_top/, view makefile for all used commands. 
