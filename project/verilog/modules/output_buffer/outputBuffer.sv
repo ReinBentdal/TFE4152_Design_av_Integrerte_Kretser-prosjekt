@@ -21,7 +21,7 @@ module OUTPUT_BUFFER(
     import PixelSensorConfig::OUTPUT_BUS_WIDTH;
     import PixelSensorConfig::PIXEL_BITS;
 
-    parameter integer counter_bits = $ceil($clog2(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH));
+    parameter integer counter_bits = $rtoi($ceil($clog2(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH)));
     parameter integer counter_cycles = (PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH) - 1;
 
     //------------------------------------------------------------
