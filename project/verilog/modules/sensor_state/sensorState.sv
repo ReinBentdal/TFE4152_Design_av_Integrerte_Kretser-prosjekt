@@ -27,7 +27,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     localparam row_read_time = 5;
     localparam read_time = row_read_time*PIXEL_ARRAY_HEIGHT;
 
-    localparam counter_bits = read_time > 255 ? $ceil($clog2(read_time)) : 8;
+    localparam counter_bits = read_time > 255 ? $rtoi($ceil($clog2(read_time))) : 8;
 
     localparam states = 4; // does not count idle state
     localparam idle_state = 0;

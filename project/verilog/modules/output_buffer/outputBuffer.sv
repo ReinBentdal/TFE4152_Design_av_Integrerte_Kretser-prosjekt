@@ -6,10 +6,8 @@
 `include "../../components/register.sv"
 `include "../../components/tristate.sv"
 
-/*
-Because the module has inputs from two different clock cycles, there needs to be enough delay, from InputDelay, to "bridge" between two different clock cycles.
 
-*/
+// Outputs data from pixel_array to output bus
 module OUTPUT_BUFFER(
     input SET_BUFFER,
     input RESET,
@@ -81,7 +79,7 @@ module OUTPUT_BUFFER(
 
 
     //------------------------------------------------------------
-    // Comb to  bridge between two clock frequencies
+    // COMB to  bridge between two clock frequencies
     //------------------------------------------------------------
     logic new_input;
 

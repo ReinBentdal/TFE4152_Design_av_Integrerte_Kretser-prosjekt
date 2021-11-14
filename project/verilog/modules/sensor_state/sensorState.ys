@@ -1,5 +1,5 @@
 # read design
-read_verilog -sv sensorState.sv
+read_verilog -sv output/sensorState.v
 
 # convert high-level behavioral parts ("processes") to d-type flip-flops and muxes
 proc; 
@@ -33,7 +33,7 @@ abc -liberty ../../lib/gates.lib
 opt
 
 # writes netlist version. -v makes the output more verbous
-write_verilog -v sensorState_netlist.sv
+write_verilog -v output/sensorState_netlist.sv
 
 # json used to create svg of circuit
-write_json sensorState.json
+write_json output/sensorState.json

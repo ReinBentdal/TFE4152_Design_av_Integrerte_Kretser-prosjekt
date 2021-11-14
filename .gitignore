@@ -13,3 +13,6 @@ tmp/
 *.gtkw
 
 .bash_history
+.vscode
+
+output/

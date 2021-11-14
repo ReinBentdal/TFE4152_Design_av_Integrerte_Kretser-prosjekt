@@ -31,12 +31,13 @@ svg:
 	netlistsvg output/sensorTop.json -o output/sensorTop_diagram.svg --config netlistsvg_conf.json
 
 synth:
+# -q -q to prevent console logging, may help with compile speed
 	yosys -q -q sensorTop.ys
 	
 # include nesecary library
 	sed -i "" '1{h;s/.*//;G;}' output/sensorTop_netlist.v
 	sed -i "" '1{h;s/.*/`include "..\/..\/lib\/gates.v"/;G;}' output/sensorTop_netlist.v
-	sed -i "" '1{h;s/.*/`include "..\/pixel_sensor\/pixelSensorAnalog.sv"/;G;}' output/sensorTop_netlist.v
+	sed -i "" '1{h;s/.*/`include "..\/..\/pixel_sensor\/pixelSensorAnalog.sv"/;G;}' output/sensorTop_netlist.v
 	sed -i "" '1{h;s/.*/\/\/ **Custom imports** /;G;}' output/sensorTop_netlist.v
 
 # log circuit components count

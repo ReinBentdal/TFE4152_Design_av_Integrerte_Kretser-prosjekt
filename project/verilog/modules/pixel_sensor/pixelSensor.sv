@@ -29,7 +29,8 @@ module PIXEL_SENSOR
 
    logic cmp;
 
-   always_comb begin
+   // uses latch to store ADC value
+   always_latch begin
       if (!cmp)
          local_data = DIGITAL_RAMP;
    end
