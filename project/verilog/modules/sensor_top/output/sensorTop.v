@@ -65,7 +65,7 @@ module Selector (
 	parameter integer length = 4;
 	output wire [length - 1:0] out;
 	reg [length - 1:0] local_out;
-	assign out = (outputEnable ? local_out : {length {1'sbz}});
+	assign out = (outputEnable ? local_out : 0);
 	always @(posedge clk or posedge reset)
 		if (reset)
 			local_out <= 1;
@@ -112,7 +112,7 @@ module SENSOR_STATE (
 	input RESET;
 	output wire PIXEL_ERASE;
 	output wire PIXEL_EXPOSE;
-	localparam integer PIXEL_ARRAY_HEIGHT = 24;
+	localparam integer PIXEL_ARRAY_HEIGHT = 3;
 	output wire [PIXEL_ARRAY_HEIGHT - 1:0] SENSOR_ROW_SELECT;
 	output reg NEW_ROW;
 	output wire PIXEL_ANALOG_RAMP;
@@ -172,14 +172,12 @@ module SENSOR_STATE (
 	assign rowSelect_enable = (idle ? 0 : state[3]);
 	wire master_rowSelect_reset;
 	assign master_rowSelect_reset = master_reset;
-	wire [PIXEL_ARRAY_HEIGHT - 1:0] local_row_select;
-	assign SENSOR_ROW_SELECT = (rowSelect_enable ? local_row_select : 0);
 	Selector #(.length(PIXEL_ARRAY_HEIGHT)) RowSelector(
 		.clk(rowSelect_inc),
 		.inputEnable(rowSelect_enable),
 		.outputEnable(rowSelect_enable),
 		.reset(master_rowSelect_reset),
-		.out(local_row_select)
+		.out(SENSOR_ROW_SELECT)
 	);
 	Selector #(.length(states)) StateSelector(
 		.clk(stateSelector_shift),
@@ -338,7 +336,7 @@ module PIXEL_ARRAY (
 	input ANALOG_RAMP;
 	input ERASE;
 	input EXPOSE;
-	localparam integer PIXEL_ARRAY_HEIGHT = 24;
+	localparam integer PIXEL_ARRAY_HEIGHT = 3;
 	input [PIXEL_ARRAY_HEIGHT - 1:0] READ;
 	input [7:0] DIGITAL_RAMP;
 	localparam integer PIXEL_ARRAY_WIDTH = 24;
@@ -514,7 +512,7 @@ module SENSOR_TOP (
 	output wire FRAME_FINISHED;
 	wire sensor_erase;
 	wire sensor_expose;
-	localparam integer PIXEL_ARRAY_HEIGHT = 24;
+	localparam integer PIXEL_ARRAY_HEIGHT = 3;
 	wire [PIXEL_ARRAY_HEIGHT - 1:0] sensor_row_select;
 	wire sensor_new_row;
 	wire sensor_analog_ramp;

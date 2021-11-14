@@ -27,7 +27,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     localparam row_read_time = 5;
     localparam read_time = row_read_time*PIXEL_ARRAY_HEIGHT;
 
-    localparam counter_bits = 10;
+    localparam counter_bits = read_time > 255 ? $ceil($clog2(read_time)) : 8;
 
     localparam states = 4; // does not count idle state
     localparam idle_state = 0;
@@ -104,9 +104,6 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
     wire master_rowSelect_reset;
     assign master_rowSelect_reset = master_reset;
 
-    wire [PIXEL_ARRAY_HEIGHT-1:0] local_row_select;
-    assign SENSOR_ROW_SELECT = rowSelect_enable ? local_row_select : 0;
-
     Selector #(
         .length(PIXEL_ARRAY_HEIGHT)
     ) RowSelector(
@@ -114,7 +111,7 @@ module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NE
         .inputEnable(rowSelect_enable),
         .outputEnable(rowSelect_enable),
         .reset(master_rowSelect_reset),
-        .out(local_row_select)
+        .out(SENSOR_ROW_SELECT)
     );
 
 

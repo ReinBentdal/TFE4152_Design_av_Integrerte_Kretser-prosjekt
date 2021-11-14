@@ -51,6 +51,6 @@ synth:
 	sed -i "" '1{h;s/.*/'$(datestring)' dffsr: '$(dffsr)', dff: '$(dff)', and: '$(and)', nand: '$(nand)', or: '$(or)', nor: '$(nor)'/;G;}' output/component_count.log
 
 all:
-	${MAKE} sv2v;
+	${MAKE} sv2v PW=${PW} PH=${PH};
 	${MAKE} synth;
 	${MAKE} svg;

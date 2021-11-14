@@ -15,7 +15,7 @@ module Selector(
 
     logic [length-1:0] local_out;
 
-    assign out = outputEnable ? local_out : 'Z;
+    assign out = outputEnable ? local_out : 0;
 
     always_ff @(posedge clk or posedge reset) begin
         if (reset) begin
