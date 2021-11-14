@@ -1,9 +1,9 @@
 
-`default_nettype none
 
 `ifndef _PIXEL_SENSOR_CONFIG
 `define _PIXEL_SENSOR_CONFIG
 
+`default_nettype none
 `timescale 1 ns / 1 ps
 
 package PixelSensorConfig;
