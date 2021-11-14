@@ -30,7 +30,7 @@ package PixelSensorConfig;
     localparam MAIN_CLK_PERIOD = 500;
 
     // calculates the clock speed needed to keep up with data from the pixel array.
-    // 2 extra output_clk  cycle for each row to compensate for clock offset between clk and output_clk.
+    // 1 extra output_clk  cycle for each row to compensate for clock offset between clk and output_clk.
     localparam integer OUTPUT_CLK_PERIOD = $floor((5*MAIN_CLK_PERIOD)/((PIXEL_ARRAY_WIDTH)/(OUTPUT_BUS_WIDTH) + 1));
 
     // image scene for simulation. Has to by 1D packed array because of yosys constrains
