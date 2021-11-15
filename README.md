@@ -1,4 +1,4 @@
-*Project uses [Dicex](https://github.com/wulffern/dicex). View Disex README for instructions on running repository.*
+*Project uses [Dicex](https://github.com/wulffern/dicex). View Dicex README for instructions on running repository.*
 
 # Running project
 ## Required software
