@@ -41,4 +41,4 @@ abc -liberty ../lib/gates.lib
 opt
 
 # json used to create svg of circuit
-write_json register_netlist.json
+write_json output/register_netlist.json
