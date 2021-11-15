@@ -1,4 +1,4 @@
-read_verilog -sv register.v
+read_verilog -sv output/register.v
 
 read_liberty -lib ../lib/gates.lib
 
