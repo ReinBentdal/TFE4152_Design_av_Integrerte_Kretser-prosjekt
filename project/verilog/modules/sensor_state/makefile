@@ -39,10 +39,3 @@ endif
 
 sv2v:
 	sv2v --define=synthesize --define=PIXEL_WIDTH=${PW} --define=PIXEL_HEIGHT=${PH} --write=output/sensorState.v sensorState.sv
-
-# fixes one naming bug
-ifeq ($(shell uname),Darwin)
-	find . -name 'sensorState.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"
-else
-	sed -i "s/PixelSensorConfig_//g" output/sensorState.v
-endif

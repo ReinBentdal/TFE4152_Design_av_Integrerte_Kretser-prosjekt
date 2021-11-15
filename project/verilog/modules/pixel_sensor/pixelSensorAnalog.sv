@@ -5,7 +5,15 @@
 // synthesizable dummy-sensor for testing the rest of the synthesizable circuits
 // This is completely different from how the analog circuit actually would work.
 // This does not simulate the expose part, as the expose value is fixed in expose_value
-module PIXEL_SENSOR_ANALOG(
+module PIXEL_SENSOR_ANALOG
+
+   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+   import PixelSensorConfig::SCENE_24;
+   import PixelSensorConfig::SCENE;
+   import PixelSensorConfig::PIXEL_BITS;
+   
+(
    input EXPOSE,
    input RAMP,
    input ERASE,
@@ -15,11 +23,6 @@ module PIXEL_SENSOR_ANALOG(
    parameter integer width_index = 0;
    parameter integer height_index = 0;
 
-   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
-   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
-   import PixelSensorConfig::SCENE_24;
-   import PixelSensorConfig::SCENE;
-   import PixelSensorConfig::PIXEL_BITS;
 
    // create some pattern which is recognizable when simulated.
    // Use this for 24x24 simulations

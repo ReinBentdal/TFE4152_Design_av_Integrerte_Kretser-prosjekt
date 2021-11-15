@@ -3,18 +3,20 @@
 `include "../pixel_sensor/pixelSensorAnalog.sv"
 
 module PIXEL_SENSOR
-  (
+
+   import PixelSensorConfig::PIXEL_BITS;
+   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
+
+(
    input ANALOG_RAMP,
    input ERASE,
    input EXPOSE,
    input READ,
    input [PIXEL_BITS-1:0] DIGITAL_RAMP,
    output [PIXEL_BITS-1:0] DATA
-   );
+);
 
-   import PixelSensorConfig::PIXEL_BITS;
-   import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
-   import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
 
    parameter integer width_index = 0;
    parameter integer height_index = 0;

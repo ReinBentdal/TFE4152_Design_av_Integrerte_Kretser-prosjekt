@@ -24,13 +24,6 @@ synthsim:
 sv2v:
 	sv2v --define=synthesize --define=PIXEL_WIDTH=${PW} --define=PIXEL_HEIGHT=${PH} --write=output/sensorTop.v sensorTop.sv
 
-# fixes one naming bug. Different from mac and linux
-ifeq ($(shell uname),Darwin)
-	find . -name 'sensorTop.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"
-else
-	sed -i "s/PixelSensorConfig_//g" output/sensorTop.v
-endif
-
 svg:
 #	rm output/sensorTop_diagram.svg
 	netlistsvg output/sensorTop.json -o output/sensorTop_diagram.svg --config netlistsvg_conf.json

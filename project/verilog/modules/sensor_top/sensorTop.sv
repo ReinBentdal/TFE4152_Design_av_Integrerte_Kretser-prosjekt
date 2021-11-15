@@ -6,26 +6,21 @@
 `include "../output_buffer/outputBuffer.sv"
 
 // wiring together the individual modules of the final sensor
-module SENSOR_TOP(
-    CLK,
-    RESET,
-    BUFFER_CLK,
-    OUTPUT_CLK,
-    DATA_OUT,
-    FRAME_FINISHED,
-);
+module SENSOR_TOP
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
     import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
     import PixelSensorConfig::OUTPUT_BUS_WIDTH;
     import PixelSensorConfig::PIXEL_BITS;
 
-    input CLK;
-    input RESET;
-    input BUFFER_CLK;
-    output OUTPUT_CLK;
-    output [OUTPUT_BUS_WIDTH-1:0][PIXEL_BITS-1:0] DATA_OUT;
-    output FRAME_FINISHED;
+(
+    input CLK,
+    input RESET,
+    input BUFFER_CLK,
+    output OUTPUT_CLK,
+    output [OUTPUT_BUS_WIDTH-1:0][PIXEL_BITS-1:0] DATA_OUT,
+    output FRAME_FINISHED
+);
 
     wire sensor_erase;
     wire sensor_expose;

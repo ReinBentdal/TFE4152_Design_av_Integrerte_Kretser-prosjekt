@@ -8,7 +8,13 @@
 
 
 // Outputs data from pixel_array to output bus
-module OUTPUT_BUFFER(
+module OUTPUT_BUFFER
+
+    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
+    import PixelSensorConfig::OUTPUT_BUS_WIDTH;
+    import PixelSensorConfig::PIXEL_BITS;
+    
+(
     input SET_BUFFER,
     input RESET,
     input CLK,
@@ -17,9 +23,6 @@ module OUTPUT_BUFFER(
     output logic [(OUTPUT_BUS_WIDTH*PIXEL_BITS)-1:0] DATA_OUT
 );
 
-    import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
-    import PixelSensorConfig::OUTPUT_BUS_WIDTH;
-    import PixelSensorConfig::PIXEL_BITS;
 
     parameter integer counter_bits = $rtoi($ceil($clog2(PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH)));
     parameter integer counter_cycles = (PIXEL_ARRAY_WIDTH/OUTPUT_BUS_WIDTH) - 1;

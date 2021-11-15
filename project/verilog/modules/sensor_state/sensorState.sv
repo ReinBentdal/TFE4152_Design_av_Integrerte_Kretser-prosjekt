@@ -5,21 +5,23 @@
 `include "../../components/tristate.sv"
 
 // reset should be triggered before use
-module SENSOR_STATE(CLK, RESET, PIXEL_ERASE, PIXEL_EXPOSE, SENSOR_ROW_SELECT, NEW_ROW, PIXEL_ANALOG_RAMP, PIXEL_DIGITAL_RAMP, FRAME_FINISHED);
+module SENSOR_STATE
 
     import PixelSensorConfig::PIXEL_ARRAY_HEIGHT;
     import PixelSensorConfig::PIXEL_ARRAY_WIDTH;
     import PixelSensorConfig::PIXEL_BITS;
 
-    input CLK;
-    input RESET;
-    output PIXEL_ERASE;
-    output PIXEL_EXPOSE;
-    output [PIXEL_ARRAY_HEIGHT-1:0] SENSOR_ROW_SELECT;
-    output logic NEW_ROW;
-    output PIXEL_ANALOG_RAMP;
-    output [PIXEL_BITS-1:0] PIXEL_DIGITAL_RAMP;
-    output FRAME_FINISHED;
+(
+    input CLK,
+    input RESET,
+    output PIXEL_ERASE,
+    output PIXEL_EXPOSE,
+    output [PIXEL_ARRAY_HEIGHT-1:0] SENSOR_ROW_SELECT,
+    output logic NEW_ROW,
+    output PIXEL_ANALOG_RAMP,
+    output [PIXEL_BITS-1:0] PIXEL_DIGITAL_RAMP,
+    output FRAME_FINISHED
+);
 
     localparam erase_time = 5;
     localparam expose_time = 255;

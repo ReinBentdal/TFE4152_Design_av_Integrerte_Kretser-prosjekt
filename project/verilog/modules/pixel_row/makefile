@@ -6,12 +6,6 @@ sim:
 sv2v:
 	sv2v --define=synthesize --write=output/pixelRow.v pixelRow.sv
 
-ifeq ($(shell uname),Darwin)
-	find . -name 'pixelRow.v' -print0 | xargs -0 sed -i "" "s/PixelSensorConfig_//g"
-else
-	sed -i "s/PixelSensorConfig_//g" output/pixelRow.v
-endif
-
 synth:
 	yosys pixelRow.ys
 
