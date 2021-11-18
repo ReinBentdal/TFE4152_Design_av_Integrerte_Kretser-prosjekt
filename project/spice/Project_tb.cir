@@ -1,4 +1,4 @@
-* Pixel sensor testbench
+* Project testbench
 **********************************************************************
 **        Copyright (c) 2021 Carsten Wulff Software, Norway
 ** *******************************************************************
@@ -183,16 +183,22 @@ unset askquit
 tran 1n 60u
 plot V(ERASE) V(EXPOSE) V(CONVERT) V(READ)
 plot V(VRAMP) V(CONVERT) V(ERASE)
+hardcopy snesor.ps V(VRAMP) V(CONVERT) V(ERASE)
 plot V(DO)
 plot V(XDUT.VSTORE) V(ERASE) V(EXPOSE) V(CONVERT) V(VRAMP) V(XDUT.VCMP_OUT) V(READ)
-
+hardcopy pix_sensor.ps V(XDUT.VSTORE) V(ERASE) V(EXPOSE) V(CONVERT) V(VRAMP) V(XDUT.VCMP_OUT) V(READ)
 plot v(xdut.xm1.xm1.vg) v(xdut.xm1.xm1.dmem)
-plot v(xdut.xm1.xm2.vg) v(xdut.xm1.xm2.dmem)
-plot v(xdut.xm1.xm3.vg) v(xdut.xm1.xm3.dmem)
-plot v(xdut.xm1.xm4.vg) v(xdut.xm1.xm4.dmem)
-plot v(xdut.xm1.xm5.vg) v(xdut.xm1.xm5.dmem)
-plot v(xdut.xm1.xm6.vg) v(xdut.xm1.xm6.dmem)
-plot v(xdut.xm1.xm7.vg) v(xdut.xm1.xm7.dmem)
-plot v(xdut.xm1.xm8.vg) v(xdut.xm1.xm8.dmem)
+hardcopy MS_memory.ps v(xdut.xm1.xm1.vg) v(xdut.xm1.xm1.dmem)
+*plot v(xdut.xm1.xm2.vg) v(xdut.xm1.xm2.dmem)
+*plot v(xdut.xm1.xm3.vg) v(xdut.xm1.xm3.dmem)
+*plot v(xdut.xm1.xm4.vg) v(xdut.xm1.xm4.dmem)
+*plot v(xdut.xm1.xm5.vg) v(xdut.xm1.xm5.dmem)
+hardcopy memory.ps v(xdut.xm1.xm5.vg) v(xdut.xm1.xm5.dmem)
+*plot v(xdut.xm1.xm6.vg) v(xdut.xm1.xm6.dmem)
+*plot v(xdut.xm1.xm7.vg) v(xdut.xm1.xm7.dmem)
+*plot v(xdut.xm1.xm8.vg) v(xdut.xm1.xm8.dmem)
+hardcopy LS_memory.ps (xdut.xm1.xm8.vg) v(xdut.xm1.xm8.dmem)
+hardcopy Do.ps V(DO)
+
 .endc
 .end

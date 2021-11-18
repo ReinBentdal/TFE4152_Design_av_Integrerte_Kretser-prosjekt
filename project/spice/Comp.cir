@@ -1,9 +1,9 @@
-.include ../models/ptm_130.spi
+.include ../../models/ptm_130_ngspice.spi
 
 *options
 *.option TNOM=27 GMIN=1e-20
 
-.SUBCKT COMP
+.SUBCKT COMP VCMP_OUT VSTORE VRAMP VDD VSS
 
 * Model comparator
 
@@ -21,21 +21,21 @@ MP2 N1 VP VDD VDD pmos W=w L=l1 M=2
 
 *De to transistorene under CMIR
 *Her har jeg sakt at output fra sensoren er VSTORE
-MN1 N1 VSTORE VS VS nmos W=w L=l
-MN2 VP VRAMP VS VS nmos W=w L=l
+MN1 N1 VSTORE N2 N2 nmos W=w L=l
+MN2 VP VRAMP N2 N2 nmos W=w L=l
 
-*I3 0 VBN1 dc 10u
+I3 0 VBN1 dc 10u
 
 *Transistor som tar inn Bias1
 *Denne skal være strong inversion tror jeg, så må endre lengde og bredde på denne
-*MB1 VBN1 VBN1 VSS VSS nmos W=w L=l M=2
-MB2 VS VBN1 VSS VSS nmos W=w L=l M=2
+MB1 VBN1 VBN1 VSS VSS nmos W=w L=l M=2
+MB2 N2 VBN1 VSS VSS nmos W=w L=l M=2
 
 *Her er vi på comp delen til høyre (tror jeg)
-MP3 N2 N1 VDD VDD pmos W=w L=l M=5
-MN3 N2 VBN1 VSS VSS nmos W=w L=l
+MP3 N3 N1 VDD VDD pmos W=w L=l M=5
+MN3 N3 VBN1 VSS VSS nmos W=w L=l
 
 *inverteren etterpå
-MP4 VCMP_OUT N2 VDD VDD pmos W=w L=l1
-MN4 VCMP_OUT N2 VSS VSS nmos W=w L=l
+MP4 VCMP_OUT N3 VDD VDD pmos W=w L=l1
+MN4 VCMP_OUT N3 VSS VSS nmos W=w L=l
 .ENDS
