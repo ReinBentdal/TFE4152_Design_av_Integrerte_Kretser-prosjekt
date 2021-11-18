@@ -1,0 +1,41 @@
+.include ../models/ptm_130.spi
+
+*options
+*.option TNOM=27 GMIN=1e-20
+
+.SUBCKT COMP
+
+* Model comparator
+
+.param l = {0.15u}
+.param l1 = {0.5u}
+.param w = {0.5u}
+
+
+BC1 VCMP_OUT VSS V = ((atan(100000*(V(VSTORE) - V(VRAMP)))) + 1.58)/3.14*1.5
+
+*Current mirror
+*Outputtet som skal inn til comp+inverter er VCMR_OUT
+MP1 VP VP VDD VDD pmos W=w L=l1 M=2
+MP2 N1 VP VDD VDD pmos W=w L=l1 M=2
+
+*De to transistorene under CMIR
+*Her har jeg sakt at output fra sensoren er VSTORE
+MN1 N1 VSTORE VS VS nmos W=w L=l
+MN2 VP VRAMP VS VS nmos W=w L=l
+
+*I3 0 VBN1 dc 10u
+
+*Transistor som tar inn Bias1
+*Denne skal være strong inversion tror jeg, så må endre lengde og bredde på denne
+*MB1 VBN1 VBN1 VSS VSS nmos W=w L=l M=2
+MB2 VS VBN1 VSS VSS nmos W=w L=l M=2
+
+*Her er vi på comp delen til høyre (tror jeg)
+MP3 N2 N1 VDD VDD pmos W=w L=l M=5
+MN3 N2 VBN1 VSS VSS nmos W=w L=l
+
+*inverteren etterpå
+MP4 VCMP_OUT N2 VDD VDD pmos W=w L=l1
+MN4 VCMP_OUT N2 VSS VSS nmos W=w L=l
+.ENDS
