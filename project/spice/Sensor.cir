@@ -1,0 +1,16 @@
+.include ../../models/ptm_130_ngspice.spi
+
+.param l = {0.15u}
+.param w = {0.5u}
+
+.SUBCKT SENSOR VRESET VSTORE ERASE EXPOSE VDD VSS
+C1 VSTORE VSS 100f
+*Rleak VSTORE VSS 100T
+
+MN1 VRESET ERASE VSTORE VSTORE nmos W = w L = l
+MN2 VPG EXPOSE VSTORE VSTORE nmos W = w L = l
+
+*RS VSTORE VS 1G
+Rphoto VPG VSS 1G
+
+.ENDS
