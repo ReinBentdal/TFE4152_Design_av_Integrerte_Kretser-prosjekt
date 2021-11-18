@@ -31,3 +31,19 @@ make svg
 Change parameters in project/verilog/pixel_sensor_config.sv. Make sure, if array size is changed, that the correct scene is used in project/verilog/modules/pixel_sensor/pixelSensorAnalog.sv
 
 ## Analog
+
+To run simulation on the entire pixel sensor all you need to do is to go into the spice file and type:
+``` sh
+make
+```
+in the terminal.
+
+If you want to only test the comparator you have to go into the Makefile and change:
+``` sh
+${MAKE} ngspice	 TB=Project_tb
+```
+to
+``` sh
+${MAKE} ngspice	 TB=Comp_tb
+```
+and then type "make" again.
