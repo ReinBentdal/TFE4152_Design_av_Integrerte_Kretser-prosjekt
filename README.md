@@ -38,7 +38,7 @@ make
 ```
 in the terminal.
 
-If you want to only test the comparator you have to go into the Makefile and change:
+If you want to only test the comparator or the sensor you have to go into the Makefile and change:
 ``` sh
 ${MAKE} ngspice	 TB=Project_tb
 ```
