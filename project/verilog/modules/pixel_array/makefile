@@ -1,7 +1,7 @@
 # pixel array
 sim:
-	iverilog -g2012 -Wall -o pixelArray.out pixelArray_tb.sv
-	vvp -n pixelArray.out
+	iverilog -g2012 -Wall -o output/pixelArray.out pixelArray_tb.sv
+	vvp -n output/pixelArray.out
 
 sv2v:
 	sv2v --define=synthesize --write=output/pixelArray.v pixelArray.sv

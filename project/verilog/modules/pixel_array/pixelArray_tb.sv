@@ -194,7 +194,7 @@ module pixelArray_tb;
 
         #MAIN_CLK_PERIOD  reset=0;
 
-        $dumpfile("pixelArray_tb.vcd");
+        $dumpfile("output/pixelArray_tb.vcd");
         $dumpvars(0,pixelArray_tb);
 
         #sim_end
