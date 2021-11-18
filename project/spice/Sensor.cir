@@ -1,0 +1,22 @@
+.include ../models/ptm_130.spi
+
+*options
+.option TNOM=27 GMIN=1e-20
+
+
+.SUBCKT SENS VRESET VSTORE ERASE EXPOSE VDD VSS
+*Dette er kondensatoren og motstanden til verdien som blir lagret i sensoren
+C1 VSTORE VSS 100f
+Rleak VSTORE VSS 100T
+
+
+* Switch to reset voltage on capacitor
+BR1 VRESET VSTORE I=V(ERASE)*V(VRESET,VSTORE)/1k
+
+* Switch to expose pixel
+BR2 VPG VSTORE I=V(EXPOSE)*V(VSTORE,VPG)/1k
+
+* Model photocurrent
+Rphoto VPG VSS 1G
+
+.ENDS
